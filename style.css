@@ -274,6 +274,130 @@ body {
 
 .btn-comprar-vitrine:hover { background-color: #1F291E; }
 
+.btn-detalhes-produto {
+    background-color: #ECE6E0;
+    color: var(--verde-mira);
+    border: 1px solid rgba(42, 54, 40, 0.12);
+    padding: 12px 16px;
+    border-radius: var(--radius-card);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-detalhes-produto:hover {
+    background-color: var(--verde-mira);
+    color: var(--branco);
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 4000;
+}
+
+.modal-overlay.ativo {
+    display: flex;
+}
+
+.modal-produto {
+    position: relative;
+    width: min(920px, 100%);
+    background-color: var(--branco);
+    border-radius: 30px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    box-shadow: 0 30px 75px rgba(0, 0, 0, 0.18);
+    max-height: calc(100vh - 40px);
+}
+
+@media (max-width: 860px) {
+    .modal-produto {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+}
+
+.modal-produto-imagem {
+    min-height: 360px;
+    background: #F7F5F0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.modal-produto-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.modal-produto-conteudo {
+    padding: 36px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.modal-produto-categoria {
+    display: inline-flex;
+    background-color: var(--verde-mira);
+    color: var(--branco);
+    padding: 8px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.modal-produto-conteudo h3 {
+    font-family: var(--font-serifa);
+    font-size: 30px;
+    margin-top: 4px;
+}
+
+.modal-produto-conteudo p {
+    font-size: 15px;
+    color: var(--texto-mutado);
+    line-height: 1.7;
+}
+
+.modal-produto-rodape {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.modal-produto-preco {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--texto-escuro);
+}
+
+.modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    color: var(--texto-escuro);
+    cursor: pointer;
+    z-index: 1;
+}
+
 /* Sacola Flutuante */
 .sacola-flutuante {
     position: fixed;

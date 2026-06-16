@@ -291,6 +291,25 @@ $whatsapp_dono = "5531999999999"; // Substitua pelo seu WhatsApp real com o DDD
         </div>
     </div>
 
+    <!-- Modal de Produto -->
+    <div class="modal-overlay" id="modal-produto-overlay" aria-hidden="true">
+        <div class="modal-produto">
+            <button class="modal-close" id="fechar-modal-produto" aria-label="Fechar janela">&times;</button>
+            <div class="modal-produto-imagem">
+                <img id="modal-produto-img" src="" alt="Imagem do produto">
+            </div>
+            <div class="modal-produto-conteudo">
+                <span class="modal-produto-categoria" id="modal-produto-categoria"></span>
+                <h3 id="modal-produto-titulo"></h3>
+                <p id="modal-produto-descricao"></p>
+                <div class="modal-produto-rodape">
+                    <span class="modal-produto-preco" id="modal-produto-preco"></span>
+                    <button type="button" class="btn-comprar-vitrine btn-add-sacola btn-modal-add" id="btn-modal-add" data-nome="" data-preco="">Adicionar à Sacola</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>
