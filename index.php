@@ -8,7 +8,7 @@ $whatsapp_dono = "5531999999999"; // Substitua pelo seu WhatsApp real com o DDD
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mira Confeitaria | Catálogo Premium</title>
-    <link rel="shortcut icon" href="imagens/favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="imagens/favicon1.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
