@@ -1,0 +1,407 @@
+@import url('https://googleapis.com');
+
+:root {
+    --verde-mira: #2A3628;
+    --creme-bg: #F5EFEB;
+    --branco: #FFFFFF;
+    --texto-escuro: #1C241B;
+    --texto-mutado: #606C5D;
+    --dourado-detalhe: #DECBA4;
+    --radius-premium: 24px;
+    --radius-card: 16px;
+    --font-serifa: 'Playfair Display', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: var(--font-sans);
+}
+
+body {
+    background-color: var(--creme-bg);
+    color: var(--texto-escuro);
+    min-height: 100vh;
+}
+
+/* Header Premium */
+.navbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(42, 54, 40, 0.06);
+    padding: 20px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mini-badge-logo {
+    width: 45px;
+    height: 45px;
+    background-color: var(--verde-mira);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--dourado-detalhe);
+    font-family: var(--font-serifa);
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 0.95;
+}
+
+.logo-mira {
+    font-family: var(--font-serifa);
+    font-size: 24px;
+    color: var(--verde-mira);
+    font-weight: 800;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--texto-escuro);
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* Banner de Entrada */
+.hero-vitrine {
+    background-color: var(--verde-mira);
+    color: var(--branco);
+    padding: 80px 60px 140px 60px;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-vitrine::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-color: var(--creme-bg);
+    clip-path: ellipse(75% 100% at 50% 100%);
+}
+
+.hero-textos {
+    max-width: 55%;
+}
+
+.hero-textos h1 {
+    font-family: var(--font-serifa);
+    font-size: 46px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.hero-textos p {
+    font-size: 16px;
+    color: var(--dourado-detalhe);
+    line-height: 1.6;
+}
+
+/* Filtros por Categoria */
+.container-filtros-premium {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    margin: 40px 0 50px 0;
+    flex-wrap: wrap;
+}
+
+.btn-filtro {
+    background-color: var(--branco);
+    color: var(--texto-escuro);
+    border: 1px solid rgba(42, 54, 40, 0.15);
+    padding: 12px 28px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 10px rgba(42, 54, 40, 0.02);
+}
+
+.btn-filtro:hover {
+    background-color: #EAE3DC;
+    border-color: var(--verde-mira);
+}
+
+.btn-filtro.active {
+    background-color: var(--verde-mira) !important;
+    color: var(--branco) !important;
+    border-color: var(--verde-mira) !important;
+    box-shadow: 0 8px 20px rgba(42, 54, 40, 0.2) !important;
+}
+
+.btn-filtro:focus { outline: none; }
+
+/* Grid de Exposição de Produtos */
+.secao-produtos {
+    max-width: 1200px;
+    margin: -40px auto 80px auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.grid-vitrine {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+/* Card de Doce */
+.card-produto {
+    background-color: var(--branco);
+    border-radius: var(--radius-premium);
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(42, 54, 40, 0.04);
+    border: 1px solid rgba(42, 54, 40, 0.05);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-produto:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 30px 50px rgba(42, 54, 40, 0.08);
+}
+
+.container-foto-produto {
+    height: 260px;
+    background-color: #FBFBFA;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--texto-mutado);
+    font-size: 14px;
+    border-bottom: 1px solid rgba(42, 54, 40, 0.03);
+    position: relative;
+    overflow: hidden;
+}
+
+.foto-real-produto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.card-produto:hover .foto-real-produto {
+    transform: scale(1.08);
+}
+
+.tag-categoria {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: var(--verde-mira);
+    color: var(--branco);
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    z-index: 5;
+}
+
+.detalhes-produto {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.detalhes-produto h3 {
+    font-family: var(--font-serifa);
+    font-size: 22px;
+    color: var(--verde-mira);
+    margin-bottom: 8px;
+}
+
+.detalhes-produto p {
+    font-size: 14px;
+    color: var(--texto-mutado);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.rodape-preco-venda {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid #F1F5F9;
+}
+
+.preco-valor {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--texto-escuro);
+}
+
+.btn-comprar-vitrine {
+    background-color: var(--verde-mira);
+    color: var(--branco);
+    border: none;
+    padding: 12px 20px;
+    border-radius: var(--radius-card);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-comprar-vitrine:hover { background-color: #1F291E; }
+
+/* Sacola Flutuante */
+.sacola-flutuante {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: var(--verde-mira);
+    color: var(--branco);
+    padding: 16px 24px;
+    border-radius: 40px;
+    box-shadow: 0 10px 30px rgba(42, 54, 40, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    z-index: 2000;
+    font-weight: 700;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.sacola-flutuante:hover { transform: scale(1.05); background-color: #1F291E; }
+.contador-sacola { background: var(--branco); color: var(--verde-mira); padding: 2px 8px; border-radius: 20px; font-size: 12px; }
+
+/* Modal do Carrinho Lateral */
+.painel-carrinho {
+    position: fixed;
+    top: 0;
+    right: -420px;
+    width: 420px;
+    height: 100vh;
+    background: var(--branco);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.1);
+    z-index: 2500;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.painel-carrinho.ativo { right: 0; }
+.topo-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #F1F5F9; padding-bottom: 15px; }
+.topo-carrinho h3 { font-family: var(--font-serifa); color: var(--verde-mira); }
+.btn-fechar-carrinho { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--texto-mutado); }
+.lista-itens-carrinho { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
+.item-no-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #FAFAFA; }
+.rodape-carrinho { border-top: 1px solid #F1F5F9; padding-top: 20px; margin-top: auto; }
+.total-container { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-bottom: 20px; }
+.btn-finalizar-carrinho { width: 100%; background: var(--verde-mira); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+.btn-finalizar-carrinho:hover { background: #1F291E; }
+
+/* --- MELHORIAS INTERATIVAS E PREMIUM (MIRA CONFEITARIA) --- */
+
+/* Notificação Flutuante Toast */
+.toast-notificacao {
+    position: fixed;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background-color: var(--verde-mira);
+    color: var(--branco);
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    box-shadow: 0 10px 25px rgba(42, 54, 40, 0.25);
+    z-index: 3000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast-notificacao.mostrar {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Controles de Quantidade no Carrinho */
+.controle-qtd-carrinho {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+.btn-qtd-carrinho {
+    background-color: #F1F5F9;
+    border: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+.btn-qtd-carrinho:hover {
+    background-color: var(--creme-bg);
+    color: var(--verde-mira);
+}
+
+/* Campo de Cupom Elegante */
+.container-cupom-desconto {
+    display: flex;
+    gap: 8px;
+    margin: 15px 0;
+}
+.input-cupom-mira {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none;
+    text-transform: uppercase;
+}
+.btn-aplicar-cupom {
+    background-color: #ECE6E0;
+    color: var(--verde-mira);
+    border: 1px solid rgba(42, 54, 40, 0.15);
+    padding: 0 16px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-aplicar-cupom:hover {
+    background-color: var(--verde-mira);
+    color: white;
+}
