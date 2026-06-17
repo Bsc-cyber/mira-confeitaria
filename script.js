@@ -200,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
             mensagem += `Aguardando retorno sobre o agendamento! ✨`;
 
             // CORREÇÃO DO LINK DO WHATSAPP AQUI: Adicionado a "/" faltante e o caractere "$" de interpolação
-            const urlWhatsApp = `https://wa.me{telefoneDono}?text=${encodeURIComponent(mensagem)}`;
+            const urlWhatsApp = `https://wa.me/5531995365146?text=${encodeURIComponent(mensagem)}`;
             
             window.open(urlWhatsApp, '_blank');
         });
