@@ -1,531 +1,876 @@
-@import url('https://googleapis.com');
-
-:root {
-    --verde-mira: #2A3628;
-    --creme-bg: #F5EFEB;
-    --branco: #FFFFFF;
-    --texto-escuro: #1C241B;
-    --texto-mutado: #606C5D;
-    --dourado-detalhe: #DECBA4;
-    --radius-premium: 24px;
-    --radius-card: 16px;
-    --font-serifa: 'Playfair Display', Georgia, serif;
-    --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
-}
-
+/* ==========================================
+   CONFIGURAÇÕES GERAIS DO SITE
+   ========================================== */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: var(--font-sans);
+    font-family: 'Montserrat', sans-serif;
 }
 
 body {
-    background-color: var(--creme-bg);
-    color: var(--texto-escuro);
-    min-height: 100vh;
+    background-color: #ffffff; /* Bege contínuo idêntico ao tom da foto do bolo */
+    color: #2F3E33;
+    overflow-x: hidden;
+    padding-top: 80px;
 }
 
-/* Header Premium */
-.navbar {
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(42, 54, 40, 0.06);
-    padding: 20px 60px;
+/* ==========================================
+   SISTEMA DE ANIMAÇÕES DE MOVIMENTO (LUXO)
+   ========================================== */
+/* Animação para os textos do banner principal subirem com suavidade */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.text-animation .hero-content {
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+/* Efeito fade suave para a troca de páginas (Cardápio / Sobre Nós) */
+.section-fade {
+    animation: fadeInUp 0.6s ease-in-out forwards;
+}
+
+/* ==========================================
+   BARRA FIXA SUPERIOR (HEADER)
+   ========================================== */
+/* ==========================================
+   BARRA SUPERIOR COM CORTE EM ONDA (MIRA)
+   ========================================== */
+.main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
+    /* Padding inferior aumentado para compensar a curva da onda */
+    padding: 20px 6% 45px 6%; 
+    
+    background-color: #2F3E33; /* Verde oliva escuro idêntico à referência */
+    position: fixed;
+    top: 0; left: 0; width: 100%;
     z-index: 1000;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+
+    /* EFEITO DE DESENHO EM ONDA NA BASE DO MENU */
+    clip-path: ellipse(100% 80% at 50% 20%);
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+/* Ajusta a cor do símbolo da logo para branco */
+.main-header .logo-symbol {
+    border: 1px solid #FAF6F0;
+    color: #FAF6F0;
 }
 
-.mini-badge-logo {
-    width: 45px;
-    height: 45px;
-    background-color: var(--verde-mira);
-    border-radius: 50%;
+/* Ajusta a cor do texto da logo para branco */
+.main-header .logo-text h1 {
+    color: #FAF6F0;
+}
+.main-header .logo-text p {
+    color: #A2B1A6; /* Verde oliva claro desbotado para o subtítulo */
+}
+
+/* Garante que os links do menu fiquem brancos na barra escura */
+.main-header .nav-menu a {
+    color: #A2B1A6;
+    transition: color 0.2s;
+}
+
+/* Link ativo ou com mouse por cima ganha destaque branco total */
+.main-header .nav-menu a.active, 
+.main-header .nav-menu a:hover {
+    color: #FAF6F0;
+}
+
+/* Botão de Enviar Pedido e Carrinho Brancos */
+.main-header .btn-whatsapp {
+    color: #FAF6F0;
+    border: 1px solid #FAF6F0;
+}
+.main-header .btn-whatsapp:hover {
+    background-color: #FAF6F0;
+    color: #2F3E33;
+}
+.main-header .cart-icon {
+    color: #FAF6F0;
+}
+.main-header .cart-count {
+    background-color: #BC8A5F; /* Contador em caramelo para destacar no verde */
+    color: #FFF;
+}
+
+
+.logo { display: flex; align-items: center; gap: 12px; }
+.logo-symbol {
+    border: 1px solid #ffffff;
+    padding: 4px 6px; font-size: 13px;
+    font-family: 'Cinzel', serif; color: #ffffff;
+}
+.logo-text h1 { font-family: 'Cinzel', serif; font-size: 22px; letter-spacing: 2px; }
+.logo-text p { font-size: 10px; letter-spacing: 2px; color: #ffffff; text-transform: uppercase; }
+
+.nav-menu a { 
+    text-decoration: none; 
+    color: #ffffff; 
+    margin: 0 15px; 
+    font-size: 12px; 
+    font-weight: 600; 
+    letter-spacing: 1px; 
+    transition: color 0.2s;
+}
+/* Altera o link ativo para a cor escura elegante do cliente */
+.nav-menu a.active, .nav-menu a:hover { 
+    color: #ffffff;
+}
+
+.btn-whatsapp {
+    text-decoration: none; color: #ffffff; border: 1px solid #2F3E33;
+    padding: 8px 18px; border-radius: 20px; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+}
+
+.cart-icon { font-size: 20px; color: #BC8A5F; position: relative; cursor: pointer; }
+.cart-count {
+    position: absolute; top: -6px; right: -8px; background-color: #2F3E33;
+    color: #FFF; font-size: 9px; width: 15px; height: 15px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+
+/* ==========================================
+   ESTILIZAÇÃO DA PÁGINA "SOBRE NÓS"
+   ========================================== */
+.sobre-nos-section {
+    padding: 100px 6%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    color: var(--dourado-detalhe);
-    font-family: var(--font-serifa);
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 0.95;
-}
-
-.logo-mira {
-    font-family: var(--font-serifa);
-    font-size: 24px;
-    color: var(--verde-mira);
-    font-weight: 800;
-}
-
-.nav-links a {
-    text-decoration: none;
-    color: var(--texto-escuro);
-    font-weight: 700;
-    font-size: 14px;
-}
-
-/* Banner de Entrada */
-.hero-vitrine {
-    background-color: var(--verde-mira);
-    color: var(--branco);
-    padding: 80px 60px 140px 60px;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    overflow: hidden;
-}
-
-.hero-vitrine::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: 0;
+    min-height: 70vh;
     width: 100%;
-    height: 80px;
-    background-color: var(--creme-bg);
-    clip-path: ellipse(75% 100% at 50% 100%);
 }
 
-.hero-textos {
-    max-width: 55%;
+.sobre-container {
+    background-color: #FFFFFF;
+    border-radius: 24px;
+    padding: 50px 6%;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
 }
 
-.hero-textos h1 {
-    font-family: var(--font-serifa);
-    font-size: 46px;
-    font-weight: 800;
+.sobre-container h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 32px;
+    color: #2F3E33;
     margin-bottom: 15px;
 }
 
-.hero-textos p {
-    font-size: 16px;
-    color: var(--dourado-detalhe);
-    line-height: 1.6;
+.sobre-linha {
+    width: 60px;
+    height: 2px;
+    background-color: #BC8A5F;
+    margin: 0 auto 30px auto;
 }
 
-/* Filtros por Categoria */
-.container-filtros-premium {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 14px;
-    margin: 40px 0 50px 0;
-    flex-wrap: wrap;
-}
-
-.btn-filtro {
-    background-color: var(--branco);
-    color: var(--texto-escuro);
-    border: 1px solid rgba(42, 54, 40, 0.15);
-    padding: 12px 28px;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 10px rgba(42, 54, 40, 0.02);
-}
-
-.btn-filtro:hover {
-    background-color: #EAE3DC;
-    border-color: var(--verde-mira);
-}
-
-.btn-filtro.active {
-    background-color: var(--verde-mira) !important;
-    color: var(--branco) !important;
-    border-color: var(--verde-mira) !important;
-    box-shadow: 0 8px 20px rgba(42, 54, 40, 0.2) !important;
-}
-
-.btn-filtro:focus { outline: none; }
-
-/* Grid de Exposição de Produtos */
-.secao-produtos {
-    max-width: 1200px;
-    margin: -40px auto 80px auto;
-    padding: 0 20px;
-    position: relative;
-    z-index: 10;
-}
-
-.grid-vitrine {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
-
-/* Card de Doce */
-.card-produto {
-    background-color: var(--branco);
-    border-radius: var(--radius-premium);
-    overflow: hidden;
-    box-shadow: 0 20px 40px rgba(42, 54, 40, 0.04);
-    border: 1px solid rgba(42, 54, 40, 0.05);
-    display: flex;
-    flex-direction: column;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card-produto:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 30px 50px rgba(42, 54, 40, 0.08);
-}
-
-.container-foto-produto {
-    height: 260px;
-    background-color: #FBFBFA;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--texto-mutado);
-    font-size: 14px;
-    border-bottom: 1px solid rgba(42, 54, 40, 0.03);
-    position: relative;
-    overflow: hidden;
-}
-
-.foto-real-produto {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.card-produto:hover .foto-real-produto {
-    transform: scale(1.08);
-}
-
-.tag-categoria {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background-color: var(--verde-mira);
-    color: var(--branco);
-    padding: 6px 14px;
-    border-radius: 30px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    z-index: 5;
-}
-
-.detalhes-produto {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-}
-
-.detalhes-produto h3 {
-    font-family: var(--font-serifa);
-    font-size: 22px;
-    color: var(--verde-mira);
-    margin-bottom: 8px;
-}
-
-.detalhes-produto p {
-    font-size: 14px;
-    color: var(--texto-mutado);
-    line-height: 1.5;
+.sobre-container p {
+    font-size: 15px;
+    color: #5C6E61;
+    line-height: 1.8;
     margin-bottom: 20px;
-    flex: 1;
 }
 
-.rodape-preco-venda {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 15px;
-    border-top: 1px solid #F1F5F9;
-}
-
-.preco-valor {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--texto-escuro);
-}
-
-.btn-comprar-vitrine {
-    background-color: var(--verde-mira);
-    color: var(--branco);
+.btn-voltar-cardapio {
+    background-color: #2F3E33;
+    color: #FFFFFF;
     border: none;
-    padding: 12px 20px;
-    border-radius: var(--radius-card);
-    font-size: 13px;
-    font-weight: 700;
+    padding: 14px 30px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 15px;
+    letter-spacing: 0.5px;
+    transition: background-color 0.2s;
+}
+.btn-voltar-cardapio:hover { background-color: #4A5D4E; }
+
+/* ==========================================
+   BANNER PRINCIPAL (HERO DE PONTA A PONTA)
+   ========================================== */
+.hero-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 60px 0 0 6%; /* Adicionado 60px no topo para compensar a onda do menu */
+    height: 540px;
+    width: 100%;
+    background-image: url('bolo-destaque.jpg') !important; 
+    background-size: cover;
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+
+.hero-content { max-width: 480px; z-index: 2; }
+.hero-content .subtitle { font-size: 11px; letter-spacing: 3px; color: #7A8A7C; font-weight: 600; margin-bottom: 10px; }
+.hero-section h2 { font-family: 'Cinzel', serif; font-size: 42px; color: #2F3E33; line-height: 1.2; margin-bottom: 18px; }
+.hero-content .description { font-size: 14px; color: #5C6E61; line-height: 1.6; }
+
+/* ==========================================
+   SEÇÃO DE CATEGORIAS (MENU CÁPSULA BRANCO)
+   ========================================== */
+.categories-container { 
+    padding: 30px 6% 10px 6%; 
+}
+
+.categories-section { 
+    background-color: #FFFFFF; 
+    border-radius: 50px; 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 12px 30px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
+}
+
+.category-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    cursor: pointer; 
+    padding: 6px 14px; 
+    border-radius: 30px; 
+    transition: all 0.2s ease;
+}
+
+.category-item span { 
+    font-size: 11px; 
+    font-weight: 600; 
+    color: #7A8A7C; 
+}
+
+.category-item .cat-icon { 
+    font-size: 16px; 
+    color: #7A8A7C; 
+}
+
+.category-item.active { 
+    background-color: #4A5D4E; 
+}
+
+.category-item.active span, 
+.category-item.active .cat-icon { 
+    color: #FFFFFF; 
+}
+
+/* ==========================================
+   BARRA DE FILTROS E PESQUISA INTEGRADA
+   ========================================== */
+.filter-bar { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 20px 6% 10px 6%; 
+}
+
+/* Estilização da Nova Barra de Pesquisa */
+.search-wrapper {
+    position: relative;
+    width: 320px; /* Largura ideal e discreta */
+}
+
+.search-icon {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #7A8A7C;
+    font-size: 16px;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 10px 15px 10px 42px; /* Espaço para o ícone de lupa */
+    border: 1px solid #D1C9BE;
+    background-color: #FFFFFF;
+    border-radius: 25px;
+    font-size: 12px;
+    color: #2F3E33;
+    transition: all 0.2s;
+}
+
+.search-wrapper input:focus {
+    border-color: #4A5D4E;
+    box-shadow: 0 0 8px rgba(74, 93, 78, 0.15);
+}
+
+.sort-wrapper label { 
+    font-size: 10px; 
+    color: #7A8A7C; 
+    margin-right: 5px; 
+}
+
+.sort-wrapper select { 
+    background: #FFFFFF; 
+    border: 1px solid #D1C9BE; 
+    padding: 8px 15px; 
+    border-radius: 20px; 
+    font-size: 11px; 
+    color: #2F3E33;
+    cursor: pointer;
+}
+
+/* ==========================================
+   GRADE DE PRODUTOS (4 COLUNAS FIXAS)
+   ========================================== */
+.products-grid { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 25px; 
+    padding: 30px 6% 60px 6%; 
+    width: 100%;
+}
+
+/* Animação de entrada sutil para os cartões de produtos */
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.product-card { 
+    background-color: #FFFFFF; 
+    border-radius: 20px; 
+    padding: 15px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02); 
+    cursor: pointer; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+}
+
+.card-animation {
+    animation: cardFadeIn 0.5s ease-out forwards;
+}
+
+.product-card:hover { 
+    transform: translateY(-4px); 
+    box-shadow: 0 6px 20px rgba(47, 62, 51, 0.05);
+}
+
+.product-img-wrapper img { 
+    width: 100% !important; 
+    height: 200px !important; 
+    border-radius: 15px; 
+    object-fit: cover !important; 
+}
+
+.product-card h3 { 
+    font-family: 'Cinzel', serif; 
+    font-size: 15px; 
+    color: #2F3E33; 
+    margin: 10px 0 5px 0; 
+}
+
+.product-desc { 
+    font-size: 11px; 
+    color: #7A8A7C; 
+    line-height: 1.4; 
+    height: 32px; 
+    overflow: hidden; 
+    margin-bottom: 12px; 
+}
+
+.product-footer { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.price { 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: #BC8A5F; 
+}
+
+.btn-ver-opcoes {
+    background-color: #2F3E33;
+    color: #FFFFFF;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
-.btn-comprar-vitrine:hover { background-color: #1F291E; }
-
-.btn-detalhes-produto {
-    background-color: #ECE6E0;
-    color: var(--verde-mira);
-    border: 1px solid rgba(42, 54, 40, 0.12);
-    padding: 12px 16px;
-    border-radius: var(--radius-card);
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.btn-ver-opcoes:hover {
+    background-color: #4A5D4E;
 }
 
-.btn-detalhes-produto:hover {
-    background-color: var(--verde-mira);
-    color: var(--branco);
+/* ==========================================
+   SISTEMA DO MODAL (JANELA DE OPÇÕES)
+   ========================================== */
+.modal { 
+    display: none; 
+    position: fixed; 
+    top: 0; left: 0; 
+    width: 100%; height: 100%; 
+    background-color: rgba(0,0,0,0.4); 
+    z-index: 2000; 
+    align-items: center; 
+    justify-content: center; 
 }
 
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0, 0, 0, 0.55);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 4000;
+.modal-content { 
+    background-color: #FAF6F0; 
+    padding: 25px; 
+    border-radius: 20px; 
+    max-width: 400px; 
+    width: 90%; 
+    position: relative; 
 }
 
-.modal-overlay.ativo {
-    display: flex;
+.close-modal { 
+    position: absolute; 
+    top: 12px; right: 18px; 
+    font-size: 26px; 
+    cursor: pointer; 
+    color: #2F3E33; 
 }
 
-.modal-produto {
-    position: relative;
-    width: min(920px, 100%);
-    background-color: var(--branco);
-    border-radius: 30px;
-    overflow: hidden;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    box-shadow: 0 30px 75px rgba(0, 0, 0, 0.18);
-    max-height: calc(100vh - 40px);
+.modal-body img { 
+    width: 100%; 
+    height: 180px; 
+    object-fit: cover; 
+    border-radius: 12px; 
+    margin-bottom: 12px; 
 }
 
-@media (max-width: 860px) {
-    .modal-produto {
-        grid-template-columns: 1fr;
-        max-height: none;
-    }
+.modal-body h2 { 
+    font-family: 'Cinzel', serif; 
+    font-size: 20px; 
+    margin-bottom: 5px; 
 }
 
-.modal-produto-imagem {
-    min-height: 360px;
-    background: #F7F5F0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
+.modal-body p { 
+    font-size: 12px; 
+    color: #7A8A7C; 
+    margin-bottom: 15px; 
 }
 
-.modal-produto-imagem img {
+.section-label { 
+    font-size: 11px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    color: #2F3E33; 
+    display: block; 
+    margin-bottom: 6px; 
+}
+
+.radio-options label { 
+    display: block; 
+    margin: 8px 0; 
+    font-size: 12px; 
+    cursor: pointer; 
+}
+
+.qty-counter { 
+    display: flex; 
+    gap: 5px; 
+    align-items: center; 
+    margin-bottom: 15px; 
+}
+
+.qty-counter button { 
+    width: 28px; 
+    height: 28px; 
+    background: #2F3E33; 
+    color: white; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+}
+
+.qty-counter input { 
+    width: 40px; 
+    height: 28px; 
+    text-align: center; 
+    border: 1px solid #D1C9BE; 
+    border-radius: 4px; 
+}
+
+.modal-price-display { 
+    font-size: 13px; 
+    font-weight: bold; 
+    margin: 15px 0; 
+    color: #BC8A5F; 
+}
+
+#btn-confirm-add { 
+    background-color: #2F3E33; 
+    color: white; 
+    border: none; 
+    padding: 12px; 
+    width: 100%; 
+    border-radius: 25px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    font-size: 12px; 
+}
+
+/* ==========================================
+   PAINEL LATERAL (CARRINHO DE COMPRAS)
+   ========================================== */
+.sidebar { 
+    position: fixed; 
+    top: 0; 
+    right: -350px; 
+    width: 320px; 
+    height: 100%; 
+    background: #FAF6F0; 
+    z-index: 3000; 
+    box-shadow: -5px 0 15px rgba(0,0,0,0.05); 
+    display: flex; 
+    flex-direction: column; 
+    transition: right 0.3s ease; 
+}
+
+.sidebar.active { 
+    right: 0; 
+}
+
+.sidebar-header { 
+    padding: 20px; 
+    border-bottom: 1px solid #EFEBE4; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
+
+.sidebar-header h2 { 
+    font-family: 'Cinzel', serif; 
+    font-size: 18px; 
+}
+
+.close-sidebar { 
+    font-size: 24px; 
+    cursor: pointer; 
+}
+
+.sidebar-body { 
+    padding: 20px; 
+    flex: 1; 
+    overflow-y: auto; 
+}
+
+.empty-msg { 
+    font-size: 12px; 
+    color: #7A8A7C; 
+    text-align: center; 
+    margin-top: 30px; 
+}
+
+.cart-item-row { 
+    font-size: 12px; 
+    padding: 10px 0; 
+    border-bottom: 1px solid #EFEBE4; 
+}
+
+.sidebar-footer { 
+    padding: 20px; 
+    border-top: 1px solid #EFEBE4; 
+}
+
+.sidebar-total { 
+    font-weight: bold; 
+    font-size: 14px; 
+    margin-bottom: 12px; 
+    display: flex; 
+    justify-content: space-between; 
+}
+
+.btn-finalize { 
+    background: #4A5D4E; 
+    color: white; 
+    border: none; 
+    width: 100%; 
+    padding: 12px; 
+    border-radius: 25px; 
+    font-weight: bold; 
+    cursor: pointer; 
+    font-size: 11px; 
+}
+
+/* ==========================================
+   RODAPÉ VERDE OLIVA ULTRA ESCURO
+   ========================================== */
+.main-footer {
+    background-color: #2F3E33; /* Tom oliva escuro premium */
+    color: #FAF6F0;
+    padding: 50px 6% 20px 6%;
+    margin-top: 60px;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
 }
 
-.modal-produto-conteudo {
-    padding: 36px 32px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-}
-
-.modal-produto-categoria {
-    display: inline-flex;
-    background-color: var(--verde-mira);
-    color: var(--branco);
-    padding: 8px 14px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-}
-
-.modal-produto-conteudo h3 {
-    font-family: var(--font-serifa);
-    font-size: 30px;
-    margin-top: 4px;
-}
-
-.modal-produto-conteudo p {
-    font-size: 15px;
-    color: var(--texto-mutado);
-    line-height: 1.7;
-}
-
-.modal-produto-rodape {
-    margin-top: auto;
+.footer-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(250, 246, 240, 0.1);
 }
 
-.modal-produto-preco {
-    font-size: 28px;
-    font-weight: 800;
-    color: var(--texto-escuro);
+.logo-symbol-footer {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    border: 1px solid #FAF6F0;
+    display: inline-block;
+    padding: 4px 8px;
+    margin-bottom: 10px;
 }
 
-.modal-close {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    background: none;
-    border: none;
-    font-size: 30px;
-    color: var(--texto-escuro);
-    cursor: pointer;
-    z-index: 1;
+.footer-brand h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    letter-spacing: 2px;
 }
 
-/* Sacola Flutuante */
-.sacola-flutuante {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    background-color: var(--verde-mira);
-    color: var(--branco);
-    padding: 16px 24px;
-    border-radius: 40px;
-    box-shadow: 0 10px 30px rgba(42, 54, 40, 0.3);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    z-index: 2000;
-    font-weight: 700;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255,255,255,0.2);
-}
-
-.sacola-flutuante:hover { transform: scale(1.05); background-color: #1F291E; }
-.contador-sacola { background: var(--branco); color: var(--verde-mira); padding: 2px 8px; border-radius: 20px; font-size: 12px; }
-
-/* Modal do Carrinho Lateral */
-.painel-carrinho {
-    position: fixed;
-    top: 0;
-    right: -420px;
-    width: 420px;
-    height: 100vh;
-    background: var(--branco);
-    box-shadow: -10px 0 40px rgba(0,0,0,0.1);
-    z-index: 2500;
-    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    padding: 40px 30px;
-    display: flex;
-    flex-direction: column;
-}
-
-.painel-carrinho.ativo { right: 0; }
-.topo-carrinho { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid #F1F5F9; padding-bottom: 15px; }
-.topo-carrinho h3 { font-family: var(--font-serifa); color: var(--verde-mira); }
-.btn-fechar-carrinho { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--texto-mutado); }
-.lista-itens-carrinho { display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px; }
-.item-no-carrinho { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #FAFAFA; }
-.rodape-carrinho { border-top: 1px solid #F1F5F9; padding-top: 20px; margin-top: auto; }
-.total-container { display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; margin-bottom: 20px; }
-.btn-finalizar-carrinho { width: 100%; background: var(--verde-mira); color: white; border: none; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: background 0.2s; }
-.btn-finalizar-carrinho:hover { background: #1F291E; }
-
-/* --- MELHORIAS INTERATIVAS E PREMIUM (MIRA CONFEITARIA) --- */
-
-/* Notificação Flutuante Toast */
-.toast-notificacao {
-    position: fixed;
-    top: 30px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-20px);
-    background-color: var(--verde-mira);
-    color: var(--branco);
-    padding: 14px 28px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 700;
-    box-shadow: 0 10px 25px rgba(42, 54, 40, 0.25);
-    z-index: 3000;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.toast-notificacao.mostrar {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Controles de Quantidade no Carrinho */
-.controle-qtd-carrinho {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 6px;
-}
-.btn-qtd-carrinho {
-    background-color: #F1F5F9;
-    border: none;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s;
-    font-size: 14px;
-}
-.btn-qtd-carrinho:hover {
-    background-color: var(--creme-bg);
-    color: var(--verde-mira);
-}
-
-/* Campo de Cupom Elegante */
-.container-cupom-desconto {
-    display: flex;
-    gap: 8px;
-    margin: 15px 0;
-}
-.input-cupom-mira {
-    flex: 1;
-    padding: 10px 14px;
-    border: 1px solid #E2E8F0;
-    border-radius: 8px;
-    font-size: 13px;
-    outline: none;
-    text-transform: uppercase;
-}
-.btn-aplicar-cupom {
-    background-color: #ECE6E0;
-    color: var(--verde-mira);
-    border: 1px solid rgba(42, 54, 40, 0.15);
-    padding: 0 16px;
-    border-radius: 8px;
+.footer-brand p {
     font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
+    color: #A2B1A6;
 }
-.btn-aplicar-cupom:hover {
-    background-color: var(--verde-mira);
-    color: white;
+
+.footer-info p {
+    font-size: 12px;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-info i {
+    color: #BC8A5F;
+}
+
+.btn-whatsapp-footer {
+    border: 1px solid #FAF6F0;
+    color: #FAF6F0;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.footer-copyright {
+    text-align: center;
+    font-size: 10px;
+    color: #A2B1A6;
+    padding-top: 20px;
+}
+
+/* ==========================================
+   ANIMAÇÃO DE MOVIMENTO SUTIL NAS IMAGENS
+   ========================================== */
+
+/* 1. Prepara o quadrado da foto para segurar o zoom sem vazar pelas bordas */
+.products-grid .product-card .product-img-wrapper {
+    overflow: hidden; /* Corta o excesso da imagem quando ela crescer */
+    border-radius: 15px; /* Mantém as pontinhas arredondadas perfeitas */
+    width: 100%;
+    height: 200px;
+}
+
+/* 2. Adiciona o motor de transição lenta na própria imagem */
+.products-grid .product-card .product-img-wrapper img {
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important; /* Movimento elegante e amanteigado */
+}
+
+/* 3. Faz a foto crescer suavemente 5% quando o mouse passa por cima do card */
+.product-card:hover .product-img-wrapper img {
+    transform: scale(1.05); /* Zoom sutil de luxo */
+}
+
+/* ==========================================
+   REGRAS DE RESPONSIVIDADE PARA CELULARES
+   ========================================== */
+/* Este comando diz ao navegador: "Se a tela for menor que 768px (celulares), use estas regras:" */
+@media (max-width: 768px) {
+    
+    body {
+        padding-top: 70px; /* Reduz o espaçamento do topo no celular */
+    }
+
+    /* 1. Ajuste do Cabeçalho Superior Fixo */
+    .main-header {
+        padding: 10px 4%; /* Encolhe as margens para dar mais espaço na tela do celular */
+    }
+
+    .logo-text h1 {
+        font-size: 18px; /* Diminui o tamanho do nome "MIRA" */
+        letter-spacing: 1px;
+    }
+
+    .nav-menu {
+        display: none; /* Oculta o menu de texto simples (CARDÁPIO/SOBRE NÓS) para não embolar no topo */
+    }
+
+    .btn-whatsapp {
+        padding: 6px 12px;
+        font-size: 10px; /* Deixa o botão de enviar pedido compacto */
+    }
+
+    /* 2. Ajuste do Banner Principal (Hero) */
+    .hero-section {
+        height: auto; /* Remove a altura fixa para o conteúdo se adaptar verticalmente */
+        min-height: 400px;
+        padding: 40px 6%;
+        background-position: 75% center; /* Move a foto ligeiramente para manter o bolo em foco no celular */
+    }
+
+    .hero-section h2 {
+        font-size: 28px; /* Diminui o título grande para caber na tela do smartphone sem quebrar linhas erradas */
+        margin-bottom: 12px;
+    }
+
+    .hero-content .description {
+        font-size: 12px; /* Reduz o tamanho da descrição */
+        max-width: 85%; /* Espalha mais o texto na tela pequena */
+    }
+}
+
+/* ==========================================
+   REGRAS DE RESPONSIVIDADE (PRODUTOS E CARRINHO)
+   ========================================== */
+@media (max-width: 768px) {
+
+    /* 3. Transforma as Categorias em um Carrossel Arrastável com o dedo */
+    .categories-container {
+        padding: 15px 4% 5px 4%;
+    }
+
+    .categories-section {
+        border-radius: 20px;
+        padding: 8px 15px;
+        overflow-x: auto; /* Permite arrastar para os lados no celular */
+        white-space: nowrap; /* Impede os botões de quebrarem linha */
+        justify-content: flex-start; /* Alinha o início do carrossel na esquerda */
+        gap: 15px;
+        -webkit-overflow-scrolling: touch; /* Deixa o deslize do dedo bem macio no iPhone/Android */
+    }
+
+    /* Esconde a barra de rolagem feia do carrossel no celular */
+    .categories-section::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-item {
+        padding: 5px 12px;
+        flex-shrink: 0; /* Impede o botão de esmagar de tamanho */
+    }
+
+    /* 4. Ajuste da Barra de Pesquisa e Filtros */
+    .filter-bar {
+        flex-direction: column; /* Joga a busca para cima e a ordenação para baixo */
+        align-items: flex-start;
+        gap: 12px;
+        padding: 15px 6% 5px 6%;
+    }
+
+    .search-wrapper {
+        width: 100%; /* Barra de busca ocupa a largura total no celular */
+    }
+
+    .sort-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* 5. A MÁGICA DOS PRODUTOS: Transforma de 4 colunas para 2 colunas no celular */
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 doces por linha */
+        gap: 12px; /* Reduz o espaço entre os cards para aproveitar a tela */
+        padding: 15px 4% 40px 4%;
+    }
+
+    .product-card {
+        padding: 10px;
+        border-radius: 16px;
+    }
+
+    .product-img-wrapper img {
+        height: 140px !important; /* Diminui a altura da foto para harmonizar com a tela pequena */
+    }
+
+    .product-card h3 {
+        font-size: 13px; /* Letras ligeiramente menores nos títulos */
+        margin: 8px 0 4px 0;
+    }
+
+    .product-desc {
+        font-size: 10px;
+        height: 28px; /* Ajusta o corte da descrição curta */
+        margin-bottom: 8px;
+    }
+
+    .product-footer {
+        flex-direction: column; /* Empilha o preço e o botão se o espaço sumir */
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .price {
+        font-size: 11px;
+    }
+
+    .btn-ver-opcoes {
+        width: 100%; /* Botão ocupa toda a base do card no celular, facilitando o clique */
+        text-align: center;
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+
+    /* 6. Ajuste da Janela do Carrinho Lateral (Sidebar) */
+    .sidebar {
+        width: 100%; /* O carrinho ocupa a tela inteira quando aberto no celular */
+        right: -100%; /* Esconde totalmente para fora da tela */
+    }
+    
+    .sidebar.active {
+        right: 0;
+    }
+
+    /* 7. Ajuste da Página Sobre Nós no Celular */
+    .sobre-nos-section {
+        padding: 40px 4%;
+    }
+    
+    .sobre-container {
+        padding: 30px 20px;
+    }
+    
+    .sobre-container h2 {
+        font-size: 24px;
+    }
+    
+    .sobre-container p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
 }

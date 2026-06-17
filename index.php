@@ -1,316 +1,342 @@
-<?php
-require_once "db.php";
-$whatsapp_dono = "5531999999999"; // Substitua pelo seu WhatsApp real com o DDD
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mira Confeitaria | Catálogo Premium</title>
-    <link rel="shortcut icon" href="imagens/favicon1.png" type="image/x-icon">
+    <title>Mira Confeitaria - Cardápio</title>
+    <!-- Link para o arquivo de estilização externa CSS -->
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Biblioteca Phosphor Icons para os ícones finos e minimalistas -->
+    <script src="https://unpkg.com"></script>
+    
+    <!-- Importação das fontes premium Cinzel e Montserrat diretamente do Google Fonts -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <!-- Menu Superior -->
-    <nav class="navbar">
-        <div class="logo-container">
-            <div class="mini-badge-logo">MI<br>ЯA</div>
-            <div class="logo-mira">Mira Confeitaria</div>
+    <!-- ==========================================
+       BARRA SUPERIOR FIXA (HEADER)
+       ========================================== -->
+    <header class="main-header">
+        <div class="logo">
+            <div class="logo-symbol">
+                <span>MI</span>
+                <span>ЯA</span>
+            </div>
+            <div class="logo-text">
+                <h1>MIRA</h1>
+                <p>confeitaria</p>
+            </div>
         </div>
-        <div class="nav-links"><a href="login.php">Painel Interno</a></div>
-    </nav>
+        
+        <nav class="nav-menu">
+            <a href="#" class="active" id="menu-cardapio" onclick="mostrarCardapio()">CARDÁPIO</a>
+            <a href="#" id="menu-sobre" onclick="abrirSobreNos()">SOBRE NÓS</a>
+        </nav>
+        
+        <div class="header-actions">
+            <a href="#" class="btn-whatsapp" onclick="enviarPedidoWhatsApp()">
+                <i class="ph ph-whatsapp-logo"></i> ENVIAR PEDIDO
+            </a>
+            
+            <div class="cart-icon" onclick="toggleCarrinho()">
+                <i class="ph ph-shopping-bag"></i>
+                <span class="cart-count" id="cart-count-badge">0</span>
+            </div>
+        </div>
+    </header>
 
-    <!-- Banner Principal -->
-    <section class="hero-vitrine">
-        <div class="hero-textos">
-            <h1>Menu de Delícias</h1>
-            <p>Adicione suas opções favoritas à sacola de pedidos. Ao finalizar, você enviará a lista completa com seus dados de entrega direto para o nosso WhatsApp!</p>
+    <!-- ==========================================
+       PÁGINA DO SOBRE NÓS (FICA OCULTA POR PADRÃO)
+       ========================================== -->
+    <section id="section-sobre-nos" class="sobre-nos-section section-fade" style="display: none;">
+        <div class="sobre-container">
+            <h2>Nossa História</h2>
+            <div class="sobre-linha"></div>
+            <p>A <strong>Mira Confeitaria</strong> nasceu do sonho de transformar receitas tradicionais de família em experiências únicas e inesquecíveis. Cada ingrediente que entra em nossa cozinha é selecionado rigorosamente, priorizando produtores locais e a máxima qualidade.</p>
+            <p>Para nós, confeitar não é apenas misturar farinha e açúcar; é esculpir afeto, celebrar momentos especiais e criar memórias doces que permanecem no coração de quem amamos. Seja muito bem-vindo ao nosso cardápio artesanal!</p>
+            <button class="btn-voltar-cardapio" onclick="mostrarCardapio()">🎯 VER O CARDÁPIO AGORA</button>
         </div>
     </section>
 
-    <!-- Sessão de Vitrine de Vendas -->
-    <section class="secao-produtos">
-        
-        <div class="container-filtros-premium">
-            <button class="btn-filtro active" data-categoria="todos">Todos</button>
-            <button class="btn-filtro" data-categoria="festivos">Festivos</button>
-            <button class="btn-filtro" data-categoria="vitrine">Vitrine</button>
-            <button class="btn-filtro" data-categoria="gourmet">Gourmet</button>
-            <button class="btn-filtro" data-categoria="individual">Individual</button>
-        </div>
+    <!-- CONTAINER QUE ENGLOBA TODO O CARDÁPIO COMPLETO -->
+    <div id="area-cardapio-completo">
 
-        <div class="grid-vitrine">
-            <!-- PRODUTO 1 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Festivos</span>
-                    <img src="imagens/bolo_morango.jpg" alt="Bolo Supremo de Morango" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Bolo Supremo de Morango</h3>
-                    <p>Massa chiffon de baunilha, recheio triplo de ninho cremoso com geleia artesanal de morangos frescos.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 120,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Bolo Supremo de Morango" data-preco="120.00">Adicionar à Sacola</button>
-                    </div>
+        <!-- BANNER PRINCIPAL (HERO) -->
+        <section class="hero-section text-animation">
+            <div class="hero-content">
+                <p class="subtitle">CARDÁPIO</p>
+                <h2>Doces feitos para transformar momentos em memórias.</h2>
+                <p class="description">Confeitaria artesanal feita com ingredientes selecionados e muito amor em cada detalhe.</p>
+                <div class="hero-leaf" style="margin-top: 30px;">
+                    <div style="width: 100px; height: 1px; background-color: #BC8A5F; opacity: 0.6;"></div>
                 </div>
             </div>
-
-            <!-- PRODUTO 2 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Vitrine</span>
-                    <img src="imagens/torta_quatro_leites.jpg" alt="Torta Quatro Leites" class="foto-real-produto">
+        </section>
+        <!-- ==========================================
+           SEÇÃO DE CATEGORIAS (CÁPSULAS FUNCIONAIS)
+           ========================================== -->
+        <section class="categories-container">
+            <div class="categories-section">
+                <div class="category-item active" onclick="filtrarPorCategoria('todos', this)">
+                    <div class="cat-icon"><i class="ph ph-squares-four"></i></div>
+                    <span>TODOS</span>
                 </div>
-                <div class="detalhes-produto">
-                    <h3>Torta Quatro Leites</h3>
-                    <p>Base crocante de biscoito amanteigado, camadas densas de mousse de quatro leites finos e raspas de chocolate.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 85,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Torta Quatro Leites" data-preco="85.00">Adicionar à Sacola</button>
-                    </div>
+                <div class="category-item" onclick="filtrarPorCategoria('bolos', this)">
+                    <div class="cat-icon"><i class="ph ph-cake"></i></div>
+                    <span>BOLOS</span>
                 </div>
-            </div>
-
-            <!-- PRODUTO 3 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Gourmet</span>
-                    <img src="imagens/brigadeiros_belgas.jpg" alt="Cento de Brigadeiros Belgas" class="foto-real-produto">
+                <div class="category-item" onclick="filtrarPorCategoria('doces', this)">
+                    <div class="cat-icon"><i class="ph ph-cookie"></i></div>
+                    <span>DOCES</span>
                 </div>
-                <div class="detalhes-produto">
-                    <h3>Cento de Brigadeiros Belgas</h3>
-                    <p>Brigadeiros gourmet enrolados no autêntico split de chocolate belga Callebaut. Derrete na boca.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 160,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Cento de Brigadeiros Belgas" data-preco="160.00">Adicionar à Sacola</button>
-                    </div>
+                <div class="category-item" onclick="filtrarPorCategoria('casamentos', this)">
+                    <div class="cat-icon"><i class="ph ph-sketch-logo"></i></div>
+                    <span>CASAMENTOS</span>
                 </div>
-            </div>
-
-            <!-- PRODUTO 4 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Festivos</span>
-                    <img src="imagens/bolo_chocolate.jpg" alt="Bolo Belga de Brigadeiro" class="foto-real-produto">
+                <div class="category-item" onclick="filtrarPorCategoria('festas', this)">
+                    <div class="cat-icon"><i class="ph ph-balloon"></i></div>
+                    <span>FESTAS</span>
                 </div>
-                <div class="detalhes-produto">
-                    <h3>Bolo Belga de Brigadeiro</h3>
-                    <p>Massa intensa de cacau 100%, recheada com brigadeiro gourmet tradicional e cobertura escorrendo.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 110,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Bolo Belga de Brigadeiro" data-preco="110.00">Adicionar à Sacola</button>
-                    </div>
+                <div class="category-item" onclick="filtrarPorCategoria('sobremesas', this)">
+                    <div class="cat-icon"><i class="ph ph-ice-cream"></i></div>
+                    <span>SOBREMESAS</span>
                 </div>
             </div>
+        </section>
 
-            <!-- PRODUTO 5 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Individual</span>
-                    <img src="imagens/tartalete_frutas.jpg" alt="Tartalete de Frutas" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Tartalete de Frutas</h3>
-                    <p>Massa sucrée crocante, creme de confeiteiro suave com baunilha natural e seleção de frutas vermelhas.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 16,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Tartalete de Frutas" data-preco="16.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
+        <!-- ==========================================
+           BARRA DE PESQUISA E FILTROS INTEGRADOS
+           ========================================== -->
+        <div class="filter-bar">
+            <div class="search-wrapper">
+                <i class="ph ph-magnifying-glass search-icon"></i>
+                <input type="text" id="search-input" placeholder="Buscar doce ou bolo especial..." oninput="buscarProdutos()">
             </div>
 
-            <!-- PRODUTO 6 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Gourmet</span>
-                    <img src="imagens/caixa_macarons.jpg" alt="Caixa Macarons Premium" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Caixa Macarons Premium</h3>
-                    <p>Caixa com 6 unidades do clássico doce francês. Sabores sortidos e refinados.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 48,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Caixa Macarons Premium" data-preco="48.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-            <!-- PRODUTO 7 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Festivos</span>
-                    <img src="imagens/bolo_red_velvet.jpg" alt="Bolo Red Velvet Premium" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Bolo Red Velvet Premium</h3>
-                    <p>Massa aveludada de cor avermelhada sutil, recheada com camadas generosas de autêntico frosting de cream cheese.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 135,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Bolo Red Velvet Premium" data-preco="135.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 8 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Vitrine</span>
-                    <img src="imagens/torta_limao.jpg" alt="Torta de Limão Siciliano" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Torta de Limão Siciliano</h3>
-                    <p>Creme aveludado de limão siciliano sobre massa sablé crocante, finalizada com merengue suíço maçaricado.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 75,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Torta de Limão Siciliano" data-preco="75.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 9 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Gourmet</span>
-                    <img src="imagens/coxinha_morango.jpg" alt="Coxinha de Brigadeiro com Morango" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Coxinha de Morango (Unidade)</h3>
-                    <p>Morango fresco inteiro selecionado, envolto em uma camada espessa de brigadeiro tradicional cremoso.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 12,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Coxinha de Morango" data-preco="12.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 10 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Individual</span>
-                    <img src="imagens/slice_cake_ninho.jpg" alt="Fatia Slice Cake Ninho" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Slice Cake Ninho com Nutella</h3>
-                    <p>Fatia de bolo estruturada em embalagem individual. Massa de chocolate com recheio de leite Ninho e Nutella pura.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 18,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Slice Cake Ninho com Nutella" data-preco="18.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 11 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Vitrine</span>
-                    <img src="imagens/banoffee_premium.jpg" alt="Banoffee Premium" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Banoffee Premium</h3>
-                    <p>Camadas de biscoito triturado, doce de leite cremoso artesanal, bananas frescas fatiadas e chantilly.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 80,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Banoffee Premium" data-preco="80.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PRODUTO 12 -->
-            <div class="card-produto">
-                <div class="container-foto-produto">
-                    <span class="tag-categoria">Individual</span>
-                    <img src="imagens/pudim_lisinho.jpg" alt="Pudim de Leite Condensado" class="foto-real-produto">
-                </div>
-                <div class="detalhes-produto">
-                    <h3>Pudim de Leite Condensado</h3>
-                    <p>O clássico pudim individual extremamente cremoso, lisinho e sem furinhos, banhado em calda de caramelo.</p>
-                    <div class="rodape-preco-venda">
-                        <span class="preco-valor">R$ 10,00</span>
-                        <button type="button" class="btn-comprar-vitrine btn-add-sacola" data-nome="Pudim de Leite Condensado" data-preco="10.00">Adicionar à Sacola</button>
-                    </div>
-                </div>
+            <div class="sort-wrapper">
+                <label>ORDENAR POR:</label>
+                <select id="sort-select" onchange="ordenarProdutos()">
+                    <option value="populares">Mais populares</option>
+                    <option value="menor-preco">Menor preço</option>
+                    <option value="maior-preco">Maior preço</option>
+                </select>
             </div>
         </div>
-    </section>
 
-    <!-- Sacola Flutuante Abaixo -->
-    <div class="sacola-flutuante" id="abrir-carrinho">
-        <span>🛍️ Minha Sacola</span>
-        <span class="contador-sacola" id="cont-itens">0</span>
-    </div>
-    <!-- Alerta Flutuante Premium -->
-    <div id="toast-alerta" class="toast-notificacao">🍰 Doce adicionado à sacola!</div>
-
-    <!-- Painel Lateral do Carrinho -->
-    <div class="painel-carrinho" id="menu-lateral-carrinho">
-        <div class="topo-carrinho">
-            <h3>Seu Pedido</h3>
-            <button class="btn-fechar-carrinho" id="fechar-carrinho">&times;</button>
-        </div>
-        
-        <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; padding-right: 5px;">
-            <div class="lista-itens-carrinho" id="itens-carrinho-lista"></div>
-
-            <!-- Inclusão do Campo de Cupom Fino -->
-            <div style="border-top: 1px solid #F1F5F9; padding-top: 15px;">
-                <label style="font-size: 10px; font-weight: 700; color: var(--texto-mutado); uppercase; letter-spacing: 0.5px;">POSSUI UM CUPOM?</label>
-                <div class="container-cupom-desconto">
-                    <input type="text" id="input-cupom-texto" class="input-cupom-mira" placeholder="Ex: BOASVINDAS">
-                    <button type="button" id="btn-validar-cupom" class="btn-aplicar-cupom">Aplicar</button>
-                </div>
-                <p id="msg-cupom-status" style="font-size: 12px; font-weight: 600; margin-top: -5px; display: none;"></p>
+        <!-- ==========================================
+           GRADE DE PRODUTOS PARTE A (PRODUTOS 1 AO 6)
+           ========================================== -->
+        <main class="products-grid" id="main-products-grid">
+            
+            <!-- Produto 1 -->
+            <div class="product-card card-animation" data-category="bolos" data-price="110.00" onclick="abrirModal('Bolo de Chocolate', 'imagens/bolo_chocolate.jpg', 'Massa fofinha de cacau com recheio de brigadeiro gourmet.', 110.00)">
+                <div class="product-img-wrapper"><img src="imagens/bolo_chocolate.jpg" alt="Bolo de Chocolate"></div>
+                <h3>Bolo de Chocolate</h3>
+                <p class="product-desc">Massa fofinha de cacau com recheio de brigadeiro gourmet.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 110,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
             </div>
 
-            <div style="border-top: 1px solid #F1F5F9; padding-top: 15px; display: flex; flex-direction: column; gap: 12px;">
-                <h4 style="font-size: 13px; font-weight: 700; color: var(--verde-mira);">Dados de Entrega</h4>
+            <!-- Produto 2 -->
+            <div class="product-card card-animation" data-category="bolos" data-price="125.00" onclick="abrirModal('Bolo de Morango', 'imagens/bolo_morango.jpg', 'Pó de ló leve com creme belga e morangos frescos.', 125.00)">
+                <div class="product-img-wrapper"><img src="imagens/bolo_morango.jpg" alt="Bolo de Morango"></div>
+                <h3>Bolo de Morango</h3>
+                <p class="product-desc">Pó de ló leve com creme belga e morangos frescos.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 125,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 3 -->
+            <div class="product-card card-animation" data-category="sobremesas" data-price="95.00" onclick="abrirModal('Torta de Limão', 'imagens/torta_limao.jpg', 'Massa crocante com creme de limão e merengue tostado.', 95.00)">
+                <div class="product-img-wrapper"><img src="imagens/torta_limao.jpg" alt="Torta de Limão"></div>
+                <h3>Torta de Limão</h3>
+                <p class="product-desc">Massa crocante com creme de limão e merengue tostado.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 95,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 4 -->
+            <div class="product-card card-animation" data-category="sobremesas" data-price="130.00" onclick="abrirModal('Torta Quatro Leites', 'imagens/torta_quatro_leites.jpg', 'Bolo molhadinho com calda e raspas de chocolate branco.', 130.00)">
+                <div class="product-img-wrapper"><img src="imagens/torta_quatro_leites.jpg" alt="Torta Quatro Leites"></div>
+                <h3>Torta Quatro Leites</h3>
+                <p class="product-desc">Bolo molhadinho com calda e raspas de chocolate branco.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 130,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 5 -->
+            <div class="product-card card-animation" data-category="sobremesas" data-price="85.00" onclick="abrirModal('Banoffee Premium', 'imagens/banoffee_premium.jpg', 'Base de biscoito crocante, doce de leite artesanal, bananas frescas and chantilly polvilhado com cacau.', 85.00)">
+                <div class="product-img-wrapper"><img src="imagens/banoffee_premium.jpg" alt="Banoffee Premium"></div>
+                <h3>Banoffee Premium</h3>
+                <p class="product-desc">Base crocante, doce de leite artesanal, bananas frescas e chantilly leve.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 85,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 6 -->
+            <div class="product-card card-animation" data-category="bolos" data-price="135.00" onclick="abrirModal('Bolo Red Velvet', 'imagens/bolo_red_velvet.jpg', 'Massa aveludada de cacau com recheio cremoso à base de cream cheese e toque de baunilha.', 135.00)">
+                <div class="product-img-wrapper"><img src="imagens/bolo_red_velvet.jpg" alt="Bolo Red Velvet"></div>
+                <h3>Bolo Red Velvet</h3>
+                <p class="product-desc">Massa aveludada vermelha com recheio cremoso tradicional de cream cheese.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 135,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+            <!-- Produto 7 -->
+            <div class="product-card card-animation" data-category="doces" data-price="45.00" onclick="abrirModal('Brigadeiros Belgas', 'imagens/brigadeiros_belgas.jpg', 'Caixa com brigadeiros gourmet feitos com o autêntico chocolate belga ao leite.', 45.00)">
+                <div class="product-img-wrapper"><img src="imagens/brigadeiros_belgas.jpg" alt="Brigadeiros Belgas"></div>
+                <h3>Brigadeiros Belgas</h3>
+                <p class="product-desc">Tradicionais brigadeiros gourmet enrolados no puro granulado belga.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 45,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 8 -->
+            <div class="product-card card-animation" data-category="doces" data-price="65.00" onclick="abrirModal('Caixa de Macarons', 'imagens/caixa_macarons.jpg', 'Delicados macarons franceses sortidos nos sabores pistache, baunilha, framboesa e chocolate.', 65.00)">
+                <div class="product-img-wrapper"><img src="imagens/caixa_macarons.jpg" alt="Caixa de Macarons"></div>
+                <h3>Caixa de Macarons</h3>
+                <p class="product-desc">Caixa com clássicos macarons franceses crocantes por fora e macios por dentro.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 65,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 9 -->
+            <div class="product-card card-animation" data-category="festas" data-price="12.00" onclick="abrirModal('Coxinha de Morango', 'imagens/coxinha_morango.jpg', 'Morango inteiro e fresco envolvido por uma camada generosa de brigadeiro gourmet tradicional.', 12.00)">
+                <div class="product-img-wrapper"><img src="imagens/coxinha_morango.jpg" alt="Coxinha de Morango"></div>
+                <h3>Coxinha de Morango</h3>
+                <p class="product-desc">Grande morango fresco recheado e coberto com muito brigadeiro artesanal.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 12,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 10 -->
+            <div class="product-card card-animation" data-category="sobremesas" data-price="55.00" onclick="abrirModal('Pudim Lisinho', 'imagens/pudim_lisinho.jpg', 'Pudim de leite condensado super cremoso, sem furinhos, com calda de caramelo dourada.', 55.00)">
+                <div class="product-img-wrapper"><img src="imagens/pudim_lisinho.jpg" alt="Pudim Lisinho"></div>
+                <h3>Pudim Lisinho</h3>
+                <p class="product-desc">O clássico e perfeito pudim de leite condensado, super cremoso e sem furinhos.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 55,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 11 -->
+            <div class="product-card card-animation" data-category="festas" data-price="18.00" onclick="abrirModal('Fatia Cake Ninho', 'imagens/slice_cake_ninho.jpg', 'Generosa fatia de bolo com massa fofinha e muito recheio cremoso de Leite Ninho.', 18.00)">
+                <div class="product-img-wrapper"><img src="imagens/slice_cake_ninho.jpg" alt="Fatia Cake Ninho"></div>
+                <h3>Fatia Cake Ninho</h3>
+                <p class="product-desc">Fatia de bolo (slice cake) super recheada com creme trufado de Leite Ninho.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 18,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+            <!-- Produto 12 -->
+            <div class="product-card card-animation" data-category="casamentos" data-price="15.00" onclick="abrirModal('Tartalete de Frutas', 'imagens/tartalete_frutas.jpg', 'Mini tortinha de massa leve recheada com creme de confeiteiro e decorada com frutas frescas.', 15.00)">
+                <div class="product-img-wrapper"><img src="imagens/tartalete_frutas.jpg" alt="Tartalete de Frutas"></div>
+                <h3>Tartalete de Frutas</h3>
+                <p class="product-desc">Massa sablée crocante com creme belga suave e seleção de frutas frescas por cima.</p>
+                <div class="product-footer"><span class="price">A partir de R$ 15,00</span><button class="btn-ver-opcoes">Ver Opções</button></div>
+            </div>
+
+        </main>
+    </div> <!-- FIM DA DIV #area-cardapio-completo -->
+    <!-- ==========================================
+       RODAPÉ OFICIAL (VERDE OLIVA ULTRA ESCURO)
+       ========================================== -->
+    <footer class="main-footer">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <div class="logo-symbol-footer">MIЯA</div>
+                <h2>MIRA confeitaria</h2>
+                <p>Doces feitos para transformar momentos em memórias.</p>
+            </div>
+            <div class="footer-info">
+                <p><i class="ph ph-instagram-logo"></i> @miraconfeitaria</p>
+                <p><i class="ph ph-map-pin"></i> Rua Sulfumiro de Freitas, 68A Progresso<br> Sete Lagoas - MG</p>
+            </div>
+            <div class="footer-action">
+                <a href="#" class="btn-whatsapp-footer" onclick="enviarPedidoWhatsApp()"><i class="ph ph-whatsapp-logo"></i> FALAR NO WHATSAPP</a>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>&copy; 2026 Mira Confeitaria. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <!-- ==========================================
+       JANELA FLUTUANTE (MODAL DE DETALHES)
+       ========================================== -->
+    <div id="product-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="fecharModal()">&times;</span>
+            <div class="modal-body">
+                <img id="modal-img" src="" alt="Produto">
+                <h2 id="modal-title">Nome do Doce</h2>
+                <p id="modal-desc">Descrição completa do doce aqui.</p>
                 
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 10px; font-weight: 700; color: var(--texto-mutado);">NOME COMPLETO</label>
-                    <input type="text" id="cli-nome" placeholder="Digite seu nome" style="width: 100%; padding: 10px 14px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13px; outline:none;">
+                <div class="options-group">
+                    <label class="section-label">Selecione o Tamanho:</label>
+                    <div class="radio-options">
+                        <label><input type="radio" name="size" value="Fatia Individual" checked onclick="atualizarPrecoModal(15)"> Fatia Individual (+ R$ 15,00)</label>
+                        <label><input type="radio" name="size" value="Bolo Inteiro 1kg" onclick="atualizarPrecoModal(0)"> Bolo Inteiro 1kg (Preço Padrão)</label>
+                        <label><input type="radio" name="size" value="Bolo Inteiro 2kg" onclick="atualizarPrecoModal(90)"> Bolo Inteiro 2kg (+ R$ 90,00)</label>
+                    </div>
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <label style="font-size: 10px; font-weight: 700; color: var(--texto-mutado);">ENDEREÇO RESIDENCIAL</label>
-                    <input type="text" id="cli-endereco" placeholder="Rua, número e bairro" style="width: 100%; padding: 10px 14px; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 13px; outline:none;">
+                <div class="options-group">
+                    <label class="section-label">Observações ou Alterações:</label>
+                    <textarea id="modal-obs" placeholder="Ex: Escrever 'Parabéns Rafa', retirar morangos, etc." rows="2" style="width: 100%; border: 1px solid #D1C9BE; border-radius: 8px; padding: 8px; font-size: 12px; resize: none;"></textarea>
                 </div>
-            </div>
-        </div>
 
-        <div class="rodape-carrinho">
-            <div id="bloco-desconto-visual" style="display: flex; justify-content: space-between; font-size: 14px; color: #10B981; margin-bottom: 8px; display: none;">
-                <span>Desconto (10%):</span>
-                <span id="valor-desconto-html">- R$ 0,00</span>
-            </div>
-            <div class="total-container">
-                <span>Total:</span>
-                <span id="valor-total-carrinho">R$ 0,00</span>
-            </div>
-            <button class="btn-finalizar-carrinho" id="finalizar-pedido-whats" data-whats="<?php echo $whatsapp_dono; ?>">Enviar Pedido via WhatsApp</button>
-        </div>
-    </div>
-
-    <!-- Modal de Produto -->
-    <div class="modal-overlay" id="modal-produto-overlay" aria-hidden="true">
-        <div class="modal-produto">
-            <button class="modal-close" id="fechar-modal-produto" aria-label="Fechar janela">&times;</button>
-            <div class="modal-produto-imagem">
-                <img id="modal-produto-img" src="" alt="Imagem do produto">
-            </div>
-            <div class="modal-produto-conteudo">
-                <span class="modal-produto-categoria" id="modal-produto-categoria"></span>
-                <h3 id="modal-produto-titulo"></h3>
-                <p id="modal-produto-descricao"></p>
-                <div class="modal-produto-rodape">
-                    <span class="modal-produto-preco" id="modal-produto-preco"></span>
-                    <button type="button" class="btn-comprar-vitrine btn-add-sacola btn-modal-add" id="btn-modal-add" data-nome="" data-preco="">Adicionar à Sacola</button>
+                <div class="quantity-selector">
+                    <label class="section-label">Quantidade:</label>
+                    <div class="qty-counter">
+                        <button type="button" onclick="alterarQtd(-1)">-</button>
+                        <input type="number" id="qty-input" value="1" min="1" readonly>
+                        <button type="button" onclick="alterarQtd(1)">+</button>
+                    </div>
                 </div>
+
+                <div class="modal-price-display">
+                    Total do item: <span id="modal-total-price">R$ 0,00</span>
+                </div>
+
+                <button id="btn-confirm-add" onclick="adicionarAoCarrinhoDoModal()">ADICIONAR AO PEDIDO</button>
             </div>
         </div>
     </div>
+    <!-- ==========================================
+       PAINEL LATERAL (CARRINHO DE COMPRAS)
+       ========================================== -->
+    <div id="sidebar-carrinho" class="sidebar">
+        <div class="sidebar-header">
+            <h2>Seu Pedido</h2>
+            <span class="close-sidebar" onclick="toggleCarrinho()">&times;</span>
+        </div>
+        
+        <div id="carrinho-itens" class="sidebar-body">
+            <p class="empty-msg">Nenhum item adicionado ainda.</p>
+        </div>
 
+        <div class="sidebar-form" id="checkout-form-container" style="display: none; padding: 15px 20px; border-top: 1px solid #EFEBE4; background: #F5F0E6;">
+            <h3 style="font-family: 'Cinzel', serif; font-size: 13px; margin-bottom: 10px;">Dados para Entrega</h3>
+            
+            <div class="form-field" style="margin-bottom: 8px;">
+                <input type="text" id="client-name" placeholder="Seu Nome Completo *" style="width: 100%; padding: 8px 12px; border: 1px solid #D1C9BE; border-radius: 20px; font-size: 12px;">
+            </div>
+
+            <div class="form-field" style="margin-bottom: 8px;">
+                <select id="delivery-method" onchange="toggleCamposEndereco()" style="width: 100%; padding: 8px 12px; border: 1px solid #D1C9BE; border-radius: 20px; font-size: 12px; background: white;">
+                    <option value="entrega">Agendar Entrega em Casa</option>
+                    <option value="retirada">Retirar na Confeitaria</option>
+                </select>
+            </div>
+
+            <div id="address-fields">
+                <div class="form-field" style="margin-bottom: 8px;">
+                    <input type="text" id="client-address" placeholder="Endereço e Número *" style="width: 100%; padding: 8px 12px; border: 1px solid #D1C9BE; border-radius: 20px; font-size: 12px;">
+                </div>
+                <div class="form-field">
+                    <input type="text" id="client-bairro" placeholder="Bairro *" style="width: 100%; padding: 8px 12px; border: 1px solid #D1C9BE; border-radius: 20px; font-size: 12px;">
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-total">Total: <span id="sidebar-total-value">R$ 0,00</span></div>
+            <button class="btn-finalize" onclick="enviarPedidoWhatsApp()">CONCLUIR E MANDAR NO WHATSAPP</button>
+        </div>
+    </div>
+
+    <!-- Vincula o arquivo lógico JavaScript de controle dinâmico -->
     <script src="script.js"></script>
 </body>
 </html>
-
