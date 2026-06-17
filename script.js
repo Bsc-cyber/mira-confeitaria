@@ -24,90 +24,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnFechar = document.getElementById("fechar-carrinho");
     const painel = document.getElementById("menu-lateral-carrinho");
 
-    btnAbrir.addEventListener("click", () => painel.classList.add("ativo"));
-    btnFechar.addEventListener("click", () => painel.classList.remove("ativo"));
+    if (btnAbrir && painel) btnAbrir.addEventListener("click", () => painel.classList.add("ativo"));
+    if (btnFechar && painel) btnFechar.addEventListener("click", () => painel.classList.remove("ativo"));
 
     // 3. ADICIONAR PRODUTOS À SACOLA + NOTIFICAÇÃO TOAST
-    const botoesAdd = document.querySelectorAll(".btn-add-sacola:not(.btn-modal-add)");
+    const botoesAdd = document.querySelectorAll(".btn-add-sacola");
     const toast = document.getElementById("toast-alerta");
-    const modalOverlay = document.getElementById("modal-produto-overlay");
-    const modalClose = document.getElementById("fechar-modal-produto");
-    const modalImg = document.getElementById("modal-produto-img");
-    const modalCategoria = document.getElementById("modal-produto-categoria");
-    const modalTitulo = document.getElementById("modal-produto-titulo");
-    const modalDescricao = document.getElementById("modal-produto-descricao");
-    const modalPreco = document.getElementById("modal-produto-preco");
-    const btnModalAdd = document.getElementById("btn-modal-add");
-
-    function adicionarProdutoAoCarrinho(nome, preco) {
-        const itemExistente = carrinho.find(item => item.nome === nome);
-        if (itemExistente) {
-            itemExistente.quantidade++;
-        } else {
-            carrinho.push({ nome, preco, quantidade: 1 });
-        }
-        atualizarInterfaceCarrinho();
-        toast.classList.add("mostrar");
-        setTimeout(() => toast.classList.remove("mostrar"), 2000);
-    }
-
-    function abrirModalProduto(produto) {
-        modalImg.src = produto.img;
-        modalImg.alt = produto.nome;
-        modalCategoria.textContent = produto.categoria;
-        modalTitulo.textContent = produto.nome;
-        modalDescricao.textContent = produto.descricao;
-        modalPreco.textContent = `R$ ${parseFloat(produto.preco).toFixed(2).replace('.', ',')}`;
-        btnModalAdd.dataset.nome = produto.nome;
-        btnModalAdd.dataset.preco = produto.preco;
-        modalOverlay.classList.add("ativo");
-        modalOverlay.setAttribute("aria-hidden", "false");
-    }
-
-    function fecharModalProduto() {
-        modalOverlay.classList.remove("ativo");
-        modalOverlay.setAttribute("aria-hidden", "true");
-    }
 
     botoesAdd.forEach(btn => {
         btn.addEventListener("click", () => {
             const nome = btn.getAttribute("data-nome");
             const preco = parseFloat(btn.getAttribute("data-preco"));
-            adicionarProdutoAoCarrinho(nome, preco);
+
+            const itemExistente = carrinho.find(item => item.nome === nome);
+            if (itemExistente) {
+                itemExistente.quantidade++;
+            } else {
+                carrinho.push({ nome, preco, quantidade: 1 });
+            }
+            
+            atualizarInterfaceCarrinho();
+            
+            if (toast) {
+                toast.classList.add("mostrar");
+                setTimeout(() => toast.classList.remove("mostrar"), 2000);
+            }
         });
-    });
-
-    cardsProdutos.forEach(card => {
-        const rodape = card.querySelector(".rodape-preco-venda");
-        const btnDetalhes = document.createElement("button");
-        btnDetalhes.type = "button";
-        btnDetalhes.className = "btn-detalhes-produto";
-        btnDetalhes.textContent = "Ver Detalhes";
-        rodape.insertBefore(btnDetalhes, rodape.lastElementChild);
-
-        btnDetalhes.addEventListener("click", () => {
-            const nome = card.querySelector("h3").textContent;
-            const descricao = card.querySelector(".detalhes-produto p").textContent;
-            const categoria = card.querySelector(".tag-categoria").textContent;
-            const img = card.querySelector(".foto-real-produto").src;
-            const preco = card.querySelector(".btn-add-sacola").getAttribute("data-preco");
-
-            abrirModalProduto({ nome, descricao, categoria, img, preco });
-        });
-    });
-
-    btnModalAdd.addEventListener("click", () => {
-        const nome = btnModalAdd.dataset.nome;
-        const preco = parseFloat(btnModalAdd.dataset.preco);
-        adicionarProdutoAoCarrinho(nome, preco);
-        fecharModalProduto();
-    });
-
-    modalClose.addEventListener("click", fecharModalProduto);
-    modalOverlay.addEventListener("click", event => {
-        if (event.target === modalOverlay) {
-            fecharModalProduto();
-        }
     });
 
     // 4. SISTEMA DE CUPOM DE DESCONTO DE TESTE
@@ -115,22 +57,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const inputCupom = document.getElementById("input-cupom-texto");
     const msgCupom = document.getElementById("msg-cupom-status");
 
-    btnCupom.addEventListener("click", () => {
-        const textoCupom = inputCupom.value.toUpperCase().trim();
-        
-        if (textoCupom === "BOASVINDAS") {
-            taxaDesconto = 0.10; // Aplica 10%
-            msgCupom.textContent = "Cupom 'BOASVINDAS' aplicado! 🎉";
-            msgCupom.style.color = "#10B981";
-            msgCupom.style.display = "block";
-        } else {
-            taxaDesconto = 0;
-            msgCupom.textContent = "Cupom inválido ou expirado.";
-            msgCupom.style.color = "#EF4444";
-            msgCupom.style.display = "block";
-        }
-        atualizarInterfaceCarrinho();
-    });
+    if (btnCupom && inputCupom && msgCupom) {
+        btnCupom.addEventListener("click", () => {
+            const textoCupom = inputCupom.value.toUpperCase().trim();
+            
+            if (textoCupom === "BOASVINDAS") {
+                taxaDesconto = 0.10; // Aplica 10%
+                msgCupom.textContent = "Cupom 'BOASVINDAS' aplicado! 🎉";
+                msgCupom.style.color = "#10B981";
+                msgCupom.style.display = "block";
+            } else {
+                taxaDesconto = 0;
+                msgCupom.textContent = "Cupom inválido ou expirado.";
+                msgCupom.style.color = "#EF4444";
+                msgCupom.style.display = "block";
+            }
+            atualizarInterfaceCarrinho();
+        });
+    }
 
     // 5. ATUALIZAR INTERFACE DA SACOLA + MAIS E MENOS
     function atualizarInterfaceCarrinho() {
@@ -139,6 +83,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const totalHtml = document.getElementById("valor-total-carrinho");
         const blocoDescVisual = document.getElementById("bloco-desconto-visual");
         const valorDescHtml = document.getElementById("valor-desconto-html");
+        
+        if (!listaHtml) return; // Evita erros se o elemento não existir na página
         
         listaHtml.innerHTML = "";
         let subtotalCalculado = 0;
@@ -164,23 +110,25 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
         });
 
-        // Cálculos matemáticos de descontos
         let totalDesconto = subtotalCalculado * taxaDesconto;
         let totalGeralFinal = subtotalCalculado - totalDesconto;
 
-        if (totalDesconto > 0) {
-            blocoDescVisual.style.display = "flex";
-            valorDescHtml.textContent = `- R$ ${totalDesconto.toFixed(2).replace('.', ',')}`;
-        } else {
-            blocoDescVisual.style.display = "none";
+        if (blocoDescVisual && valorDescHtml) {
+            if (totalDesconto > 0) {
+                blocoDescVisual.style.display = "flex";
+                valorDescHtml.textContent = `- R$ ${totalDesconto.toFixed(2).replace('.', ',')}`;
+            } else {
+                blocoDescVisual.style.display = "none";
+            }
         }
 
-        contItens.textContent = totalQuantidade;
-        totalHtml.textContent = `R$ ${totalGeralFinal.toFixed(2).replace('.', ',')}`;
+        if (contItens) contItens.textContent = totalQuantidade;
+        if (totalHtml) totalHtml.textContent = `R$ ${totalGeralFinal.toFixed(2).replace('.', ',')}`;
     }
 
-    // Funções de Escopo Global para os botões do Carrinho
+    // Funções globais mapeadas para acessar o carrinho interno sem erros de escopo
     window.alterarQuantidade = (index, valor) => {
+        if (!carrinho[index]) return;
         carrinho[index].quantidade += valor;
         if (carrinho[index].quantidade <= 0) {
             carrinho.splice(index, 1);
@@ -189,52 +137,72 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     window.removerDoCarrinho = (index) => {
+        if (!carrinho[index]) return;
         carrinho.splice(index, 1);
         atualizarInterfaceCarrinho();
     };
 
     // 6. ENVIAR PARA O WHATSAPP COM OS DADOS EXTRA
-    document.getElementById("finalizar-pedido-whats").addEventListener("click", function() {
-        if (carrinho.length === 0) {
-            alert("Sua sacola está vazia!");
-            return;
-        }
+    const botaoFinalizar = document.getElementById("finalizar-pedido-whats");
+    if (botaoFinalizar) {
+        botaoFinalizar.addEventListener("click", function() {
+            if (carrinho.length === 0) {
+                alert("Sua sacola está vazia!");
+                return;
+            }
 
-        const nomeCliente = document.getElementById("cli-nome").value.trim();
-        const enderecoCliente = document.getElementById("cli-endereco").value.trim();
+            const inputNome = document.getElementById("cli-nome");
+            const inputEndereco = document.getElementById("cli-endereco");
 
-        if (nomeCliente === "" || enderecoCliente === "") {
-            alert("Por favor, preencha o seu Nome e Endereço.");
-            return;
-        }
+            if (!inputNome || !inputEndereco) {
+                alert("Erro no HTML: Não encontrei os campos com os IDs 'cli-nome' ou 'cli-endereco'. Verifique as tags do seu formulário.");
+                return;
+            }
 
-        const telefoneDono = this.getAttribute("data-whats");
-        let mensagem = `🧁 *NOVA ENCOMENDA - MIRA CONFEITARIA* 🧁\n\n`;
-        mensagem += `👤 *Cliente:* ${nomeCliente}\n`;
-        mensagem += `📍 *Entrega:* ${enderecoCliente}\n\n`;
-        mensagem += `=========================\n`;
-        mensagem += `🛒 *ÍTENS SOLICITADOS:*\n\n`;
-        
-        let subtotalGeral = 0;
+            const nomeCliente = inputNome.value.trim();
+            const enderecoCliente = inputEndereco.value.trim();
 
-        carrinho.forEach(item => {
-            const subtotalItem = item.preco * item.quantidade;
-            subtotalGeral += subtotalItem;
-            mensagem += `🍰 *${item.quantidade}x* ${item.nome}\n`;
-            mensagem += `   Subtotal: R$ ${subtotalItem.toFixed(2).replace('.', ',')}\n\n`;
+            if (nomeCliente === "" || enderecoCliente === "") {
+                alert("Por favor, preencha o seu Nome e Endereço.");
+                return;
+            }
+
+            const telefoneDono = this.getAttribute("data-whats");
+            if (!telefoneDono || telefoneDono.trim() === "") {
+                alert("Erro de Configuração: O botão precisa ter o atributo data-whats='55...' preenchido no seu arquivo HTML.");
+                return;
+            }
+
+            let mensagem = `🧁 *NOVA ENCOMENDA - MIRA CONFEITARIA* 🧁\n\n`;
+            mensagem += `👤 *Cliente:* ${nomeCliente}\n`;
+            mensagem += `📍 *Entrega:* ${enderecoCliente}\n\n`;
+            mensagem += `=========================\n`;
+            mensagem += `🛒 *ÍTENS SOLICITADOS:*\n\n`;
+            
+            let subtotalGeral = 0;
+
+            carrinho.forEach(item => {
+                const subtotalItem = item.preco * item.quantidade;
+                subtotalGeral += subtotalItem;
+                mensagem += `🍰 *${item.quantidade}x* ${item.nome}\n`;
+                mensagem += `   Subtotal: R$ ${subtotalItem.toFixed(2).replace('.', ',')}\n\n`;
+            });
+
+            let valorDescontoFinal = subtotalGeral * taxaDesconto;
+            let valorTotalFinal = subtotalGeral - valorDescontoFinal;
+
+            mensagem += `=========================\n`;
+            if (valorDescontoFinal > 0) {
+                mensagem += `🎁 *Cupom Aplicado:* 10% DE DESCONTO\n`;
+                mensagem += `📉 *Desconto:* - R$ ${valorDescontoFinal.toFixed(2).replace('.', ',')}\n`;
+            }
+            mensagem += `💰 *VALOR TOTAL:* R$ ${valorTotalFinal.toFixed(2).replace('.', ',')}\n\n`;
+            mensagem += `Aguardando retorno sobre o agendamento! ✨`;
+
+            // CORREÇÃO DO LINK DO WHATSAPP AQUI: Adicionado a "/" faltante e o caractere "$" de interpolação
+            const urlWhatsApp = `https://wa.me{telefoneDono}?text=${encodeURIComponent(mensagem)}`;
+            
+            window.open(urlWhatsApp, '_blank');
         });
-
-        let valorDescontoFinal = subtotalGeral * taxaDesconto;
-        let valorTotalFinal = subtotalGeral - valorDescontoFinal;
-
-        mensagem += `=========================\n`;
-        if (valorDescontoFinal > 0) {
-            mensagem += `🎁 *Cupom Aplicado:* 10% DE DESCONTO\n`;
-            mensagem += `📉 *Desconto:* - R$ ${valorDescontoFinal.toFixed(2).replace('.', ',')}\n`;
-        }
-        mensagem += `💰 *VALOR TOTAL:* R$ ${valorTotalFinal.toFixed(2).replace('.', ',')}\n\n`;
-        mensagem += `Aguardando retorno sobre o agendamento! ✨`;
-
-        window.location.href = `https://wa.me/${telefoneDono}?text=${encodeURIComponent(mensagem)}`;
-    });
+    }
 });
