@@ -6,6 +6,7 @@
     <title>Mira Confeitaria - Cardápio</title>
     <!-- Link para o arquivo de estilização externa CSS -->
     <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="imagem/favicon.jpg" type="image/x-icon">
     
     <!-- Biblioteca Phosphor Icons para os ícones finos e minimalistas -->
     <script src="https://unpkg.com"></script>
