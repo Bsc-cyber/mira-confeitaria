@@ -27,30 +27,101 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnAbrir && painel) btnAbrir.addEventListener("click", () => painel.classList.add("ativo"));
     if (btnFechar && painel) btnFechar.addEventListener("click", () => painel.classList.remove("ativo"));
 
-    // 3. ADICIONAR PRODUTOS À SACOLA + NOTIFICAÇÃO TOAST
-    const botoesAdd = document.querySelectorAll(".btn-add-sacola");
+    // 3. ADICIONAR PRODUTOS À SACOLA + MODAL DE DETALHES
+    const botoesAdd = document.querySelectorAll(".btn-add-sacola:not(.btn-modal-add)");
     const toast = document.getElementById("toast-alerta");
+    const modalOverlay = document.getElementById("modal-produto-overlay");
+    const modalClose = document.getElementById("fechar-modal-produto");
+    const modalImg = document.getElementById("modal-produto-img");
+    const modalCategoria = document.getElementById("modal-produto-categoria");
+    const modalTitulo = document.getElementById("modal-produto-titulo");
+    const modalDescricao = document.getElementById("modal-produto-descricao");
+    const modalPreco = document.getElementById("modal-produto-preco");
+    const btnModalAdd = document.getElementById("btn-modal-add");
+
+    function adicionarProdutoAoCarrinho(nome, preco) {
+        const itemExistente = carrinho.find(item => item.nome === nome);
+        if (itemExistente) {
+            itemExistente.quantidade++;
+        } else {
+            carrinho.push({ nome, preco, quantidade: 1 });
+        }
+        atualizarInterfaceCarrinho();
+
+        if (toast) {
+            toast.classList.add("mostrar");
+            setTimeout(() => toast.classList.remove("mostrar"), 2000);
+        }
+    }
+
+    function abrirModalProduto(produto) {
+        if (!modalOverlay) return;
+        modalImg.src = produto.img;
+        modalImg.alt = produto.nome;
+        modalCategoria.textContent = produto.categoria;
+        modalTitulo.textContent = produto.nome;
+        modalDescricao.textContent = produto.descricao;
+        modalPreco.textContent = `R$ ${parseFloat(produto.preco).toFixed(2).replace('.', ',')}`;
+        btnModalAdd.dataset.nome = produto.nome;
+        btnModalAdd.dataset.preco = produto.preco;
+        modalOverlay.classList.add("ativo");
+        modalOverlay.setAttribute("aria-hidden", "false");
+    }
+
+    function fecharModalProduto() {
+        if (!modalOverlay) return;
+        modalOverlay.classList.remove("ativo");
+        modalOverlay.setAttribute("aria-hidden", "true");
+    }
 
     botoesAdd.forEach(btn => {
         btn.addEventListener("click", () => {
             const nome = btn.getAttribute("data-nome");
             const preco = parseFloat(btn.getAttribute("data-preco"));
-
-            const itemExistente = carrinho.find(item => item.nome === nome);
-            if (itemExistente) {
-                itemExistente.quantidade++;
-            } else {
-                carrinho.push({ nome, preco, quantidade: 1 });
-            }
-            
-            atualizarInterfaceCarrinho();
-            
-            if (toast) {
-                toast.classList.add("mostrar");
-                setTimeout(() => toast.classList.remove("mostrar"), 2000);
-            }
+            adicionarProdutoAoCarrinho(nome, preco);
         });
     });
+
+    cardsProdutos.forEach(card => {
+        const rodape = card.querySelector(".rodape-preco-venda");
+        const btnAdd = rodape.querySelector(".btn-add-sacola");
+        const btnDetalhes = document.createElement("button");
+        btnDetalhes.type = "button";
+        btnDetalhes.className = "btn-detalhes-produto";
+        btnDetalhes.textContent = "Ver Detalhes";
+        rodape.insertBefore(btnDetalhes, btnAdd);
+
+        btnDetalhes.addEventListener("click", () => {
+            const nome = card.querySelector("h3").textContent;
+            const descricao = card.querySelector(".detalhes-produto p").textContent;
+            const categoria = card.querySelector(".tag-categoria").textContent;
+            const img = card.querySelector(".foto-real-produto").src;
+            const preco = btnAdd.getAttribute("data-preco");
+
+            abrirModalProduto({ nome, descricao, categoria, img, preco });
+        });
+    });
+
+    if (btnModalAdd) {
+        btnModalAdd.addEventListener("click", () => {
+            const nome = btnModalAdd.dataset.nome;
+            const preco = parseFloat(btnModalAdd.dataset.preco);
+            adicionarProdutoAoCarrinho(nome, preco);
+            fecharModalProduto();
+        });
+    }
+
+    if (modalClose) {
+        modalClose.addEventListener("click", fecharModalProduto);
+    }
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener("click", event => {
+            if (event.target === modalOverlay) {
+                fecharModalProduto();
+            }
+        });
+    }
 
     // 4. SISTEMA DE CUPOM DE DESCONTO DE TESTE
     const btnCupom = document.getElementById("btn-validar-cupom");
