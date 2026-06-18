@@ -9,10 +9,10 @@
     <link rel="shortcut icon" href="imagens/favicon.jpg" type="image/x-icon">
     
     <!-- Biblioteca Phosphor Icons para os ícones finos e minimalistas -->
-    <script src="https://unpkg.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.1/dist/phosphor.css">
     
     <!-- Importação das fontes premium Cinzel e Montserrat diretamente do Google Fonts -->
-    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
     <link href="https://googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
@@ -241,7 +241,8 @@
                 <p>Doces feitos para transformar momentos em memórias.</p>
             </div>
             <div class="footer-info">
-                <p><i class="ph ph-instagram-logo"></i> @miraconfeitaria</p>
+                <p><i class="ph ph-instagram-logo"></i> <a href="https://www.instagram.com/miraconfeitaria?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"> @miraconfeitaria</a></p>
+                
                 <p><i class="ph ph-map-pin"></i> Rua Sulfumiro de Freitas, 68A Progresso<br> Sete Lagoas - MG</p>
             </div>
             <div class="footer-action">
