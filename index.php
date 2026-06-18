@@ -242,8 +242,9 @@
             </div>
             <div class="footer-info">
                 <p><i class="ph ph-instagram-logo"></i> <a href="https://www.instagram.com/miraconfeitaria?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank"> @miraconfeitaria</a></p>
-                
-                <p><i class="ph ph-map-pin"></i> Rua Sulfumiro de Freitas, 68A Progresso<br> Sete Lagoas - MG</p>
+                <p><a href="https://maps.app.goo.gl/3ZZSES1hGavSzgGx9" target="_blank" class="link-localizacao">
+                    <i class="ph ph-map-pin"></i> Rua Sulfumiro de Freitas, 68A Progresso<br> Sete Lagoas - MG</a>
+                </p>
             </div>
             <div class="footer-action">
                 <a href="#" class="btn-whatsapp-footer" onclick="enviarPedidoWhatsApp()"><i class="ph ph-whatsapp-logo"></i> FALAR NO WHATSAPP</a>
