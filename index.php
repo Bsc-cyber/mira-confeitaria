@@ -7,7 +7,8 @@
     <!-- Link para o arquivo de estilização externa CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="imagens/favicon.jpg" type="image/x-icon">
-    
+    <!-- Biblioteca Font Awesome para os ícones de redes sociais e outros ícones comuns -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Biblioteca Phosphor Icons para os ícones finos e minimalistas -->
     <link rel="stylesheet" href="https://unpkg.com/phosphor-icons@1.4.1/dist/phosphor.css">
     
