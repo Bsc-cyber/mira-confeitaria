@@ -211,7 +211,7 @@ body {
     padding: 60px 0 0 6%; /* Adicionado 60px no topo para compensar a onda do menu */
     height: 540px;
     width: 100%;
-    background-image: url('bolo-destaque.jpg') !important; 
+    background-image: url('imagens/bolo-destaque.jpg') !important; 
     background-size: cover;
     background-position: right center;
     background-repeat: no-repeat;
