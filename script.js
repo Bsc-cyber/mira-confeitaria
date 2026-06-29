@@ -267,7 +267,7 @@ function enviarPedidoWhatsApp() {
     }
 
     // NÚMERO DE WHATSAPP DO CONFEITEIRO (Mude para o real do cliente com o 55 e o DDD)
-    let numeroTelefone = "5511999999999"; 
+    let numeroTelefone = "5531995365146"; // Exemplo: 55 + DDD + número
     
     let textoComanda = "🎂 *NOVO PEDIDO - MIRA CONFEITARIA*\n\n";
     textoComanda += `👤 *Cliente:* ${nomeCliente}\n`;
@@ -302,5 +302,18 @@ function enviarPedidoWhatsApp() {
 
     // Dispara a API oficial abrindo o chat estruturado
     let urlCompleta = `https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${encodeURIComponent(textoComanda)}`;
+    window.open(urlCompleta, '_blank');
+}
+// ==========================================
+// ABRIR CHAT SIMPLES NO WHATSAPP (RODAPÉ)
+// ==========================================
+function falarNoWhatsApp() {
+    // Insira aqui o mesmo número de WhatsApp da loja
+    let numeroTelefone = "5531995365146"; // Exemplo: 55 + DDD + número
+    
+    // Você pode deixar uma mensagem padrão ou deixar vazio ("")
+    let mensagemPadrao = "Olá! Gostaria de tirar uma dúvida com a Mira Confeitaria.";
+    
+    let urlCompleta = `https://wa.me/${numeroTelefone}?text=${encodeURIComponent(mensagemPadrao)}`;
     window.open(urlCompleta, '_blank');
 }
