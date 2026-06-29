@@ -297,10 +297,6 @@ function enviarPedidoWhatsApp() {
     textoComanda += `💰 *TOTAL GERAL: R$ ${totalGeral.toFixed(2).replace('.', ',')}*`;
 
     // Dispara a API oficial abrindo o chat estruturado
-    //let urlCompleta = `https://whatsapp.com{numeroTelefone}&text=${encodeURIComponent(textoComanda)}`;
-    //window.open(urlCompleta, '_blank');
-
-    // Dispara a API oficial abrindo o chat estruturado
     let urlCompleta = `https://api.whatsapp.com/send?phone=${numeroTelefone}&text=${encodeURIComponent(textoComanda)}`;
     window.open(urlCompleta, '_blank');
 }

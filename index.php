@@ -247,10 +247,8 @@
                     <i class="ph ph-map-pin"></i> Rua Sulfumiro de Freitas, 68A Progresso -Sete Lagoas - MG</a>
                 </p>
             </div>
-            <!-- Botão de ação para conversar no WhatsApp
-            <div class="footer-action">
-                <a href="#" class="btn-whatsapp-footer" onclick="enviarPedidoWhatsApp()"><i class="ph ph-whatsapp-logo"></i> FALAR NO WHATSAPP</a>
-            </div>-->
+            
+            <!-- Botão de ação para conversar no WhatsApp -->
             <div class="footer-action">
                 <a href="#" class="btn-whatsapp-footer" onclick="falarNoWhatsApp()"><i class="ph ph-whatsapp-logo"></i> FALAR NO WHATSAPP</a>
             </div>
