@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIRA Confeitaria - Login</title>
+    <link rel="stylesheet" href="css/login.css?v=3.0">
+</head>
+<body>
+
+    <div class="login-wrapper">
+        
+        <!-- COLUNA ESQUERDA: Estúdio de Luzes e Bolo Flutuante -->
+        <div class="login-visual-panel">
+            <!-- Partículas de luz dourada dinâmicas -->
+            <div class="gold-glow-aurora-1"></div>
+            <div class="gold-glow-aurora-2"></div>
+            <div class="visual-overlay"></div>
+            
+            <div class="visual-content">
+                <div class="brand-badge">
+                    <span class="badge-logo">MC</span>
+                </div>
+                <h2 class="visual-title">MIRA confeitaria</h2>
+                <p class="visual-subtitle">Feito à mão, com amor e precisão.</p>
+                
+                <!-- Caixa Quadrada Maior Animada -->
+                <div class="cake-image-container-quad">
+                    <img src="imagens/login.png" alt="Bolo MIRA Confeitaria" class="cake-premium-photo-quad">
+                </div>
+            </div>
+        </div>
+
+        <!-- COLUNA DIREITA: Formulário -->
+        <div class="login-form-panel">
+            <div class="form-container">
+                <header class="form-header">
+                    <h2>Bem-vindo de volta</h2>
+                    <p>Insira suas credenciais de acesso para continuar.</p>
+                </header>
+
+                <form action="home.html" class="interactive-login-form">
+                    <div class="login-field-group">
+                        <label for="username">Usuário</label>
+                        <div class="input-with-icon">
+                            <input type="text" id="username" name="usuario" placeholder="Insira seu usuário" required autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="login-field-group">
+                        <label for="password">Senha</label>
+                        <div class="input-with-icon">
+                            <input type="password" id="password" name="senha" placeholder="Digite sua senha" required>
+                        </div>
+                    </div>
+
+                    <div class="form-utilities">
+                        <label class="remember-me">
+                            <input type="checkbox"> Lembrar acesso
+                        </label>
+                        <a href="#" class="forgot-password">Esqueceu a senha?</a>
+                    </div>
+
+                    <button type="submit" class="btn-login-submit">Entrar no Sistema</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

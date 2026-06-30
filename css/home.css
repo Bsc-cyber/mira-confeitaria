@@ -1,0 +1,387 @@
+@import url('https://googleapis.com');
+
+:root {
+    --bg-dark: #2F3E33;       /* Seu verde escuro oficial */
+    --accent-gold: #D1B48C;   /* Seu dourado refinado */
+    --bg-body: #FDFBF7;       /* Fundo off-white muito leve */
+    --card-bg: #FFFFFF;       
+    --text-main: #2F3E33;     /* Texto principal no tom de verde */
+    --text-muted: #8A948D;    /* Cinza esverdeado para subtítulos */
+    --green-trend: #4E8752;   
+    --radius-lg: 14px;        /* Cantos levemente arredondados e elegantes */
+    --radius-md: 8px;
+    --shadow-subtle: 0 4px 20px rgba(47, 62, 51, 0.015);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* --- BARRA LATERAL (VERDE E DOURADO) --- */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 68px;
+    background-color: var(--bg-dark);
+    padding: 24px 14px;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    box-shadow: 4px 0 20px rgba(47, 62, 51, 0.03);
+    overflow: hidden;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar:hover {
+    width: 260px; 
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 25px;
+    padding-left: 2px;
+}
+
+.avatar-mc {
+    border: 1px solid var(--accent-gold);
+    color: var(--accent-gold);
+    min-width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-md);
+    font-weight: 700;
+    font-size: 13px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.logo h2 {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .logo h2 {
+    opacity: 1;
+}
+
+/* --- LINKS DO MENU LATERAL E RODAPÉ --- */
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-grow: 1;
+}
+
+.menu a {
+    display: flex;
+    align-items: center;
+    color: #93A397; /* Texto suave sobre o verde escuro */
+    text-decoration: none;
+    padding: 10px;
+    border-radius: var(--radius-md);
+    transition: all 0.2s ease;
+    gap: 14px;
+    white-space: nowrap;
+}
+
+.menu a svg {
+    min-width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    stroke-width: 1.8px;
+}
+
+.menu a span {
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .menu a span {
+    opacity: 1;
+}
+
+.menu a:hover {
+    background-color: rgba(255, 255, 255, 0.03);
+    color: #FFFFFF;
+}
+
+.menu a.active {
+    background-color: rgba(209, 180, 140, 0.12);
+    color: var(--accent-gold);
+    font-weight: 600;
+}
+
+.sidebar-footer {
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.brand-phrase {
+    font-size: 11px;
+    color: #8F9E93;
+    line-height: 1.4;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .brand-phrase {
+    opacity: 1;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.avatar-lc {
+    background-color: var(--accent-gold);
+    color: var(--bg-dark);
+    min-width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 13px;
+}
+
+.user-info {
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.sidebar:hover .user-info {
+    opacity: 1;
+}
+
+.user-info h4 { font-size: 13px; font-weight: 600; color: #FFFFFF; }
+.user-info small { font-size: 11px; color: #8F8B86; }
+
+/* --- CONTEÚDO PRINCIPAL E TOPBAR --- */
+.main-content {
+    margin-left: 68px; 
+    padding: 20px 30px; 
+    width: calc(100% - 68px);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.topbar h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
+.topbar .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.topbar-right { display: flex; align-items: center; gap: 14px; }
+
+.search-box { position: relative; display: flex; align-items: center; }
+.search-box input {
+    background-color: var(--card-bg);
+    border: 1px solid rgba(47, 62, 51, 0.05);
+    padding: 8px 14px;
+    padding-right: 36px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    outline: none;
+    width: 180px;
+    color: var(--text-main);
+}
+.search-box svg { position: absolute; right: 12px; color: var(--text-muted); }
+
+.notification-btn {
+    background: var(--card-bg);
+    border: 1px solid rgba(47, 62, 51, 0.05);
+    padding: 8px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    color: var(--text-main);
+    display: flex;
+}
+
+.topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg);
+    padding: 4px 12px 4px 4px;
+    border-radius: 20px;
+    border: 1px solid rgba(47, 62, 51, 0.04);
+}
+
+.avatar-user-top {
+    background-color: var(--bg-dark);
+    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 11px;
+}
+
+.user-info-top h4 { font-size: 12px; font-weight: 600; }
+.user-info-top small { font-size: 10px; color: var(--text-muted); display: block; }
+
+/* --- CARDS SUPERIORES COM BORDA DOURADA FINE --- */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-subtle);
+    /* Borda dourada sutil em vez de cinza */
+    border: 1px solid rgba(209, 180, 140, 0.25); 
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+    border-color: rgba(209, 180, 140, 0.6);
+}
+
+/* --- CONTEÚDO DOS CARDS SUPERIORES --- */
+.card-header { display: flex; justify-content: space-between; align-items: center; }
+.card-title { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.card-value { font-size: 20px; font-weight: 700; color: var(--text-main); }
+.card-sub { font-size: 11px; color: var(--text-muted); }
+.trend-up { color: var(--green-trend); font-weight: 600; }
+
+.card-icon {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 12px;
+}
+.icon-gold { background: #FCF4E9; }
+.icon-green { background: #EAF4EB; }
+.icon-orange { background: #FCEFE9; }
+.icon-brown { background: #F5EFEB; }
+
+/* --- BLOCOS CENTRAIS COM BORDA DOURADA --- */
+.dashboard-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+    flex-grow: 1;
+}
+
+.section-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    /* Borda dourada sutil que traz o toque fino */
+    border: 1px solid rgba(209, 180, 140, 0.25);
+    box-shadow: var(--shadow-subtle);
+}
+
+.section-header { margin-bottom: 12px; }
+.section-header h3 { font-size: 14px; font-weight: 600; color: var(--text-main); }
+
+/* --- ELEMENTOS GRÁFICOS REFINADOS --- */
+.chart-placeholder-line { position: relative; padding-top: 5px; }
+.chart-value-tag { position: absolute; right: 0; top: -10px; font-size: 12px; font-weight: 700; }
+.mock-line-chart {
+    height: 100px;
+    /* Gradiente que combina com o verde oliva e dourado */
+    background: linear-gradient(180deg, rgba(78, 135, 82, 0.06) 0%, rgba(255,255,255,0) 100%);
+    border-bottom: 2px solid rgba(209, 180, 140, 0.3);
+    position: relative;
+    margin-bottom: 8px;
+    clip-path: polygon(0% 70%, 16% 60%, 33% 85%, 50% 65%, 66% 50%, 83% 40%, 100% 15%, 100% 100%, 0% 100%);
+}
+.chart-days { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+
+.chart-donut-wrapper { display: flex; align-items: center; gap: 20px; height: 100px; }
+.donut-chart {
+    width: 80px; height: 80px;
+    /* Gráfico de rosca usando as cores oficiais verde e dourada */
+    background: conic-gradient(var(--bg-dark) 0% 33%, var(--green-trend) 33% 62%, var(--accent-gold) 62% 100%);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+}
+.donut-center {
+    width: 56px; height: 56px; background: var(--card-bg); border-radius: 50%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.donut-total-title { font-size: 10px; color: var(--text-muted); }
+.donut-total-num { font-size: 14px; font-weight: 700; }
+.donut-legend { display: flex; flex-direction: column; gap: 4px; }
+.legend-item { font-size: 11px; display: flex; align-items: center; gap: 6px; }
+
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+.dot.d-black { background: var(--bg-dark); }
+.dot.d-green { background: var(--green-trend); }
+.dot.d-gold { background: var(--accent-gold); }
+
+/* --- TABELAS E COMPONENTES FINOS --- */
+.delivery-list { display: flex; flex-direction: column; gap: 10px; }
+.delivery-item { display: flex; align-items: center; justify-content: space-between; padding-bottom: 10px; border-bottom: 1px solid rgba(209,180,140,0.1); }
+.delivery-info h4 { font-size: 12px; font-weight: 600; }
+.delivery-info p { font-size: 11px; color: var(--text-muted); }
+
+.status-badge { font-size: 10px; padding: 4px 8px; border-radius: 6px; font-weight: 600; }
+.status-badge.b-preparing { background: #FFF4EB; color: #D07B38; }
+.status-badge.b-ready { background: #EAF4EB; color: #4E8752; }
+
+.ranking-list { display: flex; flex-direction: column; gap: 12px; }
+.ranking-item { display: flex; align-items: center; gap: 12px; }
+.rank-num { font-weight: 700; font-size: 12px; color: var(--text-muted); width: 12px; }
+.ranking-info { flex-grow: 1; }
+.ranking-info h4 { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.progress-bar { background: rgba(209,180,140,0.1); height: 6px; border-radius: 3px; width: 100%; }
+.progress-fill { background: var(--bg-dark); height: 100%; border-radius: 3px; }
+
+.finance-summary { display: flex; flex-direction: column; gap: 10px; }
+.finance-row { display: flex; justify-content: space-between; font-size: 12px; }
+.value-positive { color: var(--green-trend); font-weight: 600; }
+.value-negative { color: #C94A4A; font-weight: 600; }
+.finance-divider { height: 1px; background: rgba(209,180,140,0.1); margin: 2px 0; }
+.finance-row.total { font-weight: 700; font-size: 13px; }
+.value-total { color: var(--green-trend); }
+
+.recent-table { width: 100%; border-collapse: collapse; text-align: left; }
+.recent-table th { font-size: 11px; color: var(--text-muted); padding-bottom: 6px; font-weight: 500; }
+.recent-table td { font-size: 11px; padding: 8px 0; border-bottom: 1px solid rgba(209,180,140,0.1); }
+.table-badge { font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+.table-badge.t-paid { background: #EAF4EB; color: #4E8752; }
+.table-badge.t-partial { background: #FCF7E9; color: #A68238; }
