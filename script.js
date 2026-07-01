@@ -116,7 +116,6 @@ function ordenarProdutos() {
 // ==========================================
 // CONTROLE INTERNO DO POP-UP (MODAL DE OPÇÕES)
 // ==========================================
-
 function abrirModal(nome, img, descricao, precoBase) {
     produtoAtual = { nome, img, descricao, precoBase };
     precoBaseAtual = precoBase;
@@ -136,7 +135,30 @@ function abrirModal(nome, img, descricao, precoBase) {
     
     calcularTotalModal();
     document.getElementById('product-modal').style.display = 'flex';
+
+    // 👇 NOVA LINHA ADICIONADA AQUI: Recolhe o carrinho ao abrir um novo doce 👇
+    document.getElementById('sidebar-carrinho').classList.remove('active');
 }
+// function abrirModal(nome, img, descricao, precoBase) {
+   // produtoAtual = { nome, img, descricao, precoBase };
+   // precoBaseAtual = precoBase;
+   // precoAdicionalTamanho = 0;
+    
+//    document.getElementById('modal-title').innerText = nome;
+//    document.getElementById('modal-img').src = img;
+//  document.getElementById('modal-desc').innerText = descricao;
+//    document.getElementById('qty-input').value = 1;
+//    document.getElementById('modal-obs').value = "";
+    
+    // Marca a primeira opção de tamanho (Fatia Individual) como padrão automaticamente
+//    const tamanhos = document.getElementsByName('size');
+//    if(tamanhos.length > 0) {
+//        tamanhos[0].checked = true;
+//    }
+    
+//    calcularTotalModal();
+//    document.getElementById('product-modal').style.display = 'flex';
+// }
 
 function fecharModal() {
     document.getElementById('product-modal').style.display = 'none';
@@ -162,81 +184,81 @@ function calcularTotalModal() {
     document.getElementById('modal-total-price').innerText = `R$ ${totalItem.toFixed(2).replace('.', ',')}`;
 }
 
-// ==========================================
-// GERENCIAMENTO DA LISTA DE COMPRAS (CARRINHO)
-// ==========================================
+    // ==========================================
+    // GERENCIAMENTO DA LISTA DE COMPRAS (CARRINHO)
+    // ==========================================
 
-function adicionarAoCarrinhoDoModal() {
-    let qtd = parseInt(document.getElementById('qty-input').value);
-    let tamanhoSelecionado = document.querySelector('input[name="size"]:checked').value;
-    let observacaoText = document.getElementById('modal-obs').value.trim();
-    let precoFinalUnitario = precoBaseAtual + precoAdicionalTamanho;
+    function adicionarAoCarrinhoDoModal() {
+        let qtd = parseInt(document.getElementById('qty-input').value);
+        let tamanhoSelecionado = document.querySelector('input[name="size"]:checked').value;
+        let observacaoText = document.getElementById('modal-obs').value.trim();
+        let precoFinalUnitario = precoBaseAtual + precoAdicionalTamanho;
 
-    carrinho.push({
-        nome: produtoAtual.nome,
-        tamanho: tamanhoSelecionado,
-        obs: observacaoText ? observacaoText : "Nenhuma",
-        qtd: qtd,
-        precoTotal: precoFinalUnitario * qtd
-    });
+        carrinho.push({
+            nome: produtoAtual.nome,
+            tamanho: tamanhoSelecionado,
+            obs: observacaoText ? observacaoText : "Nenhuma",
+            qtd: qtd,
+            precoTotal: precoFinalUnitario * qtd
+        });
 
-    fecharModal();
-    atualizarInterfaceCarrinho();
-    toggleCarrinho(true); // Abre a barra lateral para o cliente ver o item entrando
-}
-
-function atualizarInterfaceCarrinho() {
-    let container = document.getElementById('carrinho-itens');
-    let badge = document.getElementById('cart-count-badge');
-    let totalDisplay = document.getElementById('sidebar-total-value');
-    let formContainer = document.getElementById('checkout-form-container');
-    
-    badge.innerText = carrinho.length;
-    
-    if (carrinho.length === 0) {
-        container.innerHTML = '<p class="empty-msg">Nenhum item adicionado ainda.</p>';
-        totalDisplay.innerText = "R$ 0,00";
-        formContainer.style.display = 'none';
-        return;
+        fecharModal();
+        atualizarInterfaceCarrinho();
+        //toggleCarrinho(true); // Abre a barra lateral para o cliente ver o item entrando
     }
 
-    formContainer.style.display = 'block';
-    container.innerHTML = "";
-    let totalGeral = 0;
+    function atualizarInterfaceCarrinho() {
+        let container = document.getElementById('carrinho-itens');
+        let badge = document.getElementById('cart-count-badge');
+        let totalDisplay = document.getElementById('sidebar-total-value');
+        let formContainer = document.getElementById('checkout-form-container');
+        
+        badge.innerText = carrinho.length;
+        
+        if (carrinho.length === 0) {
+            container.innerHTML = '<p class="empty-msg">Nenhum item adicionado ainda.</p>';
+            totalDisplay.innerText = "R$ 0,00";
+            formContainer.style.display = 'none';
+            return;
+        }
 
-    carrinho.forEach((item) => {
-        totalGeral += item.precoTotal;
-        container.innerHTML += `
-            <div class="cart-item-row" style="margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #EFEBE4;">
-                <strong>${item.qtd}x ${item.nome}</strong><br>
-                <span style="color: #7A8A7C; font-size:11px;">Tamanho: ${item.tamanho}</span><br>
-                <span style="color: #BC8A5F; font-size:11px; display:block; font-style:italic;">Obs: ${item.obs}</span>
-                <span style="color: #2F3E33; font-weight:600; display:block; margin-top:2px;">R$ ${item.precoTotal.toFixed(2).replace('.', ',')}</span>
-            </div>
-        `;
-    });
+        formContainer.style.display = 'block';
+        container.innerHTML = "";
+        let totalGeral = 0;
 
-    totalDisplay.innerText = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-}
+        carrinho.forEach((item) => {
+            totalGeral += item.precoTotal;
+            container.innerHTML += `
+                <div class="cart-item-row" style="margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #EFEBE4;">
+                    <strong>${item.qtd}x ${item.nome}</strong><br>
+                    <span style="color: #7A8A7C; font-size:11px;">Tamanho: ${item.tamanho}</span><br>
+                    <span style="color: #BC8A5F; font-size:11px; display:block; font-style:italic;">Obs: ${item.obs}</span>
+                    <span style="color: #2F3E33; font-weight:600; display:block; margin-top:2px;">R$ ${item.precoTotal.toFixed(2).replace('.', ',')}</span>
+                </div>
+            `;
+        });
 
-function toggleCarrinho(forçarAbrir = false) {
-    let sidebar = document.getElementById('sidebar-carrinho');
-    if (forçarAbrir) {
-        sidebar.classList.add('active');
-    } else {
-        sidebar.classList.toggle('active');
+        totalDisplay.innerText = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
     }
-}
 
-function toggleCamposEndereco() {
-    let metodo = document.getElementById('delivery-method').value;
-    let camposEndereco = document.getElementById('address-fields');
-    if (metodo === 'retirada') {
-        camposEndereco.style.display = 'none';
-    } else {
-        camposEndereco.style.display = 'block';
+    function toggleCarrinho(forçarAbrir = false) {
+        let sidebar = document.getElementById('sidebar-carrinho');
+        if (forçarAbrir) {
+            sidebar.classList.add('active');
+        } else {
+            sidebar.classList.toggle('active');
+        }
     }
-}
+
+    function toggleCamposEndereco() {
+        let metodo = document.getElementById('delivery-method').value;
+        let camposEndereco = document.getElementById('address-fields');
+        if (metodo === 'retirada') {
+            camposEndereco.style.display = 'none';
+        } else {
+            camposEndereco.style.display = 'block';
+        }
+    }
 
 // ==========================================
 // DISPARO DA COMANDA INTEGRADA PARA WHATSAPP
@@ -313,3 +335,20 @@ function falarNoWhatsApp() {
     let urlCompleta = `https://wa.me/${numeroTelefone}?text=${encodeURIComponent(mensagemPadrao)}`;
     window.open(urlCompleta, '_blank');
 }
+
+// ==========================================
+// FECHAR CARRINHO AO CLICAR FORA DELE
+// ==========================================
+document.addEventListener('click', function(event) {
+    let sidebar = document.getElementById('sidebar-carrinho');
+    let cartIcon = document.querySelector('.cart-icon');
+
+    // Verifica se o carrinho está aberto e se o clique foi FORA da barra lateral e FORA do ícone
+    if (sidebar.classList.contains('active') && 
+        !sidebar.contains(event.target) && 
+        !cartIcon.contains(event.target)) {
+        
+        // Remove a classe que mantém o carrinho aberto
+        sidebar.classList.remove('active');
+    }
+});
