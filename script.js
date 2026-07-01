@@ -139,26 +139,7 @@ function abrirModal(nome, img, descricao, precoBase) {
     // 👇 NOVA LINHA ADICIONADA AQUI: Recolhe o carrinho ao abrir um novo doce 👇
     document.getElementById('sidebar-carrinho').classList.remove('active');
 }
-// function abrirModal(nome, img, descricao, precoBase) {
-   // produtoAtual = { nome, img, descricao, precoBase };
-   // precoBaseAtual = precoBase;
-   // precoAdicionalTamanho = 0;
-    
-//    document.getElementById('modal-title').innerText = nome;
-//    document.getElementById('modal-img').src = img;
-//  document.getElementById('modal-desc').innerText = descricao;
-//    document.getElementById('qty-input').value = 1;
-//    document.getElementById('modal-obs').value = "";
-    
-    // Marca a primeira opção de tamanho (Fatia Individual) como padrão automaticamente
-//    const tamanhos = document.getElementsByName('size');
-//    if(tamanhos.length > 0) {
-//        tamanhos[0].checked = true;
-//    }
-    
-//    calcularTotalModal();
-//    document.getElementById('product-modal').style.display = 'flex';
-// }
+
 
 function fecharModal() {
     document.getElementById('product-modal').style.display = 'none';
