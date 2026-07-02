@@ -1,146 +1,155 @@
 // ==========================================================================
-// MIRA CONFEITARIA - SCRIPT DE INTERAÇÕES REAIS DAS CONFIGURAÇÕES
+// MIRA CONFEITARIA - SCRIPT DE ACESSIBILIDADE E CONFIGURAÇÕES BÁSICAS
 // ==========================================================================
 
-// Seleção de Elementos Globais da Interface
+// 1. Seleção de Elementos da Tela
 const sidebar = document.getElementById('sidebar');
-const themeSelector = document.getElementById('themeSelector');
-const btnBackup = document.getElementById('btnBackup');
-const btnSaveConfig = document.getElementById('btnSaveConfig');
-const btnClearConfig = document.getElementById('btnClearConfig');
-const btnClearLogs = document.getElementById('btnClearLogs');
-const logsTableBody = document.querySelector('#logsTable tbody');
+const viewModeSelector = document.getElementById('viewModeSelector');
+const btnFontDiminuir = document.getElementById('btnFontDiminuir');
+const btnFontNormal = document.getElementById('btnFontNormal');
+const btnFontAumentar = document.getElementById('btnFontAumentar');
+const inputUsername = document.getElementById('inputUsername');
+const inputNewPassword = document.getElementById('inputNewPassword');
+const inputConfirmPassword = document.getElementById('inputConfirmPassword');
+const btnSaveBasicConfig = document.getElementById('btnSaveBasicConfig');
+const btnResetBasicConfig = document.getElementById('btnResetBasicConfig');
+const btnClearBasicLogs = document.getElementById('btnClearBasicLogs');
+const basicLogsTableBody = document.querySelector('#basicLogsTable tbody');
 
-let logCounter = 2; // Inicia o contador após os registros padrões da tabela
+let logCounter = 2; // Inicia a contagem após as duas linhas de aviso padrões
+let currentFontSize = 100; // Porcentagem inicial do tamanho da letra
 
-// --- 1. CONTROLE DE EXPANSÃO LATERAL INTELIGENTE ---
-// Faz a barra lateral flutuar perfeitamente ao passar o mouse
+// --- CONTROLE AUTOMÁTICO DO MENU LATERAL ---
 if (sidebar) {
     sidebar.addEventListener('mouseenter', () => sidebar.classList.add('expanded'));
     sidebar.addEventListener('mouseleave', () => sidebar.classList.remove('expanded'));
 }
 
-// --- FUNÇÃO AUXILIAR: REGISTRO DE AUDITORIA (LOGS) ---
-// Adiciona uma linha em tempo real no topo da tabela da direita a cada clique
-function addSystemLog(mensagemAcao) {
+// --- FUNÇÃO AUXILIAR: ADICIONAR REGISTRO NA TABELA (LOG) ---
+function addSystemLog(mensagem) {
     logCounter++;
     const novaLinha = document.createElement('tr');
-    
-    // Formata o número do ID com três dígitos (Ex: #003)
     novaLinha.innerHTML = `
         <td>#${String(logCounter).padStart(3, '0')}</td>
-        <td>${mensagemAcao}</td>
+        <td>${mensagem}</td>
     `;
-    
-    // Insere no topo da tabela de auditoria para visualização imediata
-    if (logsTableBody) {
-        logsTableBody.insertBefore(novaLinha, logsTableBody.firstChild);
+    if (basicLogsTableBody) {
+        // Insere sempre no topo da tabela para ficar visível de primeira
+        basicLogsTableBody.insertBefore(novaLinha, basicLogsTableBody.firstChild);
     }
 }
 
-// --- 2. FUNCIONALIDADE: TROCA DINÂMICA DE CORES DO PAINEL ---
-// Altera as variáveis CSS do root em tempo real nas páginas
-if (themeSelector) {
-    themeSelector.addEventListener('change', (event) => {
-        const temaSelecionado = event.target.value;
+// --- 2. FUNCIONALIDADE: MODO CLARO E MODO ESCURO ---
+viewModeSelector.addEventListener('change', (event) => {
+    const modoSelecionado = event.target.value;
+    
+    if (modoSelecionado === 'dark') {
+        // Altera as cores bases do root para tons pretos/grafite de painel noturno
+        document.documentElement.style.setProperty('--bg-body', '#1C1F1D');
+        document.documentElement.style.setProperty('--card-bg', '#2A2E2C');
+        document.documentElement.style.setProperty('--text-main', '#F4F2EE');
+        addSystemLog('Visual alterado para o Modo Escuro (Noturno).');
+    } else {
+        // Restaura as cores originais off-white confortáveis do site
+        document.documentElement.style.setProperty('--bg-body', '#FDFBF7');
+        document.documentElement.style.setProperty('--card-bg', '#FFFFFF');
+        document.documentElement.style.setProperty('--text-main', '#2F3E33');
+        addSystemLog('Visual restaurada para o Modo Claro clássico.');
+    }
+});
+
+// --- 3. FUNCIONALIDADE: AUMENTAR E DIMINUIR LETRA ---
+btnFontAumentar.addEventListener('click', () => {
+    currentFontSize += 10; // Sobe de 10% em 10%
+    document.body.style.fontSize = currentFontSize + '%';
+    addSystemLog(`Tamanho da fonte aumentado para ${currentFontSize}%.`);
+});
+
+btnFontDiminuir.addEventListener('click', () => {
+    if (currentFontSize > 80) { // Trava de segurança para a letra não sumir
+        currentFontSize -= 10; // Desce de 10% em 10%
+        document.body.style.fontSize = currentFontSize + '%';
+        addSystemLog(`Tamanho da fonte reduzido para ${currentFontSize}%.`);
+    }
+});
+
+btnFontNormal.addEventListener('click', () => {
+    currentFontSize = 100; // Retorna ao tamanho padrão de fábrica
+    document.body.style.fontSize = '100%';
+    addSystemLog('Tamanho da fonte redefinido para o padrão Normal.');
+});
+
+// --- 4. FUNCIONALIDADE: SALVAR MUDANÇAS (NOME, AVATAR E SENHA) ---
+btnSaveBasicConfig.addEventListener('click', () => {
+    const novoNome = inputUsername.value.trim();
+    const novaSenha = inputNewPassword.value;
+    const confirmaSenha = inputConfirmPassword.value;
+
+    // Ação 1: Atualizar o Nome do Usuário no rodapé da barra lateral na hora
+    if (novoNome !== "") {
+        const footerNameElement = document.getElementById('footerUserName');
+        const footerAvatarElement = document.getElementById('footerAvatar');
         
-        if (temaSelecionado === 'sweet-pink') {
-            // Paleta Confeitaria de Luxo (Rosa Marsala e Champanhe Rosé)
-            document.documentElement.style.setProperty('--bg-dark', '#5E3A45'); 
-            document.documentElement.style.setProperty('--accent-gold', '#E8C5C8'); 
-            addSystemLog('Paleta visual alterada para "Rosa Doce & Confeitaria Fina".');
-        } else if (temaSelecionado === 'dark-midnight') {
-            // Paleta Mármore Noturno Escuro Premium
-            document.documentElement.style.setProperty('--bg-dark', '#1F2421'); 
-            document.documentElement.style.setProperty('--accent-gold', '#C4A47A'); 
-            addSystemLog('Paleta visual alterada para "Mármore Noturno (Escuro Premium)".');
+        if (footerNameElement) footerNameElement.innerText = novoNome;
+        
+        // Atualiza as duas primeiras letras do avatar do rodapé (Ex: Lucas C. = LU)
+        if (footerAvatarElement && novoNome.length >= 2) {
+            footerAvatarElement.innerText = novoNome.substring(0, 2).toUpperCase();
+        }
+        addSystemLog(`Nome do operador atualizado para: "${novoNome}".`);
+    }
+
+    // Ação 2: Validação básica e simples de troca de senha
+    if (novaSenha !== "" || confirmaSenha !== "") {
+        if (novaSenha === confirmaSenha) {
+            addSystemLog('Código de acesso e senha alterados com sucesso.');
+            alert('Senha alterada com sucesso!');
+            // Limpa as caixas de senha após salvar por segurança
+            inputNewPassword.value = "";
+            inputConfirmPassword.value = "";
         } else {
-            // Restaura o Verde Escuro e Dourado oficial da MIRA Confeitaria
-            document.documentElement.style.setProperty('--bg-dark', '#2F3E33');
-            document.documentElement.style.setProperty('--accent-gold', '#D1B48C');
-            addSystemLog('Paleta padrão "Verde Clássico MIRA" restaurada com sucesso.');
+            addSystemLog('Erro: Falha na confirmação. As senhas digitadas não batem.');
+            alert('As senhas não coincidem! Redigite com atenção.');
+            return; // Interrompe o salvamento se der erro
         }
-    });
-}
-// --- 3. FUNCIONALIDADE: GERADOR DE CÓPIA DE SEGURANÇA (BACKUP .JSON) ---
-// Simula a exportação de dados estruturados gerando um download real no navegador
-if (btnBackup) {
-    btnBackup.addEventListener('click', () => {
-        // Objeto com metadados reais do negócio para o arquivo ficar bonito e profissional
-        const dadosSeguranca = {
-            empresa: "MIRA Confeitaria",
-            tipo_arquivo: "Cópia de Segurança Completa",
-            versao_sistema: "3.5",
-            data_exportacao: new Date().toLocaleDateString('pt-BR'),
-            hora_exportacao: new Date().toLocaleTimeString('pt-BR'),
-            modulos_salvos: ["Clientes", "Produtos", "Fichas Técnicas", "Caixa Geral"],
-            integridade: "Verificada e Criptografada"
-        };
+    }
 
-        // Transforma o objeto em texto formatado e cria o link oculto de download
-        const textoJSON = JSON.stringify(dadosSeguranca, null, 4);
-        const URIBlob = "data:text/json;charset=utf-8," + encodeURIComponent(textoJSON);
-        
-        const elementoLink = document.createElement('a');
-        elementoLink.setAttribute("href", URIBlob);
-        elementoLink.setAttribute("download", "backup_seguro_mira_confeitaria.json");
-        
-        // Dispara o download automático na máquina do usuário
-        document.body.appendChild(elementoLink);
-        elementoLink.click();
-        elementoLink.remove();
+    alert('Configurações salvas e aplicadas no monitor!');
+});
 
-        addSystemLog('Exportação executada. Arquivo seguro "backup_seguro_mira_confeitaria.json" baixado.');
-        alert('Cópia de segurança (.JSON) do banco de dados baixada com sucesso no seu computador!');
-    });
-}
+// --- 5. FUNCIONALIDADE: LIMPAR FORMULÁRIO ---
+btnResetBasicConfig.addEventListener('click', () => {
+    inputUsername.value = "Lucas";
+    inputNewPassword.value = "";
+    inputConfirmPassword.value = "";
+    viewModeSelector.value = "light";
+    currentFontSize = 100;
+    
+    // Reseta as propriedades de cores para o padrão claro
+    document.documentElement.style.setProperty('--bg-body', '#FDFBF7');
+    document.documentElement.style.setProperty('--card-bg', '#FFFFFF');
+    document.documentElement.style.setProperty('--text-main', '#2F3E33');
+    document.body.style.fontSize = '100%';
 
-// --- 4. FUNCIONALIDADE: SALVAR PREFERÊNCIAS OPERACIONAIS ---
-if (btnSaveConfig) {
-    btnSaveConfig.addEventListener('click', () => {
-        // Captura o estado dos checkboxes e inputs de frete
-        const statusEstoque = document.getElementById('notifyStock').checked ? "Ativo" : "Inativo";
-        const statusEntregas = document.getElementById('notifyOrders').checked ? "Ativo" : "Inativo";
-        const valorTaxaFrete = document.getElementById('freteKM')?.value || "0,00";
-        
-        addSystemLog(`Configurações gravadas. Alertas de insumos: ${statusEstoque} | Frete base: R$ ${valorTaxaFrete}/KM.`);
-        alert('Todas as configurações táticas e de logística foram salvas com sucesso!');
-    });
-}
+    // Restaura o rodapé lateral ao padrão original
+    const footerNameElement = document.getElementById('footerUserName');
+    const footerAvatarElement = document.getElementById('footerAvatar');
+    if (footerNameElement) footerNameElement.innerText = "Lucas";
+    if (footerAvatarElement) footerAvatarElement.innerText = "LC";
 
-// --- 5. FUNCIONALIDADE: LIMPAR FORMULÁRIO DE PREFERÊNCIAS ---
-if (btnClearConfig) {
-    btnClearConfig.addEventListener('click', () => {
-        // Reseta as marcações visuais e retorna os inputs ao estado padrão limpo
-        document.getElementById('notifyStock').checked = false;
-        document.getElementById('notifyOrders').checked = false;
-        
-        const inputFrete = document.getElementById('freteKM');
-        if (inputFrete) inputFrete.value = "";
-        
-        if (themeSelector) themeSelector.value = 'classic-green';
-        
-        // Restaura as variáveis de cor para o padrão verde da marca
-        document.documentElement.style.setProperty('--bg-dark', '#2F3E33');
-        document.documentElement.style.setProperty('--accent-gold', '#D1B48C');
-        
-        addSystemLog('Painel de preferências e seletores visuais limpos pelo administrador.');
-    });
-}
+    addSystemLog('Painel de customização e caixas de texto redefinidos.');
+});
 
-// --- 6. FUNCIONALIDADE: LIMPAR HISTÓRICO DE LOGS ---
-if (btnClearLogs) {
-    btnClearLogs.addEventListener('click', () => {
-        if (logsTableBody) {
-            // Remove as linhas antigas e exibe uma mensagem elegante de tabela vazia
-            logsTableBody.innerHTML = `
-                <tr class="empty-row-placeholder">
-                    <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 45px 0; font-style: italic;">
-                        O histórico de auditoria foi redefinido pelo proprietário.
-                    </td>
-                </tr>
-            `;
-        }
-        logCounter = 0; // Zera o contador de ID dos registros
-    });
-}
+// --- 6. FUNCIONALIDADE: LIMPAR HISTÓRICO DE REGISTROS ---
+btnClearBasicLogs.addEventListener('click', () => {
+    if (basicLogsTableBody) {
+        basicLogsTableBody.innerHTML = `
+            <tr class="empty-row-placeholder">
+                <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 40px 0; font-style: italic;">
+                    O histórico de registro de atividades foi esvaziado.
+                </td>
+            </tr>
+        `;
+    }
+    logCounter = 0;
+});
