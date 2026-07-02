@@ -193,10 +193,11 @@ body {
 .font-bold-total { font-weight: 700; border-top: 1px solid rgba(47, 62, 51, 0.05); padding-top: 4px; margin-top: 2px; }
 .font-bold-profit { font-weight: 700; border-top: 1px solid rgba(209, 180, 140, 0.15); padding-top: 4px; margin-top: 2px; }
 
-/* --- CORREÇÃO DA GRADE INFERIOR: PROPORÇÃO PROTETORA 25/75 --- */
+/*GRADE INFERIOR: PROPORÇÃO PROTETORA 25/75*/
 .financial-bottom-layout {
     display: grid;
-    grid-template-columns: 25fr 75fr; /* 25% para os botões e 75% para a tabela larga */
+    /* Diminui o card esquerdo para 18% e expande a tabela para 82% */
+    grid-template-columns: 18fr 82fr; 
     gap: 20px;
     flex-grow: 1;
     height: calc(100vh - 190px); 
@@ -263,6 +264,41 @@ body {
     background-color: #243227;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
+}/* --- AJUSTE DOS BOTÕES DE LANÇAMENTO (MAIS CURTOS E MENORES) --- */
+.vertical-buttons-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start; /* Impede que os botões estiquem até a borda do card */
+    margin-top: 10px;
+}
+
+.btn-finance-action {
+    width: 200px;         /* Reduz o comprimento horizontal para um tamanho fixo elegante */
+    height: 38px;         /* Reduz a altura deixando o botão mais fino */
+    padding: 0 14px;
+    border-radius: var(--radius-md);
+    font-size: 12px;      /* Letra levemente menor para harmonizar */
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    background-color: var(--bg-dark);
+    color: #FFFFFF;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(47, 62, 51, 0.05);
+}
+
+.btn-finance-action:hover {
+    background-color: #243227;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
+}
+
+.btn-finance-action:active {
+    transform: translateY(0);
 }
 
 /* --- EXPANSÃO DO CONTEXTO DE BUSCA --- */
