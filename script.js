@@ -207,14 +207,17 @@ function calcularTotalModal() {
         container.innerHTML = "";
         let totalGeral = 0;
 
-        carrinho.forEach((item) => {
+        // Adicionamos o 'index' aqui para rastrear a posição do item
+        carrinho.forEach((item, index) => {
             totalGeral += item.precoTotal;
             container.innerHTML += `
-                <div class="cart-item-row" style="margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #EFEBE4;">
-                    <strong>${item.qtd}x ${item.nome}</strong><br>
+                <div class="cart-item-row" style="margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid #EFEBE4; position: relative;">
+                    <strong style="padding-right: 25px; display: block;">${item.qtd}x ${item.nome}</strong>
                     <span style="color: #7A8A7C; font-size:11px;">Tamanho: ${item.tamanho}</span><br>
                     <span style="color: #BC8A5F; font-size:11px; display:block; font-style:italic;">Obs: ${item.obs}</span>
                     <span style="color: #2F3E33; font-weight:600; display:block; margin-top:2px;">R$ ${item.precoTotal.toFixed(2).replace('.', ',')}</span>
+                    
+                    <i class="ph ph-trash" onclick="removerDoCarrinho(${index}, event)" style="position: absolute; right: 0; top: 10px; cursor: pointer; font-size: 16px; color: #A2B1A6;" title="Remover pedido"></i>
                 </div>
             `;
         });
@@ -333,3 +336,18 @@ document.addEventListener('click', function(event) {
         sidebar.classList.remove('active');
     }
 });
+
+
+// ==========================================
+// FUNÇÃO PARA REMOVER ITEM DO CARRINHO
+// ==========================================
+function removerDoCarrinho(index, event) {
+    // Segura o clique no ícone para não acionar o fechamento da aba lateral
+    event.stopPropagation(); 
+    
+    // Remove 1 elemento do array a partir da posição (index)
+    carrinho.splice(index, 1);
+    
+    // Atualiza a interface 
+    atualizarInterfaceCarrinho();
+}
