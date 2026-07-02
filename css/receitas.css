@@ -44,9 +44,7 @@ body {
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar.expanded {
-    width: 260px; 
-}
+.sidebar.expanded { width: 260px; }
 
 .logo {
     display: flex;
@@ -79,9 +77,7 @@ body {
     transition: opacity 0.2s ease;
 }
 
-.sidebar.expanded .logo h2 {
-    opacity: 1;
-}
+.sidebar.expanded .logo h2 { opacity: 1; }
 
 .menu {
     display: flex;
@@ -102,28 +98,10 @@ body {
     white-space: nowrap;
 }
 
-.menu a svg {
-    min-width: 20px;
-    height: 20px;
-    stroke: currentColor;
-    stroke-width: 1.8px;
-}
-
-.menu a span {
-    font-size: 13px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.sidebar.expanded .menu a span {
-    opacity: 1;
-}
-
-.menu a:hover {
-    background-color: rgba(255, 255, 255, 0.03);
-    color: #FFFFFF;
-}
+.menu a svg { min-width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8px; }
+.menu a span { font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.2s ease; }
+.sidebar.expanded .menu a span { opacity: 1; }
+.menu a:hover { background-color: rgba(255, 255, 255, 0.03); color: #FFFFFF; }
 
 .menu a.active {
     background-color: rgba(209, 180, 140, 0.12);
@@ -148,15 +126,8 @@ body {
     transition: opacity 0.2s ease;
 }
 
-.sidebar.expanded .brand-phrase {
-    opacity: 1;
-}
-
-.user-profile {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
+.sidebar.expanded .brand-phrase { opacity: 1; }
+.user-profile { display: flex; align-items: center; gap: 12px; }
 
 .avatar-lc {
     background-color: var(--accent-gold);
@@ -171,23 +142,15 @@ body {
     font-size: 13px;
 }
 
-.user-info {
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.sidebar.expanded .user-info {
-    opacity: 1;
-}
-
+.user-info { white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; }
+.sidebar.expanded .user-info { opacity: 1; }
 .user-info h4 { font-size: 13px; font-weight: 600; color: #FFFFFF; }
 .user-info small { font-size: 11px; color: #8F8B86; }
 
-/* --- CONTEÚDO PRINCIPAL --- */
+/* --- ÁREA PRINCIPAL --- */
 .main-content {
     margin-left: 68px; 
-    padding: 20px 30px; 
+    padding: 16px 24px; 
     width: calc(100% - 68px);
     height: 100vh;
     display: flex;
@@ -198,24 +161,24 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
-.topbar h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
-.topbar .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+.topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+.topbar .subtitle { font-size: 12px; color: var(--text-muted); }
 
-/* --- GRADE ASSIMÉTRICA PREMIUM (UX DE ALTO PADRÃO) --- */
-.premium-recipes-layout {
+/* --- GRADE IGUAL AO MODELO DO QT DESIGNER (50/50) --- */
+.recipes-grid-container {
     display: grid;
-    grid-template-columns: 42fr 58fr; /* Proporção fina: Foco maior na tabela de visualização */
+    grid-template-columns: 1fr 1fr; /* Divide a tela exatamente ao meio */
     gap: 20px;
     flex-grow: 1;
-    height: calc(100vh - 100px); 
+    height: calc(100vh - 90px); /* Preenche a tela e evita scroll global */
     overflow: hidden;
 }
 
-/* Painéis com Acabamento Dourado Fino */
-.form-container-card, .table-container-card {
+/* Painéis de Fundo com Acabamento Dourado Fino */
+.form-card, .list-card {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
     padding: 20px;
@@ -227,97 +190,60 @@ body {
     overflow: hidden;
 }
 
-/* Cabeçalho Fixo do Painel de Cadastro */
-.panel-header-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(209, 180, 140, 0.15);
-    padding-bottom: 12px;
-}
-
-.title-group h2 {
+.card-section-title {
     font-size: 15px;
     font-weight: 600;
     color: var(--text-main);
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(209, 180, 140, 0.15);
+    padding-bottom: 8px;
 }
 
-.title-group p {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-/* Botões de Ação Fixos no Topo */
-.action-buttons-top {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-p {
-    padding: 6px 14px;
-    border-radius: var(--radius-md);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-}
-
-.btn-p-save { 
-    background-color: var(--bg-dark); 
-    color: #FFFFFF; 
-}
-.btn-p-save:hover { background-color: #202c24; }
-
-.btn-p-edit { 
-    background-color: #FFFFFF; 
-    border: 1px solid var(--accent-gold); 
-    color: var(--text-main); 
-}
-.btn-p-edit:hover { background-color: rgba(209, 180, 140, 0.08); }
-
-.btn-p-delete { 
-    background-color: #FDF2F2; 
-    color: #C94A4A; 
-}
-.btn-p-delete:hover { background-color: #FDE8E8; }
-
-/* --- FORMULÁRIO COM ROLAGEM INTERNA SEGURA --- */
-.premium-form {
+/* --- FORMULÁRIO COM DUAS CAIXAS GIGANTES DE TEXTO --- */
+.custom-form {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto; /* Cria o scroll apenas nos campos, protegendo os botões */
-    padding-right: 6px;
     flex-grow: 1;
+    height: 100%;
 }
 
-/* Scrollbar ultrafina e discreta para os campos */
-.premium-form::-webkit-scrollbar { width: 4px; }
-.premium-form::-webkit-scrollbar-track { background: transparent; }
-.premium-form::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
-
-.p-field {
+.form-row {
     display: flex;
     flex-direction: column;
     gap: 4px;
 }
 
-.premium-form label {
-    font-size: 10px;
+.form-row.full-width {
+    width: 100%;
+}
+
+/* Força as duas caixas de texto a dividirem o espaço restante igualmente */
+.flex-grow-textarea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Permite encolhimento e ativação de rolagem interna */
+}
+
+.flex-height-textarea {
+    flex: 1;
+    display: flex;
+}
+
+.custom-form label {
+    font-size: 11px;
     font-weight: 600;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.2px;
 }
 
-/* Inputs e Textareas Premium com bordas douradas sutis */
-.premium-form input, .recipe-textarea-large {
+/* Inputs e Textareas Refinados */
+.custom-form input, .flex-height-textarea textarea {
     background-color: var(--bg-body);
     border: 1px solid rgba(47, 62, 51, 0.08);
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-radius: var(--radius-md);
     font-size: 13px;
     font-family: inherit;
@@ -326,37 +252,73 @@ body {
     transition: all 0.2s ease;
 }
 
-.premium-form input:focus, .recipe-textarea-large:focus {
+.custom-form input:focus, .flex-height-textarea textarea:focus {
     border-color: var(--accent-gold);
     background-color: #FFFFFF;
     box-shadow: 0 0 0 3px rgba(209, 180, 140, 0.08);
 }
 
-/* Tamanho esticado confortável para ler receitas grandes */
-.recipe-textarea-large {
-    height: 140px;
+.flex-height-textarea textarea {
+    width: 100%;
+    flex-grow: 1;
     resize: none;
     line-height: 1.5;
 }
 
-/* --- TABELA E BARRA DE BUSCA DA DIREITA --- */
-.table-container-card {
+/* --- LINHA COM OS 4 BOTÕES UNIFICADOS NA MESMA COR OFICIAL --- */
+.form-actions-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
+    gap: 10px;
+    margin-top: auto; /* Mantém os botões colados na base do card */
+    padding-top: 14px;
+    border-top: 1px solid rgba(209, 180, 140, 0.15);
+}
+
+.btn {
+    padding: 10px;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    /* Todos os botões agora usam o verde escuro oficial e texto branco */
+    background-color: var(--bg-dark);
+    color: #FFFFFF;
+    transition: all 0.2s ease;
+}
+
+/* Efeito de destaque suave ao passar o mouse por cima de qualquer um deles */
+.btn:hover {
+    background-color: #243227;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+
+/* --- COLUNA DA DIREITA: BUSCA E TABELA GIGANTE (ID / NOME) --- */
+.list-card {
     display: flex;
     flex-direction: column;
 }
 
-.table-header-search {
+.list-header {
     margin-bottom: 16px;
 }
 
-.search-input-wrapper {
+.search-box-client {
     position: relative;
     display: flex;
     align-items: center;
     width: 100%;
 }
 
-.search-input-wrapper input {
+.search-box-client input {
     width: 100%;
     background-color: var(--bg-body);
     border: 1px solid rgba(47, 62, 51, 0.08);
@@ -369,17 +331,18 @@ body {
     transition: all 0.2s ease;
 }
 
-.search-input-wrapper input:focus {
+.search-box-client input:focus {
     border-color: var(--accent-gold);
     background-color: #FFFFFF;
 }
 
-.search-input-wrapper svg {
+.search-box-client svg {
     position: absolute;
     right: 14px;
     color: var(--text-muted);
 }
 
+/* Área de Rolagem Segura da Tabela */
 .table-wrapper {
     flex-grow: 1;
     overflow-y: auto;
@@ -388,13 +351,13 @@ body {
 .table-wrapper::-webkit-scrollbar { width: 4px; }
 .table-wrapper::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
 
-.premium-table {
+.clients-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
 }
 
-.premium-table th {
+.clients-table th {
     font-size: 11px;
     color: var(--text-muted);
     padding-bottom: 10px;
@@ -404,27 +367,10 @@ body {
     border-bottom: 1px solid rgba(209, 180, 140, 0.15);
 }
 
-.premium-table td {
+.clients-table td {
     font-size: 13px;
     padding: 12px 0;
-    border-bottom: 1px solid rgba(47, 62, 51, 0.02);
+    border-bottom: 1px solid rgba(47, 62, 51, 0.03);
     color: var(--text-main);
     font-weight: 500;
-}
-
-/* Estilo de tela vazia quando não há dados carregados */
-.placeholder-empty-state td {
-    padding: 60px 0;
-    text-align: center;
-}
-
-.empty-message span {
-    font-size: 24px;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.empty-message p {
-    font-size: 13px;
-    color: var(--text-muted);
 }

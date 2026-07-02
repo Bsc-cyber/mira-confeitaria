@@ -165,8 +165,9 @@ body {
 
 .topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
 .topbar .subtitle { font-size: 12px; color: var(--text-muted); }
-/* --- GRADE SIMÉTRICA DE PRODUTOS (50/50) --- */
-.products-grid-container {
+
+/* --- GRADE IGUAL AO MODELO DO QT DESIGNER (50/50) --- */
+.recipes-grid-container {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Divide a tela exatamente ao meio */
     gap: 20px;
@@ -175,7 +176,7 @@ body {
     overflow: hidden;
 }
 
-/* Painéis com Acabamento Dourado Fino */
+/* Painéis de Fundo com Acabamento Dourado Fino */
 .form-card, .list-card {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
@@ -202,15 +203,13 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto; /* Cria o scroll apenas nos campos, protegendo os botões na base */
+    overflow-y: auto; /* Cria o scroll apenas nos campos se a tela for menor */
     padding-right: 6px;
     flex-grow: 1;
     height: 100%;
 }
 
-/* Scrollbar ultrafina para os campos */
 .custom-form::-webkit-scrollbar { width: 4px; }
-.custom-form::-webkit-scrollbar-track { background: transparent; }
 .custom-form::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
 
 .form-row {
@@ -219,15 +218,12 @@ body {
     gap: 4px;
 }
 
-.form-row.full-width {
-    width: 100%;
-}
+.form-row.full-width { width: 100%; }
+.form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-.form-row-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
+/* Alinhamento fino para os botões de lupa ao lado dos selects */
+.target-address { grid-template-columns: 1fr 40px !important; }
+.align-end-btn { display: flex; align-items: flex-end; }
 
 .custom-form label {
     font-size: 11px;
@@ -237,7 +233,7 @@ body {
     letter-spacing: 0.2px;
 }
 
-/* Inputs e Selects Premium com bordas douradas sutis */
+/* Inputs, Selects e Textareas Refinados */
 .custom-form input, .custom-form textarea, .premium-select {
     background-color: var(--bg-body);
     border: 1px solid rgba(47, 62, 51, 0.08);
@@ -266,54 +262,92 @@ body {
     box-shadow: 0 0 0 3px rgba(209, 180, 140, 0.08);
 }
 
-.custom-form textarea {
-    height: 60px;
-    resize: none;
-}
-
-/* --- LINHA COM OS 4 BOTÕES UNIFICADOS NO VERDE OFICIAL --- */
-.form-actions-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
-    gap: 10px;
-    margin-top: auto; /* Força os botões a ficarem sempre fixos no rodapé do card */
-    padding-top: 14px;
-    border-top: 1px solid rgba(209, 180, 140, 0.15);
-    background-color: #FFFFFF;
-}
-
-.btn {
-    padding: 10px;
+/* --- TRAVA DE BOTÕES UNIFICADOS NO VERDE ESCURO OFICIAL --- */
+.btn, .btn-add-item-box, .btn-lupa-p {
     border-radius: var(--radius-md);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     border: none;
     text-align: center;
-    background-color: var(--bg-dark);
-    color: #FFFFFF;
+    background-color: var(--bg-dark) !important; /* Todos os botões em verde escuro */
+    color: #FFFFFF !important;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.btn:hover {
-    background-color: #243227;
+.btn { padding: 10px; }
+
+/* Botões pequenos de pesquisa e de "+" */
+.btn-lupa-p {
+    width: 100%;
+    height: 33px;
+    font-size: 14px;
+}
+
+/* Botão Largo "Adicionar Item" */
+.btn-add-item-box {
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    margin-top: 4px;
+}
+
+.btn:hover, .btn-add-item-box:hover, .btn-lupa-p:hover {
+    background-color: #243227 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
 }
 
-.btn:active {
-    transform: translateY(0);
+/* --- CUPOM DE ITENS DA VENDA ATUAL (ESQUERDA) --- */
+.mini-cart-table {
+    flex: 1;
+    min-height: 100px;
+    border: 1px solid rgba(209, 180, 140, 0.2);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-body);
+    padding: 8px;
 }
 
-/* --- COLUNA DA DIREITA: PESQUISA E TABELA ID / NOME --- */
-.list-card {
+/* --- BLOCO DE TOTALIZADORES --- */
+.sales-totals-summary {
+    background-color: rgba(209, 180, 140, 0.05);
+    border: 1px dashed rgba(209, 180, 140, 0.3);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
     display: flex;
     flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
 }
 
-.list-header {
-    margin-bottom: 16px;
+.total-row-txt {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+    display: flex;
+    justify-content: space-between;
 }
+
+.total-row-txt .v-bold { font-weight: 700; color: #4E8752; }
+.total-row-txt .v-red { font-weight: 700; color: #C94A4A; }
+
+/* Linha com os 4 Botões do Rodapé */
+.form-actions-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(209, 180, 140, 0.15);
+    background-color: #FFFFFF;
+}
+
+/* --- COLUNA DA DIREITA: BUSCA, BADGE E HISTÓRICO --- */
+.list-card { display: flex; flex-direction: column; }
+.list-header { margin-bottom: 12px; }
 
 .search-box-client {
     position: relative;
@@ -335,32 +369,44 @@ body {
     transition: all 0.2s ease;
 }
 
-.search-box-client input:focus {
-    border-color: var(--accent-gold);
-    background-color: #FFFFFF;
+.search-box-client input:focus { border-color: var(--accent-gold); background-color: #FFFFFF; }
+.search-box-client svg { position: absolute; right: 14px; color: var(--text-muted); }
+
+/* Painel de Destaque - Mais Vendidos */
+.top-selling-badge-panel {
+    background-color: rgba(209, 180, 140, 0.04);
+    border: 1px solid rgba(209, 180, 140, 0.2);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.search-box-client svg {
-    position: absolute;
-    right: 14px;
-    color: var(--text-muted);
-}
+.badge-title { font-size: 10px; font-weight: 700; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px; }
+.badge-subtitle { font-size: 13px; font-weight: 600; color: var(--text-main); }
 
+/* Tabela de Histórico de Vendas Completa */
 .table-wrapper {
     flex-grow: 1;
     overflow-y: auto;
 }
 
-.table-wrapper::-webkit-scrollbar { width: 4px; }
+.table-wrapper::-webkit-scrollbar { width: 4px; height: 4px; }
 .table-wrapper::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
 
-.products-table {
+.clients-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
 }
 
-.products-table th {
+.font-sales-table {
+    white-space: nowrap; /* Impede quebras feias de texto na tabela longa do caixa */
+}
+
+.clients-table th {
     font-size: 11px;
     color: var(--text-muted);
     padding-bottom: 10px;
@@ -370,7 +416,7 @@ body {
     border-bottom: 1px solid rgba(209, 180, 140, 0.15);
 }
 
-.products-table td {
+.clients-table td {
     font-size: 13px;
     padding: 12px 0;
     border-bottom: 1px solid rgba(47, 62, 51, 0.03);

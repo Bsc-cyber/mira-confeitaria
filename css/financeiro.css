@@ -1,9 +1,9 @@
 @import url('https://googleapis.com');
 
 :root {
-    --bg-dark: #2F3E33;       /* Seu verde escuro oficial */
-    --accent-gold: #D1B48C;   /* Seu dourado refinado */
-    --bg-body: #FDFBF7;       /* Fundo off-white muito leve */
+    --bg-dark: #2F3E33;       /* Verde escuro oficial */
+    --accent-gold: #D1B48C;   /* Dourado refinado */
+    --bg-body: #FDFBF7;       /* Fundo off-white leve */
     --card-bg: #FFFFFF;       
     --text-main: #2F3E33;     
     --text-muted: #8A948D;    
@@ -27,7 +27,7 @@ body {
     overflow: hidden;
 }
 
-/* --- BARRA LATERAL COM EXPANSÃO FLUTUANTE PREMIUM --- */
+/* --- BARRA LATERAL --- */
 .sidebar {
     position: fixed;
     left: 0;
@@ -81,10 +81,7 @@ body {
     letter-spacing: 0.5px;
 }
 
-.sidebar.expanded .logo h2 { 
-    opacity: 1; 
-    transition-delay: 0.1s;
-}
+.sidebar.expanded .logo h2 { opacity: 1; }
 
 .menu {
     display: flex;
@@ -109,12 +106,7 @@ body {
 .menu a span { font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.15s ease; }
 .sidebar.expanded .menu a span { opacity: 1; transition-delay: 0.1s; }
 .menu a:hover { background-color: rgba(255, 255, 255, 0.03); color: #FFFFFF; }
-
-.menu a.active {
-    background-color: rgba(209, 180, 140, 0.12);
-    color: var(--accent-gold);
-    font-weight: 600;
-}
+.menu a.active { background-color: rgba(209, 180, 140, 0.12); color: var(--accent-gold); font-weight: 600; }
 
 .sidebar-footer {
     padding-top: 15px;
@@ -133,11 +125,7 @@ body {
     transition: opacity 0.15s ease;
 }
 
-.sidebar.expanded .brand-phrase { 
-    opacity: 1; 
-    transition-delay: 0.1s;
-}
-
+.sidebar.expanded .brand-phrase { opacity: 1; transition-delay: 0.1s; }
 .user-profile { display: flex; align-items: center; gap: 12px; }
 .avatar-lc { background-color: var(--accent-gold); color: var(--bg-dark); min-width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px; }
 
@@ -165,18 +153,57 @@ body {
 
 .topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
 .topbar .subtitle { font-size: 12px; color: var(--text-muted); }
-/* --- GRADE SIMÉTRICA DE PRODUTOS (50/50) --- */
-.products-grid-container {
+
+/* --- PAINEL FINANCEIRO SUPERIOR --- */
+.financial-summary-banner {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 14px 20px;
+    border: 1px solid rgba(209, 180, 140, 0.25);
+    box-shadow: var(--shadow-subtle);
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide a tela exatamente ao meio */
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 16px;
+}
+
+.banner-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.banner-column:not(:last-child) {
+    border-right: 1px solid rgba(209, 180, 140, 0.15);
+    padding-right: 10px;
+}
+
+.metrics-row {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.metrics-row span { font-weight: 600; }
+.metrics-row .v-green { color: #4E8752; font-weight: 700; }
+.metrics-row .v-red { color: #C94A4A; font-weight: 700; }
+.metrics-row .v-gold { color: #B39570; font-weight: 700; }
+
+.font-bold-total { font-weight: 700; border-top: 1px solid rgba(47, 62, 51, 0.05); padding-top: 4px; margin-top: 2px; }
+.font-bold-profit { font-weight: 700; border-top: 1px solid rgba(209, 180, 140, 0.15); padding-top: 4px; margin-top: 2px; }
+
+/* --- CORREÇÃO DA GRADE INFERIOR: PROPORÇÃO PROTETORA 25/75 --- */
+.financial-bottom-layout {
+    display: grid;
+    grid-template-columns: 25fr 75fr; /* 25% para os botões e 75% para a tabela larga */
     gap: 20px;
     flex-grow: 1;
-    height: calc(100vh - 90px); /* Preenche a tela e evita scroll global */
+    height: calc(100vh - 190px); 
     overflow: hidden;
 }
 
-/* Painéis com Acabamento Dourado Fino */
-.form-card, .list-card {
+.action-card-left, .list-card-right {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
     padding: 20px;
@@ -197,136 +224,60 @@ body {
     padding-bottom: 8px;
 }
 
-/* --- FORMULÁRIO COM ROLAGEM INTERNA SEGURA --- */
-.custom-form {
+/* Cabeçalho de Movimentações */
+.list-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(209, 180, 140, 0.15);
+    padding-bottom: 8px;
+}
+
+/* --- AJUSTE INFALÍVEL DOS BOTÕES EMPILHADOS --- */
+.vertical-buttons-stack {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto; /* Cria o scroll apenas nos campos, protegendo os botões na base */
-    padding-right: 6px;
-    flex-grow: 1;
-    height: 100%;
 }
 
-/* Scrollbar ultrafina para os campos */
-.custom-form::-webkit-scrollbar { width: 4px; }
-.custom-form::-webkit-scrollbar-track { background: transparent; }
-.custom-form::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
-
-.form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.form-row.full-width {
+.btn-finance-action {
     width: 100%;
-}
-
-.form-row-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-
-.custom-form label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.2px;
-}
-
-/* Inputs e Selects Premium com bordas douradas sutis */
-.custom-form input, .custom-form textarea, .premium-select {
-    background-color: var(--bg-body);
-    border: 1px solid rgba(47, 62, 51, 0.08);
-    padding: 8px 12px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-family: inherit;
-    color: var(--text-main);
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.premium-select {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='%232F3E33' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 14px;
-    padding-right: 36px;
-}
-
-.custom-form input:focus, .custom-form textarea:focus, .premium-select:focus {
-    border-color: var(--accent-gold);
-    background-color: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(209, 180, 140, 0.08);
-}
-
-.custom-form textarea {
-    height: 60px;
-    resize: none;
-}
-
-/* --- LINHA COM OS 4 BOTÕES UNIFICADOS NO VERDE OFICIAL --- */
-.form-actions-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
-    gap: 10px;
-    margin-top: auto; /* Força os botões a ficarem sempre fixos no rodapé do card */
-    padding-top: 14px;
-    border-top: 1px solid rgba(209, 180, 140, 0.15);
-    background-color: #FFFFFF;
-}
-
-.btn {
-    padding: 10px;
+    height: 44px; /* Altura fixa confortável de clique */
+    padding: 0 16px;
     border-radius: var(--radius-md);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     border: none;
-    text-align: center;
+    text-align: left;
+    display: flex;
+    align-items: center;
     background-color: var(--bg-dark);
     color: #FFFFFF;
     transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(47, 62, 51, 0.05);
 }
 
-.btn:hover {
+.btn-finance-action:hover {
     background-color: #243227;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
 }
 
-.btn:active {
-    transform: translateY(0);
-}
-
-/* --- COLUNA DA DIREITA: PESQUISA E TABELA ID / NOME --- */
-.list-card {
-    display: flex;
-    flex-direction: column;
-}
-
-.list-header {
-    margin-bottom: 16px;
-}
-
-.search-box-client {
+/* --- EXPANSÃO DO CONTEXTO DE BUSCA --- */
+.search-box-finance {
     position: relative;
     display: flex;
     align-items: center;
-    width: 100%;
+    width: 320px; /* Largura ideal para respirar o placeholder */
 }
 
-.search-box-client input {
+.search-box-finance input {
     width: 100%;
     background-color: var(--bg-body);
     border: 1px solid rgba(47, 62, 51, 0.08);
-    padding: 10px 14px;
+    padding: 8px 14px;
     padding-right: 36px;
     border-radius: var(--radius-md);
     font-size: 13px;
@@ -335,17 +286,18 @@ body {
     transition: all 0.2s ease;
 }
 
-.search-box-client input:focus {
+.search-box-finance input:focus {
     border-color: var(--accent-gold);
     background-color: #FFFFFF;
 }
 
-.search-box-client svg {
+.search-box-finance svg {
     position: absolute;
-    right: 14px;
+    right: 12px;
     color: var(--text-muted);
 }
 
+/* --- CONTROLE DE ROLAGEM INTERNA DA TABELA --- */
 .table-wrapper {
     flex-grow: 1;
     overflow-y: auto;
@@ -354,13 +306,13 @@ body {
 .table-wrapper::-webkit-scrollbar { width: 4px; }
 .table-wrapper::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
 
-.products-table {
+.financial-table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
 }
 
-.products-table th {
+.financial-table th {
     font-size: 11px;
     color: var(--text-muted);
     padding-bottom: 10px;
@@ -370,10 +322,11 @@ body {
     border-bottom: 1px solid rgba(209, 180, 140, 0.15);
 }
 
-.products-table td {
+.financial-table td {
     font-size: 13px;
     padding: 12px 0;
     border-bottom: 1px solid rgba(47, 62, 51, 0.03);
     color: var(--text-main);
     font-weight: 500;
 }
+ 

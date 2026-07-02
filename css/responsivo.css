@@ -1,0 +1,92 @@
+/* ==========================================================================
+   MIRA CONFEITARIA - ARQUIVO DE RESPONSIVIDADE UNIVERSAL PARA COMPUTADORES
+   ========================================================================== */
+
+/* Ajuste fino para notebooks pequenos (Telas até 1366px de largura - Padrão de 14 polegadas) */
+@media screen and (max-width: 1366px) {
+    :root {
+        --radius-lg: 12px;
+        --radius-md: 6px;
+    }
+
+    .main-content {
+        padding: 12px 20px !important;
+    }
+
+    .topbar {
+        margin-bottom: 8px !important;
+    }
+
+    .topbar h1 {
+        font-size: 18px !important;
+    }
+
+    /* Reduz levemente o tamanho dos textos e inputs para caber em telas menores */
+    .custom-form input, 
+    .flex-height-textarea textarea, 
+    .premium-select,
+    .search-box-client input {
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+
+    .custom-form label {
+        font-size: 9px !important;
+    }
+
+    /* Encolhe a altura das caixas de texto para liberar espaço vertical */
+    .custom-form textarea {
+        height: 50px !important;
+    }
+
+    .btn {
+        padding: 8px !important;
+        font-size: 12px !important;
+    }
+
+    .form-actions-4 {
+        gap: 6px !important;
+        padding-top: 10px !important;
+    }
+}
+
+/* Ajuste de segurança para monitores muito baixos ou com zoom de tela alto (Alturas menores que 720px) */
+@media screen and (max-height: 720px) {
+    .main-content {
+        padding: 8px 16px !important;
+    }
+
+    .topbar {
+        margin-bottom: 4px !important;
+    }
+
+    /* Garante que os containers se adaptem perfeitamente sem vazar na base */
+    .recipes-grid-container,
+    .vendors-grid-container,
+    .clients-grid-container {
+        height: calc(100vh - 70px) !important;
+        gap: 12px !important;
+    }
+
+    .form-card, .list-card {
+        padding: 12px !important;
+    }
+
+    /* Deixa os campos mais colados para otimizar o espaço vertical */
+    .custom-form {
+        gap: 8px !important;
+    }
+}
+
+/* Ajuste para telas muito grandes (Monitores Ultrawide ou TVs 4K) */
+@media screen and (min-width: 1920px) {
+    .form-container-card, .table-container-card, .form-card, .list-card {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .custom-form input, .flex-height-textarea textarea, .premium-select {
+        font-size: 14px !important;
+        padding: 12px 16px !important;
+    }
+}

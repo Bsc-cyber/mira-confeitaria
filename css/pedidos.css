@@ -99,14 +99,7 @@ body {
 }
 
 .menu a svg { min-width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8px; }
-
-.menu a span {
-    font-size: 13px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
+.menu a span { font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.2s ease; }
 .sidebar.expanded .menu a span { opacity: 1; }
 .menu a:hover { background-color: rgba(255, 255, 255, 0.03); color: #FFFFFF; }
 
@@ -134,7 +127,6 @@ body {
 }
 
 .sidebar.expanded .brand-phrase { opacity: 1; }
-
 .user-profile { display: flex; align-items: center; gap: 12px; }
 
 .avatar-lc {
@@ -175,10 +167,9 @@ body {
 .topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
 .topbar .subtitle { font-size: 12px; color: var(--text-muted); }
 
-/* --- GRADE PREMIUM 50/50 DE PEDIDOS --- */
 .premium-orders-layout {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide a tela perfeitamente ao meio */
+    grid-template-columns: 1fr 1fr;
     gap: 16px;
     flex-grow: 1;
     height: calc(100vh - 85px); 
@@ -257,39 +248,10 @@ body {
 .p-field-row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .p-field-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .p-field-row-custom { display: flex; gap: 8px; align-items: flex-end; }
+.p-field-search-row { display: flex; gap: 8px; align-items: flex-end; }
+.search-buttons-group { display: flex; gap: 4px; }
 
-/* Linhas de Busca com Ícones Integrados */
-.p-field-search-row {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-}
-
-.search-buttons-group {
-    display: flex;
-    gap: 4px;
-}
-
-.btn-icon-p {
-    background-color: var(--bg-dark);
-    color: #FFFFFF;
-    border: none;
-    width: 28px;
-    height: 28px;
-    border-radius: var(--radius-md);
-    font-size: 11px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-}
-
-.btn-icon-p:hover { background-color: #202c24; }
-.btn-add-new { background-color: var(--accent-gold); color: var(--bg-dark); font-weight: 700; font-size: 14px; }
-.btn-add-new:hover { background-color: #c4a57b; }
-
-/* Badge de Valor Desabilitado */
+/* Preço Unitário Exibido */
 .price-badge-disabled {
     background-color: #ECEAE6;
     border: 1px solid rgba(47, 62, 51, 0.05);
@@ -303,20 +265,51 @@ body {
     align-items: center;
 }
 
-/* Botão Largo Adicionar ao Carrinho */
-.btn-add-to-cart {
-    background-color: var(--bg-dark);
-    color: #FFFFFF;
-    border: none;
-    padding: 8px;
+/* --- PADRONIZAÇÃO COMPLETA: TODOS OS BOTÕES EM VERDE ESCURO --- */
+.btn-p, 
+.btn-add-to-cart, 
+.btn-icon-p, 
+.btn-add-new, 
+.btn-filter-action {
+    padding: 8px 12px;
     border-radius: var(--radius-md);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    border: none;
+    background-color: var(--bg-dark) !important; /* Trava todos os botões no verde oficial */
+    color: #FFFFFF !important;
     transition: all 0.2s ease;
-    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.btn-add-to-cart:hover { background-color: #202c24; }
+
+/* Ajustes de tamanhos específicos para manter os formatos da tela */
+.btn-icon-p, .btn-add-new {
+    width: 28px;
+    height: 28px;
+    font-size: 11px;
+}
+.btn-add-new { font-size: 14px; }
+
+.btn-add-to-cart {
+    width: 100%;
+    margin-top: 4px;
+    padding: 10px;
+    font-size: 13px;
+}
+
+/* Efeito de passar o mouse unificado para a página inteira */
+.btn-p:hover, 
+.btn-add-to-cart:hover, 
+.btn-icon-p:hover, 
+.btn-add-new:hover, 
+.btn-filter-action:hover {
+    background-color: #243227 !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
+}
 
 /* --- RODAPÉ FIXO DO CARRINHO (ESQUERDA) --- */
 .cart-summary-footer {
@@ -337,16 +330,16 @@ body {
 .highlight-price {
     font-size: 15px;
     font-weight: 700;
-    color: var(--green-trend);
+    color: #4E8752;
 }
 
 .cart-actions {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.2fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 8px;
 }
 
-/* --- DASHBOARD DE PRODUÇÃO (DIREITA) --- */
+/* --- DASHBOARD DE STATUS DA PRODUÇÃO (MANTIDOS COLORIDOS CONFORME SOLICITADO) --- */
 .production-dashboard-header {
     background-color: rgba(209, 180, 140, 0.04);
     border: 1px solid rgba(209, 180, 140, 0.2);
@@ -384,7 +377,7 @@ body {
 .p-status-badge.green { background-color: #EAF4EB; color: #4E8752; }
 .p-status-badge.red { background-color: #FDF2F2; color: #C94A4A; }
 
-/* Filtros Avançados */
+/* Filtros */
 .production-filter-row {
     display: grid;
     grid-template-columns: 1.2fr 1.5fr 1.5fr 1fr;
@@ -402,19 +395,7 @@ body {
     outline: none;
 }
 
-.btn-filter-action {
-    background-color: var(--accent-gold);
-    color: var(--bg-dark);
-    font-weight: 600;
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.btn-filter-action:hover { background-color: #c4a57b; }
-
-/* --- TABELAS E COMPONENTES DA DIREITA --- */
+/* --- TABELAS --- */
 .table-wrapper {
     flex-grow: 1;
     overflow-y: auto;
@@ -449,26 +430,6 @@ body {
 .placeholder-empty-state td { padding: 40px 0; text-align: center; }
 .empty-message span { font-size: 20px; display: block; margin-bottom: 4px; }
 .empty-message p { font-size: 12px; color: var(--text-muted); }
-
-/* Botões Globais de Rodapé */
-.btn-p {
-    padding: 6px 12px;
-    border-radius: var(--radius-md);
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s ease;
-}
-
-.btn-p-save { background-color: var(--bg-dark); color: #FFFFFF; }
-.btn-p-save:hover { background-color: #202c24; }
-
-.btn-p-edit { background-color: #FFFFFF; border: 1px solid var(--accent-gold); color: var(--text-main); }
-.btn-p-edit:hover { background-color: rgba(209, 180, 140, 0.08); }
-
-.btn-p-delete { background-color: #FDF2F2; color: #C94A4A; }
-.btn-p-delete:hover { background-color: #FDE8E8; }
 
 .production-footer-actions {
     margin-top: auto;

@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIRA Confeitaria - Cadastro de Receitas</title>
-    <link rel="stylesheet" href="css/receitas.css?v=4.0">
-    <!-- Vá no cabeçalho de cada página e adicione a segunda linha: -->
-    <link rel="stylesheet" href="css/receitas.css?v=4.0">
-    <link rel="stylesheet" href="css/responsivo.css"> <!-- ADICIONE ESSA LINHA EM TODAS AS PÁGINAS -->
-
+    <title>MIRA Confeitaria - Controle Financeiro</title>
+    <link rel="stylesheet" href="css/financeiro.css?v=1.0">
+    <link rel="stylesheet" href="css/responsivo.css">
 </head>
 <body>
 
-    <!-- Barra Lateral Inteligente (Padrão do Site) -->
+    <!-- Barra Lateral Inteligente (Padrão Unificado do Site) -->
     <aside class="sidebar" id="sidebar">
         <div class="logo">
             <span class="avatar-mc">MC</span>
@@ -40,7 +37,7 @@
                 <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                 <span>Vendas</span>
             </a>
-            <a href="#" class="active">
+            <a href="receitas.html">
                 <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                 <span>Receitas</span>
             </a>
@@ -48,7 +45,7 @@
                 <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                 <span>Fornecedores</span>
             </a>
-            <a href="financeiro.html">
+            <a href="#" class="active">
                 <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 <span>Controle Financeiro</span>
             </a>
@@ -78,70 +75,82 @@
     <main class="main-content">
         <header class="topbar">
             <div class="topbar-left">
-                <h1>Cadastro de Receitas</h1>
-                <p class="subtitle">Insira o modo de produção e os componentes das suas receitas autorais.</p>
+                <h1>Controle Financeiro</h1>
+                <p class="subtitle">Acompanhe o fluxo de caixa, controle contas a pagar e analise o lucro real.</p>
             </div>
         </header>
 
-        <!-- Grade Principal Baseada no Modelo da Foto (Meio a Meio) -->
-        <section class="recipes-grid-container">
-            <!-- COLUNA ESQUERDA: Formulário Fiel ao Seu Modelo -->
-            <div class="form-card">
-                <h3 class="card-section-title">Dados da Receita</h3>
-                <form id="recipeForm" class="custom-form">
+        <!-- TOP BAR: Painel Financeiro Horizontal Fiel ao Qt Designer -->
+        <section class="financial-summary-banner">
+            <div class="banner-column">
+                <div class="metrics-row">💵 Entradas: <span class="v-green">R$ 0,00</span></div>
+                <div class="metrics-row">📉 Despesas: <span class="v-red">R$ 0,00</span></div>
+                <div class="metrics-row font-bold-total">📊 Saldo Final: <span>R$ 0,00</span></div>
+            </div>
+            <div class="banner-column">
+                <div class="metrics-row">📥 Recebido: <span>R$ 0,00</span></div>
+                <div class="metrics-row">💸 Contas: <span>R$ 0,00</span></div>
+            </div>
+            <div class="banner-column">
+                <div class="metrics-row">⏳ A receber: <span>R$ 0,00</span></div>
+                <div class="metrics-row font-bold-profit">💎 Lucro: <span class="v-gold">R$ 0,00</span></div>
+            </div>
+        </section>
+
+        <!-- BOTTOM AREA: Grade Dividida Baseada na Foto -->
+        <section class="financial-bottom-layout">
+            <!-- COLUNA ESQUERDA: Painel de Ações Rápidas (+ Lançamentos) -->
+            <div class="action-card-left">
+                <h3 class="card-section-title">+ Lançamentos</h3>
+                
+                <div class="vertical-buttons-stack">
+                    <button type="button" class="btn btn-finance-action">
+                        <svg xmlns="http://w3.org" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><path d="M12 5v14M5 12h14"/></svg>
+                        Adicionar Despesa
+                    </button>
                     
-                    <div class="form-row full-width">
-                        <label>Nome:</label>
-                        <input type="text" name="nome_receita" placeholder="Digite o nome da receita">
-                    </div>
-
-                    <div class="form-row full-width flex-grow-textarea">
-                        <label>Ingredientes:</label>
-                        <div class="flex-height-textarea">
-                            <textarea name="ingredientes" placeholder="Liste os ingredientes e suas quantidades..."></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-row full-width flex-grow-textarea">
-                        <label>Modo de Preparo:</label>
-                        <div class="flex-height-textarea">
-                            <textarea name="modo_preparo" placeholder="Descreva o passo a passo do preparo..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Linha com os 4 Botões Clássicos Exatamente Igual ao Modelo -->
-                    <div class="form-actions-4">
-                        <button type="submit" class="btn btn-save">Salvar</button>
-                        <button type="button" class="btn btn-edit">Editar</button>
-                        <button type="button" class="btn btn-clear">Limpar</button>
-                        <button type="button" class="btn btn-delete">Excluir</button>
-                    </div>
-                </form>
+                    <button type="button" class="btn btn-finance-action">
+                        <svg xmlns="http://w3.org" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="4"/><line x1="8" y1="2" x2="8" y2="4"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        Adicionar Conta
+                    </button>
+                    
+                    <button type="button" class="btn btn-finance-action btn-refresh-finance">
+                        <svg xmlns="http://w3.org" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 8px;"><polyline points="23 4 23 10 18 10"/><polyline points="1 20 1 14 6 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        Atualizar
+                    </button>
+                </div>
             </div>
 
-            <!-- COLUNA DIREITA: Barra de Pesquisa e Tabela Limpa -->
-            <div class="list-card">
-                <div class="list-header">
-                    <div class="search-box-client">
-                        <input type="text" placeholder="Pesquisar receita...">
+            <!-- COLUNA DIREITA: Área Ampla de Histórico (Movimentações) -->
+            <div class="list-card-right">
+                <div class="list-card-header">
+                    <h3 class="card-section-title" style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Movimentações</h3>
+                    
+                    <!-- Barra de pesquisa elegante para o caixa -->
+                    <div class="search-box-finance">
+                        <input type="text" placeholder="Filtrar lançamentos por descrição ou categoria...">
                         <svg xmlns="http://w3.org" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     </div>
                 </div>
 
-                <!-- Tabela Fina de Referência com Colunas ID e NOME -->
+                <!-- Tabela Ampla com Rolagem Interna Segura -->
                 <div class="table-wrapper">
-                    <table class="clients-table">
+                    <table class="financial-table">
                         <thead>
                             <tr>
-                                <th style="width: 80px;">ID</th>
-                                <th>Nome da Receita</th>
+                                <th style="width: 60px;">ID</th>
+                                <th style="width: 110px;">Data</th>
+                                <th>Descrição do Lançamento</th>
+                                <th style="width: 140px;">Categoria</th>
+                                <th style="width: 130px; text-align: right;">Valor</th>
+                                <th style="width: 110px; text-align: right;">Tipo</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Pronto para receber as linhas dinâmicas do banco de dados do seu colega -->
-                            <tr class="empty-row-placeholder">
-                                <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
-                                    Nenhuma receita cadastrada ou encontrada na busca.
+                            <!-- Pronto para carregar dinamicamente os registros do banco de dados -->
+                            <tr class="empty-state-placeholder">
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 50px 0;">
+                                    Nenhuma movimentação financeira registrada no período.
                                 </td>
                             </tr>
                         </tbody>
