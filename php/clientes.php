@@ -1,11 +1,59 @@
+<?php
+// 1. Chama a conexão com o banco
+require_once 'conexao.php';
+
+// 2. LÓGICA DE SALVAR, EDITAR E EXCLUIR
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $acao = $_POST['acao'] ?? 'salvar';
+    $id = $_POST['id'] ?? '';
+    
+    // EXCLUIR
+    if ($acao === 'excluir' && !empty($id)) {
+        $stmt = $pdo->prepare("DELETE FROM clientes WHERE id = ?");
+        $stmt->execute([$id]);
+        header("Location: clientes.php");
+        exit;
+    } 
+    
+    // SALVAR (NOVO) OU EDITAR
+    if ($acao === 'salvar') {
+        $dados = [
+            $_POST['nome'], $_POST['telefone'], $_POST['cpf'], $_POST['data_nascimento'],
+            $_POST['cep'], $_POST['rua'], $_POST['numero'], $_POST['bairro'],
+            $_POST['complemento'], $_POST['cidade'], $_POST['email'], $_POST['observacoes']
+        ];
+
+        if (empty($id)) {
+            // Se não tem ID, é um cliente NOVO (INSERT)
+            $sql = "INSERT INTO clientes (nome, telefone, cpf, data_nascimento, cep, rua, numero, bairro, complemento, cidade, email, observacoes) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($dados);
+        } else {
+            // Se tem ID, está atualizando um cliente existente (UPDATE)
+            $sql = "UPDATE clientes SET nome=?, telefone=?, cpf=?, data_nascimento=?, cep=?, rua=?, numero=?, bairro=?, complemento=?, cidade=?, email=?, observacoes=? WHERE id=?";
+            $dados[] = $id; // Adiciona o ID no final da lista de dados para a cláusula WHERE
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute($dados);
+        }
+        // Recarrega a página para limpar o formulário e atualizar a tabela
+        header("Location: clientes.php");
+        exit;
+    }
+}
+
+// 3. BUSCAR OS CLIENTES PARA A TABELA (Ordem alfabética)
+$stmt = $pdo->query("SELECT * FROM clientes ORDER BY nome ASC");
+$clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Cadastro de Clientes</title>
-    <link rel="stylesheet" href="css/clientes.css?v=3.0">
-    <link rel="stylesheet" href="css/responsivo.css">
+    <link rel="stylesheet" href="../css/clientes.css?v=3.0">
+    <link rel="stylesheet" href="../css/responsivo.css">
 </head>
 <body>
 
@@ -91,8 +139,18 @@
             <!-- COLUNA ESQUERDA: Formulário com os 4 Botões Verdes -->
             <div class="form-card">
                 <h3 class="card-section-title">Dados do Cliente</h3>
-                <form id="clientForm" class="custom-form" novalidate>
+                <!--<form id="clientForm" class="custom-form" novalidate> -->
+                <form id="clientForm" method="POST" action="clientes.php" class="custom-form" novalidate>
                     
+                    <!-- CAMPOS OCULTOS (Obrigatórios para o PHP saber o que fazer) -->
+                    <input type="hidden" name="id" id="cliente_id" value="">
+                    <input type="hidden" name="acao" id="form_acao" value="salvar">
+
+                    <!-- O campo Nome e o resto continuam normais daqui para baixo -->
+                    <div class="form-row full-width">
+                        <label>Nome:</label>
+                        <input type="text" name="nome" id="nome" placeholder="Nome completo do cliente">
+                    </div>
                     <div class="form-row full-width">
                         <label>Nome:</label>
                         <input type="text" name="nome" placeholder="Nome completo do cliente">
