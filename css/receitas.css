@@ -1,3 +1,7 @@
+/* ==========================================================================
+   MIRA CONFEITARIA - ESTILIZAÇÃO DO PAINEL DE RECEITAS - PARTE 1 DE 2
+   ========================================================================== */
+
 @import url('https://googleapis.com');
 
 :root {
@@ -27,7 +31,7 @@ body {
     overflow: hidden;
 }
 
-/* --- BARRA LATERAL (PADRÃO DO SITE) --- */
+/* --- BARRA LATERAL DA SUBPASTA (FLUTUANTE E COM TRANSIÇÕES COESAS) --- */
 .sidebar {
     position: fixed;
     left: 0;
@@ -44,7 +48,10 @@ body {
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar.expanded { width: 260px; }
+.sidebar.expanded { 
+    width: 260px; 
+    box-shadow: 10px 0 40px rgba(47, 62, 51, 0.15);
+}
 
 .logo {
     display: flex;
@@ -74,10 +81,14 @@ body {
     font-weight: 600;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.15s ease;
+    letter-spacing: 0.5px;
 }
 
-.sidebar.expanded .logo h2 { opacity: 1; }
+.sidebar.expanded .logo h2 { 
+    opacity: 1; 
+    transition-delay: 0.1s;
+}
 
 .menu {
     display: flex;
@@ -99,15 +110,10 @@ body {
 }
 
 .menu a svg { min-width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8px; }
-.menu a span { font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.2s ease; }
-.sidebar.expanded .menu a span { opacity: 1; }
+.menu a span { font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.15s ease; }
+.sidebar.expanded .menu a span { opacity: 1; transition-delay: 0.1s; }
 .menu a:hover { background-color: rgba(255, 255, 255, 0.03); color: #FFFFFF; }
-
-.menu a.active {
-    background-color: rgba(209, 180, 140, 0.12);
-    color: var(--accent-gold);
-    font-weight: 600;
-}
+.menu a.active { background-color: rgba(209, 180, 140, 0.12); color: var(--accent-gold); font-weight: 600; }
 
 .sidebar-footer {
     padding-top: 15px;
@@ -123,27 +129,15 @@ body {
     line-height: 1.4;
     white-space: nowrap;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.15s ease;
 }
 
-.sidebar.expanded .brand-phrase { opacity: 1; }
+.sidebar.expanded .brand-phrase { opacity: 1; transition-delay: 0.1s; }
 .user-profile { display: flex; align-items: center; gap: 12px; }
+.avatar-lc { background-color: var(--accent-gold); color: var(--bg-dark); min-width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px; }
 
-.avatar-lc {
-    background-color: var(--accent-gold);
-    color: var(--bg-dark);
-    min-width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 13px;
-}
-
-.user-info { white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; }
-.sidebar.expanded .user-info { opacity: 1; }
+.user-info { white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; }
+.sidebar.expanded .user-info { opacity: 1; transition-delay: 0.1s; }
 .user-info h4 { font-size: 13px; font-weight: 600; color: #FFFFFF; }
 .user-info small { font-size: 11px; color: #8F8B86; }
 
@@ -157,92 +151,102 @@ body {
     flex-direction: column;
 }
 
+/* ==========================================================================
+   MIRA CONFEITARIA - ESTILIZAÇÃO DO PAINEL DE RECEITAS - PARTE 2 DE 2
+   ========================================================================== */
+
 .topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+    flex-shrink: 0;
 }
 
 .topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
 .topbar .subtitle { font-size: 12px; color: var(--text-muted); }
 
-/* --- GRADE IGUAL AO MODELO DO QT DESIGNER (50/50) --- */
-.recipes-grid-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide a tela exatamente ao meio */
-    gap: 20px;
+/* --- GRADE PROPORCIONAL DE RECEITAS LADO A LADO FIXO (60/40) --- */
+.recipes-grid-layout-unified {
+    display: flex;                      
+    flex-direction: row;                
+    width: 100%;
+    height: calc(100vh - 110px);        
+    gap: 24px;
     flex-grow: 1;
-    height: calc(100vh - 90px); /* Preenche a tela e evita scroll global */
+    overflow: hidden;                   
+    padding-bottom: 12px;               
+}
+
+/* Painéis com Acabamento Premium e Bordas Bronze Escuras Uniformizadas */
+.form-card {
+    flex: 60;                           /* 60% para a ficha técnica da receita */
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 18px 24px;
+    border: 2px solid #5C4634;          /* Tom de alto contraste para sua tela */
+    box-shadow: 0 4px 24px rgba(47, 62, 51, 0.015);
+    display: flex;
+    flex-direction: column;
+    height: 100%;                       
     overflow: hidden;
 }
 
-/* Painéis de Fundo com Acabamento Dourado Fino */
-.form-card, .list-card {
+.list-card {
+    flex: 40;                           /* 40% para o índice de busca rápida */
     background: var(--card-bg);
     border-radius: var(--radius-lg);
-    padding: 20px;
-    border: 1px solid rgba(209, 180, 140, 0.25);
-    box-shadow: var(--shadow-subtle);
+    padding: 18px 24px;
+    border: 2px solid #5C4634;          
+    box-shadow: 0 4px 24px rgba(47, 62, 51, 0.015);
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100%;                       
     overflow: hidden;
 }
 
 .card-section-title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     color: var(--text-main);
-    margin-bottom: 16px;
-    border-bottom: 1px solid rgba(209, 180, 140, 0.15);
+    margin-bottom: 4px;
+    border-bottom: 2px solid rgba(92, 70, 52, 0.6); 
     padding-bottom: 8px;
+    flex-shrink: 0;
 }
 
-/* --- FORMULÁRIO COM DUAS CAIXAS GIGANTES DE TEXTO --- */
+/* --- ROLAGEM INDEPENDENTE INTERNA DO FORMULÁRIO --- */
 .custom-form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 12px;                        
+    overflow-y: auto;                 
+    padding-right: 6px;
     flex-grow: 1;
     height: 100%;
 }
 
-.form-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
+.custom-form::-webkit-scrollbar { width: 4px; }
+.custom-form::-webkit-scrollbar-track { background: transparent; }
+.custom-form::-webkit-scrollbar-thumb { background: rgba(92, 70, 52, 0.3); border-radius: 10px; }
 
-.form-row.full-width {
-    width: 100%;
-}
-
-/* Força as duas caixas de texto a dividirem o espaço restante igualmente */
-.flex-grow-textarea {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0; /* Permite encolhimento e ativação de rolagem interna */
-}
-
-.flex-height-textarea {
-    flex: 1;
-    display: flex;
-}
+.form-row { display: flex; flex-direction: column; gap: 4px; }
+.form-row.full-width { width: 100%; }
+.form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 .custom-form label {
     font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 700;
+    color: var(--text-main);          
     text-transform: uppercase;
-    letter-spacing: 0.2px;
+    letter-spacing: 0.5px;
 }
 
-/* Inputs e Textareas Refinados */
-.custom-form input, .flex-height-textarea textarea {
-    background-color: var(--bg-body);
-    border: 1px solid rgba(47, 62, 51, 0.08);
+/* --- CONTRASTE DOS CAMPOS E INPUTS DE RECEITAS --- */
+.custom-form input, .custom-form textarea, .premium-select {
+    width: 100%;
+    background-color: #FFFFFF;
+    border: 1.5px solid #5C4634;        
     padding: 10px 14px;
     border-radius: var(--radius-md);
     font-size: 13px;
@@ -252,27 +256,40 @@ body {
     transition: all 0.2s ease;
 }
 
-.custom-form input:focus, .flex-height-textarea textarea:focus {
-    border-color: var(--accent-gold);
-    background-color: #FFFFFF;
-    box-shadow: 0 0 0 3px rgba(209, 180, 140, 0.08);
+.premium-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='%232F3E33' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 14px;
+    padding-right: 36px;
 }
 
-.flex-height-textarea textarea {
-    width: 100%;
-    flex-grow: 1;
-    resize: none;
-    line-height: 1.5;
+.custom-form input:focus, .custom-form textarea:focus, .premium-select:focus {
+    border-color: #1F150B;            
+    background-color: #FAFAFA;       
+    box-shadow: 0 0 0 3px rgba(92, 70, 52, 0.15);
 }
 
-/* --- LINHA COM OS 4 BOTÕES UNIFICADOS NA MESMA COR OFICIAL --- */
+/* Textareas maiores específicas para Modo de Preparo e Ingredientes */
+.custom-form textarea { 
+    height: 90px; 
+    min-height: 70px;
+    resize: none; 
+}
+
+/* --- BARRA DE BOTÕES CRAVADA NO RODAPÉ --- */
 .form-actions-4 {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* 4 colunas iguais */
-    gap: 10px;
-    margin-top: auto; /* Mantém os botões colados na base do card */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 14px;                 
     padding-top: 14px;
-    border-top: 1px solid rgba(209, 180, 140, 0.15);
+    border-top: 2px solid #5C4634;    
+    background-color: #FFFFFF;
+    height: 52px;                     
+    flex-shrink: 0;                   
 }
 
 .btn {
@@ -281,96 +298,47 @@ body {
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    border: none;
-    text-align: center;
-    /* Todos os botões agora usam o verde escuro oficial e texto branco */
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     background-color: var(--bg-dark);
     color: #FFFFFF;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Efeito de destaque suave ao passar o mouse por cima de qualquer um deles */
 .btn:hover {
     background-color: #243227;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.12);
+    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.1);
 }
 
-.btn:active {
+.btn.active-click {
+    background-color: #FFFFFF !important;
+    color: var(--bg-dark) !important;
+    border-color: var(--accent-gold) !important;
+    box-shadow: 0 4px 15px rgba(209, 180, 140, 0.2) !important;
     transform: translateY(0);
 }
 
+/* --- COLUNA DIREITA: BUSCA INSTANTÂNEA E TABELA --- */
+.list-header { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 20px; flex-shrink: 0; }
+.search-box-client { position: relative; display: flex; align-items: center; }
+.search-box-client input { width: 100%; background-color: #FFFFFF; border: 1.5px solid #5C4634; padding: 10px 14px; padding-right: 36px; border-radius: var(--radius-md); font-size: 13px; outline: none; color: var(--text-main); }
+.search-box-client input:focus { border-color: #1F150B; }
+.search-box-client svg { position: absolute; right: 14px; color: var(--text-muted); }
 
-/* --- COLUNA DA DIREITA: BUSCA E TABELA GIGANTE (ID / NOME) --- */
-.list-card {
-    display: flex;
-    flex-direction: column;
+/* Tabela de Receitas Cadastradas */
+.table-wrapper { 
+    flex-grow: 1; 
+    overflow-y: auto; 
 }
-
-.list-header {
-    margin-bottom: 16px;
-}
-
-.search-box-client {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
-
-.search-box-client input {
-    width: 100%;
-    background-color: var(--bg-body);
-    border: 1px solid rgba(47, 62, 51, 0.08);
-    padding: 10px 14px;
-    padding-right: 36px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    outline: none;
-    color: var(--text-main);
-    transition: all 0.2s ease;
-}
-
-.search-box-client input:focus {
-    border-color: var(--accent-gold);
-    background-color: #FFFFFF;
-}
-
-.search-box-client svg {
-    position: absolute;
-    right: 14px;
-    color: var(--text-muted);
-}
-
-/* Área de Rolagem Segura da Tabela */
-.table-wrapper {
-    flex-grow: 1;
-    overflow-y: auto;
-}
-
 .table-wrapper::-webkit-scrollbar { width: 4px; }
-.table-wrapper::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
+.table-wrapper::-webkit-scrollbar-track { background: transparent; }
+.table-wrapper::-webkit-scrollbar-thumb { background: rgba(92, 70, 52, 0.3); border-radius: 10px; }
 
-.clients-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.clients-table th {
-    font-size: 11px;
-    color: var(--text-muted);
-    padding-bottom: 10px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    border-bottom: 1px solid rgba(209, 180, 140, 0.15);
-}
-
-.clients-table td {
-    font-size: 13px;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(47, 62, 51, 0.03);
-    color: var(--text-main);
-    font-weight: 500;
-}
+.products-table { width: 100%; border-collapse: collapse; text-align: left; }
+.products-table th { font-size: 11px; color: var(--text-muted); padding-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 2px solid #5C4634; }
+.products-table td { font-size: 13px; padding: 12px 0; border-bottom: 1px solid rgba(47,62,51,0.03); color: var(--text-main); font-weight: 500; cursor: pointer; transition: background 0.15s; }
+.products-table tbody tr:hover td { background-color: rgba(209, 180, 140, 0.08); }

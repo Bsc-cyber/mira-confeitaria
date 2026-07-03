@@ -1,3 +1,7 @@
+/* ==========================================================================
+   MIRA CONFEITARIA - ESTILIZAÇÃO DO CARDÁPIO DE PRODUTOS - PARTE 1 DE 2
+   ========================================================================== */
+
 @import url('https://googleapis.com');
 
 :root {
@@ -27,7 +31,7 @@ body {
     overflow: hidden;
 }
 
-/* --- BARRA LATERAL DA SUBPASTA (CORRIGIDA COM TRANSIDÕES) --- */
+/* --- BARRA LATERAL DA SUBPASTA (FLUTUANTE E COM TRANSIÇÕES COESAS) --- */
 .sidebar {
     position: fixed;
     left: 0;
@@ -137,7 +141,7 @@ body {
 .user-info h4 { font-size: 13px; font-weight: 600; color: #FFFFFF; }
 .user-info small { font-size: 11px; color: #8F8B86; }
 
-/* --- ÁREA PRINCIPAL --- */
+/* --- CONTEÚDO PRINCIPAL --- */
 .main-content {
     margin-left: 68px; 
     padding: 16px 24px; 
@@ -147,36 +151,58 @@ body {
     flex-direction: column;
 }
 
+/* ==========================================================================
+   MIRA CONFEITARIA - ESTILIZAÇÃO DO CARDÁPIO DE PRODUTOS - PARTE 2 DE 2
+   ========================================================================== */
+
 .topbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;
+    flex-shrink: 0;
 }
 
 .topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
 .topbar .subtitle { font-size: 12px; color: var(--text-muted); }
 
-/* --- GRADE PROPORCIONAL DE PRODUTOS (60/40) --- */
+/* --- GRADE PROPORCIONAL: LADO A LADO FIXO (60/40) PARA CLIQUE DINÂMICO --- */
 .products-grid-layout-unified {
-    display: grid;
-    grid-template-columns: 60fr 40fr; /* 60% para o formulário e 40% para a listagem */
+    display: flex;                      
+    flex-direction: row;                
+    width: 100%;
+    height: calc(100vh - 110px);        
     gap: 24px;
     flex-grow: 1;
-    height: calc(100vh - 90px); 
+    overflow: hidden;                   
+    padding-bottom: 12px;               
+}
+
+/* Painel Esquerdo Amplo: Formulário Detalhado (60%) */
+.form-card {
+    flex: 60;                           
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    padding: 18px 24px;
+    border: 2px solid #5C4634;          /* Borda Bronze Tabaco Ultra Visível */
+    box-shadow: 0 4px 24px rgba(47, 62, 51, 0.015);
+    display: flex;
+    flex-direction: column;
+    height: 100%;                       
     overflow: hidden;
 }
 
-/* Painéis de Fundo com Acabamento Premium */
-.form-card, .list-card {
+/* Painel Direito Limpo: Lista de Seleção Rápida ID/Nome (40%) */
+.list-card {
+    flex: 40;                           
     background: var(--card-bg);
     border-radius: var(--radius-lg);
-    padding: 24px;
-    border: 1px solid rgba(209, 180, 140, 0.25);
-    box-shadow: var(--shadow-subtle);
+    padding: 18px 24px;
+    border: 2px solid #5C4634;          /* Borda Bronze Tabaco Ultra Visível */
+    box-shadow: 0 4px 24px rgba(47, 62, 51, 0.015);
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: 100%;                       
     overflow: hidden;
 }
 
@@ -185,37 +211,43 @@ body {
     font-weight: 600;
     color: var(--text-main);
     margin-bottom: 4px;
+    border-bottom: 2px solid rgba(92, 70, 52, 0.6); /* Linha divisória interna forte */
+    padding-bottom: 8px;
+    flex-shrink: 0;
 }
 
+/* --- FORMULÁRIO COM ROLAGEM INDEPENDENTE INTERNA --- */
 .custom-form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    overflow-y: auto;
+    gap: 12px;                        
+    overflow-y: auto;                 
     padding-right: 6px;
     flex-grow: 1;
+    height: 100%;
 }
 
 .custom-form::-webkit-scrollbar { width: 4px; }
-.custom-form::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
+.custom-form::-webkit-scrollbar-track { background: transparent; }
+.custom-form::-webkit-scrollbar-thumb { background: rgba(92, 70, 52, 0.3); border-radius: 10px; }
 
-.form-row { display: flex; flex-direction: column; gap: 6px; }
+.form-row { display: flex; flex-direction: column; gap: 4px; }
 .form-row.full-width { width: 100%; }
 .form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 .custom-form label {
     font-size: 11px;
     font-weight: 700;
-    color: var(--text-muted);
+    color: var(--text-main);          
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-/* Inputs, Selects e Textareas Premium */
+/* --- CONTRASTE DOS CAMPOS E INPUTS --- */
 .custom-form input, .custom-form textarea, .premium-select {
     width: 100%;
     background-color: #FFFFFF;
-    border: 1px solid rgba(47, 62, 51, 0.12);
+    border: 1.5px solid #5C4634;        /* Bordas internas marcadas */
     padding: 10px 14px;
     border-radius: var(--radius-md);
     font-size: 13px;
@@ -236,25 +268,32 @@ body {
 }
 
 .custom-form input:focus, .custom-form textarea:focus, .premium-select:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px rgba(209, 180, 140, 0.08);
+    border-color: #1F150B;            /* Quase preto e marcado ao clicar */
+    background-color: #FAFAFA;       
+    box-shadow: 0 0 0 3px rgba(92, 70, 52, 0.15);
 }
 
-.custom-form textarea { height: 75px; resize: none; }
+.custom-form textarea { 
+    height: 65px; 
+    min-height: 65px;
+    resize: none; 
+}
 
-/* --- BARRA DE BOTÕES INFERIORES DINÂMICOS (FUNDO VERDE / CLIQUE BRANCO) --- */
+/* --- BARRA DE BOTÕES CRAVADA NO RODAPÉ --- */
 .form-actions-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    margin-top: auto;
-    padding-top: 18px;
-    border-top: 1px solid rgba(209, 180, 140, 0.15);
+    margin-top: 14px;                 
+    padding-top: 14px;
+    border-top: 2px solid #5C4634;    
     background-color: #FFFFFF;
+    height: 52px;                     
+    flex-shrink: 0;                   
 }
 
 .btn {
-    padding: 11px;
+    padding: 10px;
     border-radius: var(--radius-md);
     font-size: 13px;
     font-weight: 600;
@@ -264,7 +303,6 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    /* Padrão Inicial: Todo Verde Oficial e Texto Branco */
     background-color: var(--bg-dark);
     color: #FFFFFF;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -276,7 +314,6 @@ body {
     box-shadow: 0 4px 12px rgba(47, 62, 51, 0.1);
 }
 
-/* CLASSE DINÂMICA: Ativada quando o botão for selecionado */
 .btn.active-click {
     background-color: #FFFFFF !important;
     color: var(--bg-dark) !important;
@@ -286,13 +323,15 @@ body {
 }
 
 /* --- COLUNA DIREITA: BUSCA, FILTROS E ESTADO VAZIO --- */
+.list-header { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 20px; flex-shrink: 0; }
 .search-box-client { position: relative; display: flex; align-items: center; }
-.search-box-client input { width: 100%; background-color: #FFFFFF; border: 1px solid rgba(47, 62, 51, 0.12); padding: 10px 14px; padding-right: 36px; border-radius: var(--radius-md); font-size: 13px; outline: none; color: var(--text-main); }
+.search-box-client input { width: 100%; background-color: #FFFFFF; border: 1.5px solid #5C4634; padding: 10px 14px; padding-right: 36px; border-radius: var(--radius-md); font-size: 13px; outline: none; color: var(--text-main); }
+.search-box-client input:focus { border-color: #1F150B; }
 .search-box-client svg { position: absolute; right: 14px; color: var(--text-muted); }
 
 .btn-filter-box {
     background: #FFFFFF;
-    border: 1px solid rgba(47, 62, 51, 0.12);
+    border: 1.5px solid #5C4634;
     padding: 0 16px;
     border-radius: var(--radius-md);
     font-size: 13px;
@@ -304,9 +343,9 @@ body {
     cursor: pointer;
     transition: all 0.2s;
 }
-.btn-filter-box:hover { border-color: var(--accent-gold); background-color: var(--bg-body); }
+.btn-filter-box:hover { border-color: #1F150B; background-color: var(--bg-body); }
 
-/* Centralização do Box de "Nenhum Produto Cadastrado" */
+/* Centralização do Estado Vazio */
 .empty-state-container {
     flex-grow: 1;
     display: flex;
@@ -314,24 +353,24 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 40px 20px;
+    padding: 20px;
+    margin: auto 0;
 }
 
-.empty-state-illustration {
-    width: 130px;
-    height: 130px;
-    margin-bottom: 20px;
-    opacity: 0.9;
+.empty-state-illustration { width: 80px; height: 80px; margin-bottom: 12px; opacity: 0.9; }
+.empty-state-container h4 { font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px; }
+.empty-state-container p { font-size: 12px; color: var(--text-muted); line-height: 1.4; max-width: 240px; }
+
+/* Tabela de Produtos Cadastrados com Rolagem Isolada */
+.table-wrapper { 
+    flex-grow: 1; 
+    overflow-y: auto; 
 }
-
-.empty-state-container h4 { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
-.empty-state-container p { font-size: 13px; color: var(--text-muted); line-height: 1.5; max-width: 280px; }
-
-/* Tabela de Referência Limpa */
-.table-wrapper { flex-grow: 1; overflow-y: auto; }
 .table-wrapper::-webkit-scrollbar { width: 4px; }
-.table-wrapper::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
+.table-wrapper::-webkit-scrollbar-track { background: transparent; }
+.table-wrapper::-webkit-scrollbar-thumb { background: rgba(92, 70, 52, 0.3); border-radius: 10px; }
 
 .products-table { width: 100%; border-collapse: collapse; text-align: left; }
-.products-table th { font-size: 11px; color: var(--text-muted); padding-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 1px solid rgba(209, 180, 140, 0.15); }
-.products-table td { font-size: 13px; padding: 12px 0; border-bottom: 1px solid rgba(47, 62, 51, 0.03); color: var(--text-main); font-weight: 500; }
+.products-table th { font-size: 11px; color: var(--text-muted); padding-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 2px solid #5C4634; }
+.products-table td { font-size: 13px; padding: 12px 0; border-bottom: 1px solid rgba(47,62,51,0.03); color: var(--text-main); font-weight: 500; cursor: pointer; transition: background 0.15s; }
+.products-table tbody tr:hover td { background-color: rgba(209, 180, 140, 0.08); }
