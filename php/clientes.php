@@ -139,78 +139,76 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <!-- COLUNA ESQUERDA: Formulário com os 4 Botões Verdes -->
             <div class="form-card">
                 <h3 class="card-section-title">Dados do Cliente</h3>
-                <!--<form id="clientForm" class="custom-form" novalidate> -->
+                
                 <form id="clientForm" method="POST" action="clientes.php" class="custom-form" novalidate>
                     
                     <!-- CAMPOS OCULTOS (Obrigatórios para o PHP saber o que fazer) -->
                     <input type="hidden" name="id" id="cliente_id" value="">
                     <input type="hidden" name="acao" id="form_acao" value="salvar">
 
-                    <!-- O campo Nome e o resto continuam normais daqui para baixo -->
-
                     <div class="form-row full-width">
                         <label>Nome:</label>
-                        <input type="text" name="nome" placeholder="Nome completo do cliente">
+                        <input type="text" name="nome" id="nome" placeholder="Nome completo do cliente">
                     </div>
 
                     <div class="form-row-grid">
                         <div class="form-row">
                             <label>Telefone:</label>
-                            <input type="text" name="telefone" placeholder="(00) 00000-0000">
+                            <input type="text" name="telefone" id="telefone" placeholder="(00) 00000-0000">
                         </div>
                         <div class="form-row">
                             <label>CPF:</label>
-                            <input type="text" name="cpf" placeholder="000.000.000-00">
+                            <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00">
                         </div>
                     </div>
 
                     <div class="form-row-grid">
                         <div class="form-row">
                             <label>Data Nascimento:</label>
-                            <input type="date" name="data_nascimento">
+                            <input type="date" name="data_nascimento" id="data_nascimento">
                         </div>
                         <div class="form-row">
                             <label>CEP:</label>
-                            <input type="text" name="cep" placeholder="00000-000">
+                            <input type="text" name="cep" id="cep" placeholder="00000-000">
                         </div>
                     </div>
 
                     <div class="form-row-grid target-address">
                         <div class="form-row long-input">
                             <label>Rua:</label>
-                            <input type="text" name="rua" placeholder="Logradouro">
+                            <input type="text" name="rua" id="rua" placeholder="Logradouro">
                         </div>
                         <div class="form-row short-input">
                             <label>Nº:</label>
-                            <input type="text" name="numero" placeholder="Número">
+                            <input type="text" name="numero" id="numero" placeholder="Número">
                         </div>
                     </div>
 
                     <div class="form-row-grid">
                         <div class="form-row">
                             <label>Bairro:</label>
-                            <input type="text" name="bairro" placeholder="Bairro">
+                            <input type="text" name="bairro" id="bairro" placeholder="Bairro">
                         </div>
                         <div class="form-row">
                             <label>Complemento:</label>
-                            <input type="text" name="complemento" placeholder="Apt, Bloco, etc.">
+                            <input type="text" name="complemento" id="complemento" placeholder="Apt, Bloco, etc.">
                         </div>
                     </div>
 
                     <div class="form-row-grid">
                         <div class="form-row">
                             <label>Cidade:</label>
-                            <input type="text" name="cidade" placeholder="Cidade">
+                            <input type="text" name="cidade" id="cidade" placeholder="Cidade">
                         </div>
                         <div class="form-row">
                             <label>E-mail:</label>
-                            <input type="email" name="email" placeholder="exemplo@email.com">
+                            <input type="email" name="email" id="email" placeholder="exemplo@email.com">
                         </div>
                     </div>
 
                     <div class="form-row full-width">
                         <label>Observações:</label>
-                        <textarea name="observacoes" placeholder="Restrições alimentares, preferências de entrega, notas gerais..."></textarea>
+                        <textarea name="observacoes" id="observacoes" placeholder="Restrições alimentares, preferências de entrega, notas gerais..."></textarea>
                     </div>
 
                     <!-- Linha com os 4 Botões Clássicos Padronizados -->
@@ -242,12 +240,23 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Pronto para receber as linhas dinâmicas do banco de dados -->
-                            <tr class="empty-row-placeholder">
-                                <td colspan="2" style="text-align: center; color: var(--text-muted); padding: 40px 0;">
-                                    Nenhum cliente cadastrado ou encontrado na busca.
-                                </td>
-                            </tr>
+                            <?php if (empty($clientes)): ?>
+                                <!-- Mostra isso se o banco de dados estiver vazio -->
+                                <tr class="empty-row-placeholder">
+                                    <td colspan="2" style="text-align: center; color: #7A8A7C; padding: 40px 0;">
+                                        Nenhum cliente cadastrado ou encontrado na busca.
+                                    </td>
+                                </tr>
+                            <?php else: ?>
+                                <!-- Se tiver clientes no banco, cria uma linha para cada um -->
+                                <?php foreach ($clientes as $cliente): ?>
+                                    <!-- A função carregarCliente pega os dados e joga no formulário da esquerda ao clicar -->
+                                    <tr onclick='carregarCliente(<?= json_encode($cliente) ?>)' style="cursor: pointer;">
+                                        <td><?= htmlspecialchars($cliente['id']) ?></td>
+                                        <td><?= htmlspecialchars($cliente['nome']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
                         </tbody>
                     </table>
                 </div>

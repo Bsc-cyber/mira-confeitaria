@@ -29,3 +29,29 @@ botoesAcao.forEach(botao => {
         this.classList.add('active-click');
     });
 });
+
+// Preenche o formulário ao clicar em uma linha da tabela
+function carregarCliente(dados) {
+    document.getElementById('cliente_id').value = dados.id;
+    document.getElementById('nome').value = dados.nome;
+    
+    // O '|| ""' evita que apareça "null" caso o cliente não tenha telefone cadastrado, por exemplo
+    document.getElementById('telefone').value = dados.telefone || "";
+    document.getElementById('cpf').value = dados.cpf || "";
+    document.getElementById('data_nascimento').value = dados.data_nascimento || "";
+    document.getElementById('cep').value = dados.cep || "";
+    document.getElementById('rua').value = dados.rua || "";
+    document.getElementById('numero').value = dados.numero || "";
+    document.getElementById('bairro').value = dados.bairro || "";
+    document.getElementById('complemento').value = dados.complemento || "";
+    document.getElementById('cidade').value = dados.cidade || "";
+    document.getElementById('email').value = dados.email || "";
+    document.getElementById('observacoes').value = dados.observacoes || "";
+
+    // Garante que a ação principal é salvar (ou atualizar, já que o ID está preenchido)
+    document.getElementById('form_acao').value = 'salvar';
+
+    // Se você tiver botões de editar/excluir desabilitados, habilite-os aqui:
+    // document.getElementById('btn-editar').disabled = false;
+    // document.getElementById('btn-excluir').disabled = false;
+}
