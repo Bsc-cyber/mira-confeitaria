@@ -147,10 +147,7 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <input type="hidden" name="acao" id="form_acao" value="salvar">
 
                     <!-- O campo Nome e o resto continuam normais daqui para baixo -->
-                    <div class="form-row full-width">
-                        <label>Nome:</label>
-                        <input type="text" name="nome" id="nome" placeholder="Nome completo do cliente">
-                    </div>
+
                     <div class="form-row full-width">
                         <label>Nome:</label>
                         <input type="text" name="nome" placeholder="Nome completo do cliente">

@@ -208,13 +208,20 @@ body {
     background: var(--card-bg);
     border-radius: var(--radius-lg);
     padding: 20px;
-    border: 1px solid rgba(209, 180, 140, 0.25);
+    /* Linha alterada: Borda externa escurecida para alinhar com a outra página */
+    border: 1px solid rgba(47, 62, 51, 0.18); 
     box-shadow: var(--shadow-subtle);
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: hidden;
 }
+
+/* Escurece também a linha divisória interna do título do card */
+.card-section-title, .list-card-header {
+    border-bottom: 1px solid rgba(209, 180, 140, 0.40);
+}
+
 
 .card-section-title {
     font-size: 15px;
@@ -355,14 +362,32 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    border-bottom: 1px solid rgba(209, 180, 140, 0.15);
+    /* Alterado: Cor sólida dourada escura (sem transparência) */
+    border-bottom: 2px solid #B39570; 
 }
 
 .financial-table td {
     font-size: 13px;
     padding: 12px 0;
-    border-bottom: 1px solid rgba(47, 62, 51, 0.03);
+    /* Alterado: Cinza escuro sólido para total legibilidade das linhas */
+    border-bottom: 1px solid #D5DDD7; 
     color: var(--text-main);
     font-weight: 500;
+}
+
+/* Divisórias dos títulos dos cards superiores */
+.card-section-title, .list-card-header {
+    /* Alterado: Linha sólida marcante abaixo de "Movimentações" e "+ Lançamentos" */
+    border-bottom: 2px solid #B39570; 
+}
+
+.financial-summary-banner, .action-card-left, .list-card-right {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg);
+    /* Alterado: Borda cinza escura esverdeada sólida de alta definição */
+    border: 1px solid #BAC4BD; 
+    box-shadow: var(--shadow-subtle);
+    display: flex;
+    flex-direction: column;
 }
  
