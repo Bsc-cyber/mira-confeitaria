@@ -250,7 +250,8 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <!-- Se tiver clientes no banco, cria uma linha para cada um -->
                                 <?php foreach ($clientes as $cliente): ?>
                                     <!-- A função carregarCliente pega os dados e joga no formulário da esquerda ao clicar -->
-                                    <tr onclick='carregarCliente(<?= json_encode($cliente) ?>)' style="cursor: pointer;">
+                                    <!--<tr onclick='carregarCliente(<?= json_encode($cliente) ?>)' style="cursor: pointer;">-->
+                                    <tr onclick="carregarCliente(<?= htmlspecialchars(json_encode($cliente), ENT_QUOTES, 'UTF-8') ?>)" style="cursor: pointer;">   
                                         <td><?= htmlspecialchars($cliente['id']) ?></td>
                                         <td><?= htmlspecialchars($cliente['nome']) ?></td>
                                     </tr>
@@ -266,7 +267,7 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Script de animação do menu lateral -->
     <script>
-        const sidebar = document.getElementById('sidebar');
+        var sidebar = document.getElementById('sidebar');
         if (sidebar) {
             sidebar.addEventListener('mouseenter', () => sidebar.classList.add('expanded'));
             sidebar.addEventListener('mouseleave', () => sidebar.classList.remove('expanded'));
@@ -274,6 +275,6 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </script>
    
     <!-- CHAMADA PADRÃO DO ARQUIVO DE SCRIPT SEPARADO -->
-    <script src="js/clientes.js"></script>
+    <script src="../script/clientes.js"></script>
 </body>
 </html>
