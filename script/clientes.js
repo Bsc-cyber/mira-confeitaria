@@ -3,7 +3,7 @@
 // ==========================================================================
 
 // 1. ANIMAÇÃO DE EXPANSÃO DA BARRA LATERAL (CORREÇÃO DA ABERTURA)
-const sidebar = document.getElementById('sidebar');
+var sidebar = document.getElementById('sidebar');
 
 if (sidebar) {
     // Quando o mouse passa por cima, adiciona a classe que abre a barra
@@ -18,7 +18,7 @@ if (sidebar) {
 }
 
 // 2. INTELIGÊNCIA DE CLIQUES DOS BOTÕES DO FORMULÁRIO (FUNDO VERDE / CLIQUE BRANCO)
-const botoesAcao = document.querySelectorAll('.form-actions-4 .btn');
+var botoesAcao = document.querySelectorAll('.form-actions-4 .btn');
 
 botoesAcao.forEach(botao => {
     botao.addEventListener('click', function() {
