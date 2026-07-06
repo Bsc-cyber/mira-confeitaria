@@ -154,6 +154,8 @@ require_once "logica_php/home.php";
                                         <th>Tam.</th>
                                         <th>Qtd.</th>
                                         <th>Preço</th>
+                                        <!-- Espaço para o botão de exclusão do item -->
+                                        <th style="width: 30px;"></th> </tr>
                                     </tr>
                                 </thead>
                                 <tbody id="corpoTabelaCarrinho">

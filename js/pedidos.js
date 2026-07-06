@@ -59,57 +59,79 @@ document.addEventListener("DOMContentLoaded", function () {
     // Vincula a função de cálculo para disparar instantaneamente sempre que o usuário digitar ou mudar a quantidade
     inputQuantidade.addEventListener("input", atualizarPrecoDisplay);
 /* ==========================================================================
-   PARTE 2: INSERÇÃO DINÂMICA DE ITENS NA TABELA DO CARRINHO (ESQUERDA)
+   PARTE 2: INSERÇÃO DINÂMICA E EXCLUSÃO DE ITENS NA TABELA (ESQUERDA)
    ========================================================================== */
 
-    // 2. EVENTO DE CLIQUE: Escuta o botão de adicionar ao carrinho e injeta os dados na tabela
+    // FUNÇÃO NOVA: Limpa e desenha a tabela do zero baseado na memória
+    function atualizarTabelaCarrinho() {
+        corpoTabela.innerHTML = ""; // Limpa a tabela visual
+        totalGeral = 0; // Zera o totalizador
+
+        // Percorre os itens na memória e desenha a linha com um ID único (index)
+        itensCarrinho.forEach((item, index) => {
+            const novaLinha = document.createElement("tr");
+            
+            novaLinha.innerHTML = `
+                <td>${item.produtoNome}</td>
+                <td>${item.sabor}</td>
+                <td>${item.tamanho.split(' ')[0]}</td>
+                <td>${item.qtd}</td>
+                <td>R$ ${item.precoTotalItem.toFixed(2).replace('.', ',')}</td>
+                <td style="text-align: center;">
+                    <button type="button" class="btn-remover-item" data-index="${index}" style="background:none; border:none; color:#ef4444; cursor:pointer; font-size:12px; font-weight:bold;" title="Remover item">
+                        ❌
+                    </button>
+                </td>
+            `;
+            
+            corpoTabela.appendChild(novaLinha);
+            totalGeral += item.precoTotalItem;
+        });
+
+        // Atualiza o valor do rodapé
+        totalDisplay.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+    }
+
+    // 2. EVENTO DE CLIQUE: Adicionar ao carrinho
     btnAdicionar.addEventListener("click", function () {
-        // Captura os textos e valores selecionados nos campos no momento exato do clique
-        const produtoNome = selectProduto.value; // Nome do doce escolhido
-        const sabor = document.getElementById("selectSabor").value; // Sabor selecionado
-        const tamanho = document.getElementById("selectTamanho").value; // Tamanho selecionado
-        const qtd = parseInt(inputQuantidade.value) || 1; // Quantidade informada
-        const cliente = document.getElementById("selectCliente").value; // Nome do cliente do lote
+        const produtoNome = selectProduto.value; 
+        const sabor = document.getElementById("selectSabor").value; 
+        const tamanho = document.getElementById("selectTamanho").value; 
+        const qtd = parseInt(inputQuantidade.value) || 1; 
+        const cliente = document.getElementById("selectCliente").value; 
         
-        // REGRAS DE VALIDAÇÃO: Impede o envio se faltar preencher algum seletor obrigatório
         if (!cliente) { 
-            alert("Por favor, selecione um Cliente primeiro antes de montar o carrinho!"); 
-            return; // Interrompe a execução do código na hora
+            alert("Por favor, selecione um Cliente primeiro!"); 
+            return; 
         }
         if (!produtoNome || !sabor || !tamanho) { 
-            alert("Preencha todos os parâmetros do doce (Produto, Sabor e Tamanho)!"); 
-            return; // Interrompe a execução do código na hora
+            alert("Preencha Produto, Sabor e Tamanho!"); 
+            return; 
         }
         
-        // Extrai o preço unitário do produto selecionado para somar na tabela
         const precoUnit = parseFloat(selectProduto.options[selectProduto.selectedIndex].getAttribute("data-preco"));
-        
-        // Multiplica o valor unitário pela quantidade de doces informada
         const precoTotalItem = precoUnit * qtd;
         
-        // Injeta os dados estruturados em forma de objeto dentro do vetor global na memória RAM
+        // Em vez de desenhar o HTML aqui, nós guardamos na memória [cite: 88]
         itensCarrinho.push({ produtoNome, sabor, tamanho, qtd, precoTotalItem });
         
-        // CRIAÇÃO DE COMPONENTE HTML: Cria uma linha física <tr> para embutir na tabela da esquerda
-        const novaLinha = document.createElement("tr");
-        
-        // Preenche os dados organizados em colunas <td> milimetricamente alinhadas conforme a tabela
-        novaLinha.innerHTML = `
-            <td>${produtoNome}</td>
-            <td>${sabor}</td>
-            <td>${tamanho.split(' ')[0]}</td> <!-- Pega apenas a primeira palavra (Ex: Pequeno) -->
-            <td>${qtd}</td>
-            <td>R$ ${precoTotalItem.toFixed(2).replace('.', ',')}</td>
-        `;
-        
-        // Adiciona a nova linha de fato no corpo da tabela visível na tela
-        corpoTabela.appendChild(novaLinha);
-        
-        // Atualiza a variável acumuladora do total geral do pedido somando o novo item
-        totalGeral += precoTotalItem;
-        
-        // Injeta o valor do acumulador formatado na moeda nacional no mostrador da base esquerda
-        totalDisplay.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+        // E chamamos a função inteligente que desenha tudo e calcula
+        atualizarTabelaCarrinho();
+    });
+
+    // 3. EVENTO DE CLIQUE NOVO: Excluir item específico da tabela
+    corpoTabela.addEventListener("click", function(evento) {
+        // Verifica se clicou exatamente no ícone de "X" vermelho
+        if (evento.target.closest('.btn-remover-item')) {
+            // Descobre o número da linha clicada
+            const index = evento.target.closest('.btn-remover-item').getAttribute('data-index');
+            
+            // Remove 1 item da memória a partir daquela posição
+            itensCarrinho.splice(index, 1);
+            
+            // Redesenha a tabela perfeitamente sem o item excluído!
+            atualizarTabelaCarrinho();
+        }
     });
 /* ==========================================================================
    PARTE 3: GERAÇÃO DA ORDEM DE PRODUÇÃO E LIMPEZA DE FLUXO (DIREITA)
@@ -125,59 +147,95 @@ document.addEventListener("DOMContentLoaded", function () {
         selectProduto.value = ""; // Volta a seleção do produto para o estado inicial neutro
     });
     
-    // 4. EVENTO DE CLIQUE: Despacha o pedido atual gerando o card na esteira de produção à direita
+// 4. EVENTO DE CLIQUE: Despacha o pedido para o Banco de Dados e gera o card
     btnGerar.addEventListener("click", function () {
-        // Captura as definições de cabeçalho do pedido no instante do disparo
-        const clienteName = document.getElementById("selectCliente").value; // Nome do cliente informado
-        const statusPed = document.getElementById("statusInicial").value; // Status de produção escolhido
+        // Captura os dados do formulário
+        const clienteName = document.getElementById("selectCliente").value; 
+        const statusPed = document.getElementById("statusInicial").value; 
+        const dataPed = document.getElementById("dataPedido").value;
+        const dataEnt = document.getElementById("dataEntrega").value;
         
-        // VALIDAÇÃO: Impede a geração se o confeiteiro tentar clicar com a tabela vazia
+        // VALIDAÇÃO: Impede a geração se a tabela estiver vazia
         if (itensCarrinho.length === 0) {
             alert("A tabela do pedido está vazia! Adicione doces ao carrinho primeiro.");
-            return; // Interrompe o envio na hora
+            return; 
         }
+
+        // Muda o texto do botão para mostrar que está carregando
+        const textoOriginalBotao = btnGerar.innerHTML;
+        btnGerar.innerHTML = "⏳ Salvando...";
+        btnGerar.disabled = true;
         
-        // Esconde a prancheta de aviso cinza central de "Nenhum item adicionado" para abrir espaço
-        if (estadoVazio) { 
-            estadoVazio.style.display = "none"; 
-        }
-        
-        // CRIAÇÃO DE COMPONENTE HTML: Desenha a caixinha estrutural (Card) da ordem de produção
-        const novoCardProd = document.createElement("div");
-        novoCardProd.className = "card-pedido-producao-ativo"; // Aplica o estilo de contorno e padding
-        
-        // Define de forma lógica a classe de cor da etiqueta da esteira baseado no status selecionado
-        const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
-        
-        // Injeta a estrutura de layout e os dados do lote em formato de texto e mini ícones SVG
-        novoCardProd.innerHTML = `
-            <div class="info-card-prod">
-                <h4>
-                    <svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Cliente: ${clienteName}
-                </h4>
-                <p style="margin-top: 4px;">🎂 Lote: ${itensCarrinho.length} doce(s) cadastrado(s)</p>
-                <p style="margin-top: 2px;">💰 Líquido: R$ ${totalGeral.toFixed(2).replace('.', ',')}</p>
-            </div>
-            <span class="status-badge-dinamica ${classeBadge}">${statusPed}</span>
-        `;
-        
-        // Adiciona o card gerado na lista vertical de monitoramento da direita
-        containerProducao.appendChild(novoCardProd);
-        
-        // ATUALIZAÇÃO DE INDICADORES: Incrementa o contador do topo baseado na escolha feita
-        if (statusPed === "Pendente") {
-            // Soma mais um no contador de pendentes na fila
-            countPend.textContent = parseInt(countPend.textContent) + 1;
-        } else {
-            // Soma mais um no contador de ordens em produção ativa
-            countProd.textContent = parseInt(countProd.textContent) + 1;
-        }
-        
-        // Simula o clique automático no botão de limpar para resetar a esquerda para uma nova venda
-        btnLimpar.click();
-        
-        // Dispara o alerta de sucesso na tela para controle operacional do confeiteiro
-        alert("Sucesso! O lote de pedidos foi despachado para a esteira de produção.");
+        // 1. PREPARA O PACOTE DE DADOS (JSON)
+        const pacoteDados = {
+            cliente: clienteName,
+            data_pedido: dataPed,
+            data_entrega: dataEnt,
+            status: statusPed,
+            total: totalGeral,
+            itens: itensCarrinho // Manda a lista inteira de doces!
+        };
+
+        // 2. ENVIA PARA O PHP USANDO FETCH (O Carteiro)
+        fetch('../php/salvar_pedido.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pacoteDados)
+        })
+        .then(resposta => resposta.json()) // Lê a resposta do PHP
+        .then(retorno => {
+            
+            // SE O PHP AVISAR QUE SALVOU COM SUCESSO:
+            if (retorno.sucesso) {
+                // Esconde a prancheta vazia
+                if (estadoVazio) { estadoVazio.style.display = "none"; }
+                
+                // CRIA O CARD NA TELA (Seu código visual original)
+                const novoCardProd = document.createElement("div");
+                novoCardProd.className = "card-pedido-producao-ativo"; 
+                const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
+                
+                novoCardProd.innerHTML = `
+                    <div class="info-card-prod">
+                        <h4>
+                            <svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Cliente: ${clienteName}
+                        </h4>
+                        <p style="margin-top: 4px;">🎂 Lote: ${itensCarrinho.length} doce(s) cadastrado(s)</p>
+                        <p style="margin-top: 2px;">💰 Líquido: R$ ${totalGeral.toFixed(2).replace('.', ',')}</p>
+                    </div>
+                    <span class="status-badge-dinamica ${classeBadge}">${statusPed}</span>
+                `;
+                
+                containerProducao.appendChild(novoCardProd);
+                
+                // Atualiza contadores numéricos
+                if (statusPed === "Pendente") {
+                    countPend.textContent = parseInt(countPend.textContent) + 1;
+                } else {
+                    countProd.textContent = parseInt(countProd.textContent) + 1;
+                }
+                
+                // Limpa o formulário esquerdo
+                btnLimpar.click();
+                
+                // Avisa o usuário!
+                alert("Sucesso! O pedido foi salvo no banco de dados e enviado para produção.");
+            } else {
+                // SE O PHP DEVOLVER ERRO (Ex: banco de dados fora do ar)
+                alert("Erro ao salvar o pedido no banco de dados:\n" + retorno.erro);
+            }
+        })
+        .catch(erro => {
+            alert("Erro de comunicação com o servidor.");
+            console.error(erro);
+        })
+        .finally(() => {
+            // Devolve o botão ao estado normal
+            btnGerar.innerHTML = textoOriginalBotao;
+            btnGerar.disabled = false;
+        });
     });
 });
