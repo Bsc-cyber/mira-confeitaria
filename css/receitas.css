@@ -1,344 +1,571 @@
 /* ==========================================================================
-   MIRA CONFEITARIA - ESTILIZAÇÃO DO PAINEL DE RECEITAS - PARTE 1 DE 2
+   PARTE 1: RESET DE CORREÇÃO CIRÚRGICA DE VETORES E CABEÇALHO SUPERIOR
    ========================================================================== */
 
-@import url('https://googleapis.com');
-
-:root {
-    --bg-dark: #2F3E33;       /* Seu verde escuro oficial */
-    --accent-gold: #D1B48C;   /* Seu dourado refinado */
-    --bg-body: #FDFBF7;       /* Fundo off-white muito leve */
-    --card-bg: #FFFFFF;       
-    --text-main: #2F3E33;     
-    --text-muted: #8A948D;    
-    --radius-lg: 14px;        
-    --radius-md: 8px;
-    --shadow-subtle: 0 4px 20px rgba(47, 62, 51, 0.015);
+/* Trava todo o painel de receitas na tela eliminando barras de rolagem globais */
+.painel-conteudo-receitas {
+    padding: 12px 25px 12px 90px !important; /* Espaço para a barra lateral */
+    background-color: #f3f4f6; /* Fundo cinza claro oficial */
+    height: 100vh; /* Altura máxima da janela */
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* Espaçamento sutil do cabeçalho da página */
+.topo-receitas {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-start; 
+    margin-bottom: 8px; 
 }
 
-body {
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-main);
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
+/* Alinhamento do ícone e textos principais do topo esquerdo */
+.titulo-pagina-receitas {
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
 }
 
-/* --- BARRA LATERAL DA SUBPASTA (FLUTUANTE E COM TRANSIÇÕES COESAS) --- */
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 68px;
-    background-color: var(--bg-dark);
-    padding: 24px 14px;
-    display: flex;
-    flex-direction: column;
-    z-index: 1000;
-    box-shadow: 4px 0 20px rgba(47, 62, 51, 0.03);
-    overflow: hidden;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Caixinha branca que envolve o ícone de receita do topo */
+.icone-titulo-rec {
+    background-color: #ffffff; 
+    width: 38px; 
+    height: 38px; 
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border: 1px solid #e5e7eb; 
 }
 
-.sidebar.expanded { 
-    width: 260px; 
-    box-shadow: 10px 0 40px rgba(47, 62, 51, 0.15);
+/* Força os SVGs a não herdarem nenhuma cor preta de preenchimento do navegador */
+.svg-topo-rec, .svg-card-titulo, .svg-mini-topo, .svg-btn-inline, .svg-busca-topo, .svg-busca-tabela-interna, .svg-linha-acao, .svg-pag {
+    fill: none !important; /* BLINDA O INTERIOR: Proíbe qualquer preenchimento preto automático */
+    display: inline-block;
+    vertical-align: middle;
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 25px;
-    padding-left: 2px;
+/* Estilo do ícone do livro no cabeçalho */
+.svg-topo-rec {
+    width: 18px; 
+    height: 18px; 
+    stroke: #171d14; /* Verde musgo do MIRA */
+    stroke-width: 2; 
 }
 
-.avatar-mc {
-    border: 1px solid var(--accent-gold);
-    color: var(--accent-gold);
-    min-width: 38px;
-    height: 38px;
-    display: flex;
+/* Formatação de fontes do topo */
+.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; } 
+.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; } 
+
+/* Controles de pesquisa e botões do topo direito */
+.controles-topo-receitas {
+    display: flex; 
+    gap: 8px; 
+    align-items: center; 
+}
+
+/* Caixinha de busca superior */
+.wrapper-busca-topo {
+    background-color: #ffffff; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    padding: 6px 10px; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    width: 180px; 
+}
+
+.svg-busca-topo {
+    width: 14px;
+    height: 14px;
+    stroke: #6b7280; 
+    stroke-width: 2;
+}
+
+.wrapper-busca-topo input {
+    border: none;
+    outline: none;
+    font-size: 0.78rem;
+    color: #1f2937;
+    width: 100%;
+}
+
+/* Botões do topo direito */
+.btn-filtro-topo, .btn-nova-receita-topo {
+    padding: 6px 10px; 
+    border-radius: 6px; 
+    font-size: 0.75rem; 
+    cursor: pointer; 
+    display: flex; 
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-md);
-    font-weight: 700;
-    font-size: 13px;
-    background-color: rgba(255, 255, 255, 0.05);
 }
 
-.logo h2 {
-    color: #FFFFFF;
-    font-size: 15px;
-    font-weight: 600;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    letter-spacing: 0.5px;
+.btn-filtro-topo {
+    background-color: #ffffff; 
+    border: 1px solid #d1d5db; 
+    color: #374151; 
 }
 
-.sidebar.expanded .logo h2 { 
-    opacity: 1; 
-    transition-delay: 0.1s;
-}
-
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex-grow: 1;
-}
-
-.menu a {
-    display: flex;
-    align-items: center;
-    color: #93A397;
-    text-decoration: none;
-    padding: 10px;
-    border-radius: var(--radius-md);
-    transition: all 0.2s ease;
-    gap: 14px;
-    white-space: nowrap;
-}
-
-.menu a svg { min-width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8px; }
-.menu a span { font-size: 13px; font-weight: 500; opacity: 0; transition: opacity 0.15s ease; }
-.sidebar.expanded .menu a span { opacity: 1; transition-delay: 0.1s; }
-.menu a:hover { background-color: rgba(255, 255, 255, 0.03); color: #FFFFFF; }
-.menu a.active { background-color: rgba(209, 180, 140, 0.12); color: var(--accent-gold); font-weight: 600; }
-
-.sidebar-footer {
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.brand-phrase {
-    font-size: 11px;
-    color: #8F9E93;
-    line-height: 1.4;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-}
-
-.sidebar.expanded .brand-phrase { opacity: 1; transition-delay: 0.1s; }
-.user-profile { display: flex; align-items: center; gap: 12px; }
-.avatar-lc { background-color: var(--accent-gold); color: var(--bg-dark); min-width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px; }
-
-.user-info { white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; }
-.sidebar.expanded .user-info { opacity: 1; transition-delay: 0.1s; }
-.user-info h4 { font-size: 13px; font-weight: 600; color: #FFFFFF; }
-.user-info small { font-size: 11px; color: #8F8B86; }
-
-/* --- ÁREA PRINCIPAL --- */
-.main-content {
-    margin-left: 68px; 
-    padding: 16px 24px; 
-    width: calc(100% - 68px);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+.btn-nova-receita-topo {
+    background-color: #1f2937; 
+    border: none; 
+    color: #ffffff; 
+    font-weight: 500; 
 }
 
 /* ==========================================================================
-   MIRA CONFEITARIA - ESTILIZAÇÃO DO PAINEL DE RECEITAS - PARTE 2 DE 2
+   PARTE 2: DISTRIBUIÇÃO DAS DUAS COLUNAS E FORMULÁRIO DE CADASTRO (ESQUERDA)
    ========================================================================== */
 
-.topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    flex-shrink: 0;
+/* Container que divide a tela ao meio em duas colunas simétricas */
+.grid-receitas-container {
+    display: flex; /* Alinha a coluna da esquerda e direita lado a lado */
+    gap: 15px; /* Espaço de separação entre as duas colunas */
+    flex: 1; /* Faz o bloco ocupar todo o espaço central restante da tela */
+    height: calc(100vh - 75px); /* Desconta a altura do cabeçalho superior */
+    overflow: hidden; /* Evita que o grid vaze para fora da viewport */
 }
 
-.topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-.topbar .subtitle { font-size: 12px; color: var(--text-muted); }
-
-/* --- GRADE PROPORCIONAL DE RECEITAS LADO A LADO FIXO (60/40) --- */
-.recipes-grid-layout-unified {
-    display: flex;                      
-    flex-direction: row;                
-    width: 100%;
-    height: calc(100vh - 110px);        
-    gap: 24px;
-    flex-grow: 1;
-    overflow: hidden;                   
-    padding-bottom: 12px;               
+/* Divisão padrão: cada coluna assume exatamente a mesma largura (50% cada) */
+.coluna-esquerda-cadastro, 
+.coluna-direita-listagem {
+    flex: 1; /* Ocupa metade da largura da tela de forma justa */
+    display: flex; /* Ativa flexbox interno para os cards */
+    flex-direction: column; /* Alinha os blocos de cima para baixo */
+    height: 100%; /* Força o preenchimento total da altura do grid */
+    overflow: hidden; /* Previne barras de rolagem indesejadas por fora */
 }
 
-/* Painéis com Acabamento Premium e Bordas Bronze Escuras Uniformizadas */
-.form-card {
-    flex: 60;                           /* 60% para a ficha técnica da receita */
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    padding: 18px 24px;
-    border: 2px solid #5C4634;          /* Tom de alto contraste para sua tela */
-    box-shadow: 0 4px 24px rgba(47, 62, 51, 0.015);
-    display: flex;
-    flex-direction: column;
-    height: 100%;                       
-    overflow: hidden;
+/* Card que envolve o formulário de cadastro na esquerda */
+.card-formulario-receitas {
+    background-color: #ffffff; /* Fundo branco limpo */
+    border-radius: 8px; /* Cantos arredondados sutis */
+    padding: 10px 15px; /* Preenchimento confortável idêntico ao de pedidos */
+    border: 1px solid #e5e7eb; /* Linha de contorno cinza clara */
+    height: 100%; /* Ocupa toda a altura da coluna esquerda */
+    display: flex; /* Ativa flexbox no container */
+    flex-direction: column; /* Alinha as caixas de digitação verticalmente */
 }
 
-.list-card {
-    flex: 40;                           /* 40% para o índice de busca rápida */
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    padding: 18px 24px;
-    border: 2px solid #5C4634;          
-    box-shadow: 0 4px 24px rgba(47, 62, 51, 0.015);
-    display: flex;
-    flex-direction: column;
-    height: 100%;                       
-    overflow: hidden;
+/* Títulos internos dos blocos */
+.card-formulario-receitas h3, 
+.card-lista-producao-status h3 {
+    font-size: 0.8rem; 
+    color: #374151; 
+    font-weight: 600; 
+    margin-bottom: 8px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
 }
 
-.card-section-title {
-    font-size: 16px;
+/* Força o reset de cor nas linhas de contorno do ícone de título */
+.svg-card-titulo { 
+    width: 14px; 
+    height: 14px; 
+    stroke: #171d14 !important; /* Contorno verde escuro do MIRA */
+    stroke-width: 2; 
+    fill: none !important; /* Garante que o interior permaneça transparente */
+}
+
+/* Estruturação vertical para colocar a etiqueta de orientação acima do campo */
+.grupo-input-receitas {
+    display: flex; 
+    flex-direction: column; 
+}
+
+/* Estilização das etiquetas superiores */
+.grupo-input-receitas label {
+    font-size: 0.7rem; 
+    color: #4b5563; 
+    font-weight: 600; 
+    margin-bottom: 3px; 
+}
+
+/* Asterisco vermelho identificador de campos obrigatórios */
+.obrigatorio {
+    color: #ef4444; 
+    margin-left: 2px; 
+}
+
+/* Caixa de suporte com ícone interno para o nome da receita */
+.input-com-icone-interno {
+    background-color: #ffffff; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    padding: 6px 10px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+}
+
+/* Ícone de folha de papel interno */
+.svg-interno-input {
+    width: 14px; 
+    height: 14px; 
+    stroke: #6b7280; 
+    stroke-width: 2; 
+    fill: none !important;
+}
+
+/* Remove estilos padrões da caixa de digitação embutida */
+.input-com-icone-interno input {
+    border: none; 
+    outline: none; 
+    font-size: 0.78rem; 
+    color: #1f2937; 
+    width: 100%; 
+}
+
+/* Customização estética das caixas de texto grandes */
+.grupo-input-receitas textarea {
+    padding: 6px 10px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    font-size: 0.78rem; 
+    outline: none; 
+    background-color: #ffffff; 
+    color: #1f2937; 
+    resize: none; /* Bloqueia o ajuste manual de tamanho pelo usuário */
+}
+
+#ingredientesReceita { height: 110px; } /* Altura justa para ingredientes */
+#preparoReceita { height: 160px; flex: 1; } /* Se estica para preencher o bloco livre */
+
+/* Legenda explicativa cinza em itálico */
+.dica-campo {
+    font-size: 0.68rem; 
+    color: #6b7280; 
+    margin-top: 3px; 
+    font-style: italic; 
+}
+
+/* Fileira que organiza a grade dos 4 botões na base */
+.botoes-acoes-formulario {
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 8px; 
+    margin-top: 10px; 
+    border-top: 1px solid #e5e7eb; 
+    padding-top: 8px; 
+}
+
+/* Estilo unificado das ações do formulário */
+.btn-form-rec {
+    padding: 6px 8px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    font-size: 0.75rem; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 4px; 
+    font-weight: 500; 
+    background-color: #ffffff; 
+    color: #374151; 
+    transition: all 0.2s; 
+}
+
+.svg-btn-inline {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor; /* Faz a linha do ícone herdar a mesma cor do texto do botão automaticamente */
+    stroke-width: 2;
+    fill: none !important;
+}
+
+/* Configurações de cores individuais de botões */
+.salvar-btn { background-color: #172016 !important; color: white !important; border: none; } 
+.limpar-btn { background-color: #ffffff; color: #374151; } 
+.excluir-btn { color: #ef4444 !important; border-color: #fca5a5 !important; } 
+
+.btn-form-rec:disabled {
+    opacity: 0.4; 
+    cursor: not-allowed; 
+}
+
+.m-t-12 { margin-top: 6px; }
+
+/* ==========================================================================
+   PARTE 3A: LISTAGEM, TOPOGRAFIA DA TABELA E ESTRUTURA DOS BOTÕES SUPERIORES
+   ========================================================================== */
+
+/* Card principal que serve de base para toda a área da listagem à direita */
+.card-tabela-receitas {
+    background-color: #ffffff; /* Fundo branco puro */
+    border-radius: 8px; /* Cantos arredondados macios */
+    padding: 10px 15px; /* Preenchimento interno sutil */
+    border: 1px solid #e5e7eb; /* Linha de contorno fina cinza */
+    height: 100%; /* Força o card a preencher 100% da altura da coluna */
+    display: flex; /* Ativa o modo flexbox interno */
+    flex-direction: column; /* Organiza os elementos de cima para baixo */
+    justify-content: space-between; /* Empurra o painel de paginação para a base */
+    overflow: hidden; /* Bloqueia vazamentos e zera barras de rolagem externas */
+}
+
+/* Alinhamento horizontal para o título da tabela e os mini botões do canto superior */
+.topo-tabela-acoes {
+    display: flex; /* Coloca o título na esquerda e os ícones na direita */
+    justify-content: space-between; /* Empurra os blocos para as extremidades */
+    align-items: center; /* Centraliza ambos horizontalmente */
+    margin-bottom: 6px; /* Folga sutil inferior */
+}
+
+.topo-tabela-acoes h3 {
+    font-size: 0.8rem;
+    color: #374151;
     font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 4px;
-    border-bottom: 2px solid rgba(92, 70, 52, 0.6); 
-    padding-bottom: 8px;
-    flex-shrink: 0;
-}
-
-/* --- ROLAGEM INDEPENDENTE INTERNA DO FORMULÁRIO --- */
-.custom-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;                        
-    overflow-y: auto;                 
-    padding-right: 6px;
-    flex-grow: 1;
-    height: 100%;
-}
-
-.custom-form::-webkit-scrollbar { width: 4px; }
-.custom-form::-webkit-scrollbar-track { background: transparent; }
-.custom-form::-webkit-scrollbar-thumb { background: rgba(92, 70, 52, 0.3); border-radius: 10px; }
-
-.form-row { display: flex; flex-direction: column; gap: 4px; }
-.form-row.full-width { width: 100%; }
-.form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.custom-form label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-main);          
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* --- CONTRASTE DOS CAMPOS E INPUTS DE RECEITAS --- */
-.custom-form input, .custom-form textarea, .premium-select {
-    width: 100%;
-    background-color: #FFFFFF;
-    border: 1.5px solid #5C4634;        
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-family: inherit;
-    color: var(--text-main);
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-.premium-select {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://w3.org' viewBox='0 0 24 24' fill='none' stroke='%232F3E33' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 14px;
-    padding-right: 36px;
-}
-
-.custom-form input:focus, .custom-form textarea:focus, .premium-select:focus {
-    border-color: #1F150B;            
-    background-color: #FAFAFA;       
-    box-shadow: 0 0 0 3px rgba(92, 70, 52, 0.15);
-}
-
-/* Textareas maiores específicas para Modo de Preparo e Ingredientes */
-.custom-form textarea { 
-    height: 90px; 
-    min-height: 70px;
-    resize: none; 
-}
-
-/* --- BARRA DE BOTÕES CRAVADA NO RODAPÉ --- */
-.form-actions-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 14px;                 
-    padding-top: 14px;
-    border-top: 2px solid #5C4634;    
-    background-color: #FFFFFF;
-    height: 52px;                     
-    flex-shrink: 0;                   
-}
-
-.btn {
-    padding: 10px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid transparent;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    background-color: var(--bg-dark);
-    color: #FFFFFF;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.btn:hover {
-    background-color: #243227;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.1);
+/* Força as linhas do ícone de livro a ficarem verdes e com o miolo transparente */
+.topo-tabela-acoes h3 .svg-card-titulo {
+    width: 14px;
+    height: 14px;
+    stroke: #171d14 !important; /* Verde padrão do MIRA */
+    stroke-width: 2;
+    fill: none !important; /* ZERA O PREENCHIMENTO PRETO DE VEZ */
 }
 
-.btn.active-click {
-    background-color: #FFFFFF !important;
-    color: var(--bg-dark) !important;
-    border-color: var(--accent-gold) !important;
-    box-shadow: 0 4px 15px rgba(209, 180, 140, 0.2) !important;
-    transform: translateY(0);
+/* Agrupamento horizontal dos pequenos botões de recarregar e adicionar do topo */
+.icones-topo-tabela {
+    display: flex; /* Alinha os dois botões lado a lado */
+    gap: 4px; /* Folga milimétrica entre eles */
 }
 
-/* --- COLUNA DIREITA: BUSCA INSTANTÂNEA E TABELA --- */
-.list-header { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 20px; flex-shrink: 0; }
-.search-box-client { position: relative; display: flex; align-items: center; }
-.search-box-client input { width: 100%; background-color: #FFFFFF; border: 1.5px solid #5C4634; padding: 10px 14px; padding-right: 36px; border-radius: var(--radius-md); font-size: 13px; outline: none; color: var(--text-main); }
-.search-box-client input:focus { border-color: #1F150B; }
-.search-box-client svg { position: absolute; right: 14px; color: var(--text-muted); }
-
-/* Tabela de Receitas Cadastradas */
-.table-wrapper { 
-    flex-grow: 1; 
-    overflow-y: auto; 
+/* Customização dos mini botões brancos quadrados do topo da tabela */
+.btn-mini-tabela-topo {
+    background-color: #ffffff; /* Fundo branco limpo */
+    border: 1px solid #d1d5db; /* Linha cinza padrão de contorno */
+    width: 24px; /* Largura compacta quadrada */
+    height: 24px; /* Altura compacta quadrada */
+    border-radius: 4px; /* Cantos levemente suavizados */
+    cursor: pointer; /* Mãozinha de clique ativa */
+    display: flex; /* Ativa flexbox interno para centralizar o vetor */
+    align-items: center; 
+    justify-content: center;
 }
-.table-wrapper::-webkit-scrollbar { width: 4px; }
-.table-wrapper::-webkit-scrollbar-track { background: transparent; }
-.table-wrapper::-webkit-scrollbar-thumb { background: rgba(92, 70, 52, 0.3); border-radius: 10px; }
 
-.products-table { width: 100%; border-collapse: collapse; text-align: left; }
-.products-table th { font-size: 11px; color: var(--text-muted); padding-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px; border-bottom: 2px solid #5C4634; }
-.products-table td { font-size: 13px; padding: 12px 0; border-bottom: 1px solid rgba(47,62,51,0.03); color: var(--text-main); font-weight: 500; cursor: pointer; transition: background 0.15s; }
-.products-table tbody tr:hover td { background-color: rgba(209, 180, 140, 0.08); }
+/* Configuração dos mini ícones SVG inseridos nos botões quadrados do topo */
+.svg-mini-topo {
+    width: 12px; /* Ícone vetorizado ultra compacto */
+    height: 12px; 
+    stroke: #4b5563 !important; /* Cor cinza escuro sutil */
+    stroke-width: 2; 
+    fill: none !important; /* Remove preenchimento preto */
+}
+
+/* Barra cinza horizontal de pesquisa interna localizada acima da tabela */
+.linha-pesquisa-tabela {
+    display: flex; /* Coloca a caixa branca de busca e o botão cinza lado a lado */
+    gap: 6px; /* Folga sutil entre os dois elementos */
+    margin-bottom: 6px; /* Emprega espaço sutil antes de começar as linhas */
+}
+
+/* Caixa branca decorativa que envolve o campo de pesquisa interna */
+.wrapper-busca-tabela {
+    background-color: #ffffff; /* Fundo branco */
+    border: 1px solid #d1d5db; /* Linha sutil de contorno cinza */
+    border-radius: 6px; /* Cantos arredondados */
+    padding: 5px 8px; /* Preenchimento interno sutil */
+    display: flex; /* Alinha a minilupa vetorizada e o texto */
+    align-items: center; 
+    gap: 6px; 
+    flex: 1; /* Faz a barra branca se esticar por toda a largura livre */
+}
+
+/* Estilização da minilupa vetorial de dentro da barra de busca da tabela */
+.svg-busca-tabela-interna {
+    width: 12px;
+    height: 12px;
+    stroke: #6b7280 !important; /* Tom cinza opaco sutil */
+    stroke-width: 2;
+    fill: none !important;
+}
+
+/* Remove contornos e fundos padrões do campo de texto da pesquisa interna */
+.wrapper-busca-tabela input {
+    border: none;
+    outline: none;
+    font-size: 0.75rem;
+    color: #1f2937;
+    width: 100%;
+}
+
+/* Botão cinza escuro de ação que dispara a pesquisa filtrada */
+.btn-pesquisar-tabela {
+    background-color: #1f2937; /* Cinza corporativo escuro */
+    color: white; /* Letras brancas */
+    border: none; 
+    padding: 5px 12px; /* Preenchimento idêntico ao do campo ao lado */
+    border-radius: 6px; 
+    font-size: 0.75rem; 
+    font-weight: 500; 
+    cursor: pointer; 
+}
+
+/* ==========================================================================
+   PARTE 3B: ROLAGEM DA TABELA, REGRAS DE RETICÊNCIAS E PAGINAÇÃO DE RODAPÉ
+   ========================================================================== */
+
+/* Caixa contendo a rolagem interna que vai listar as receitas cadastradas */
+.wrapper-tabela-receitas-scroll {
+    flex: 1; /* Ocupa de forma automática toda a área livre central do bloco */
+    overflow-y: auto; /* Cria uma barra de rolagem vertical sutil apenas na tabela se acumular itens */
+    border: 1px solid #edf2f7; /* Desenha um contorno sutil cinza ao redor da tabela */
+    border-radius: 6px; 
+    margin-bottom: 6px; /* Folga sutil antes do rodapé de paginação */
+    max-height: calc(100vh - 200px); /* REGRA DE OURO: Limita a altura para travar e caber tudo no monitor */
+}
+
+/* Formatação geral das linhas e fontes da tabela de receitas */
+.tabela-dados-receitas {
+    width: 100%; /* Preenche 100% da largura interna da caixa de rolagem */
+    border-collapse: collapse; /* Une os contornos removendo linhas duplas */
+    font-size: 0.75rem; /* Letras compactas e elegantes de excelente legibilidade */
+}
+
+/* Configuração de preenchimento e bordas para as células da tabela */
+.tabela-dados-receitas th, 
+.tabela-dados-receitas td {
+    padding: 8px 10px; /* Preenchimento interno sutil para espremer as linhas e caber na janela */
+    text-align: left; /* Alinha os textos à esquerda */
+    border-bottom: 1px solid #edf2f7; /* Linha sutil divisória horizontal entre os registros */
+}
+
+/* Customização visual sutil para a linha de títulos (Cabeçalho) da tabela */
+.tabela-dados-receitas th {
+    background-color: #f9fafb; /* Fundo cinza bem clarinho de destaque */
+    color: #4b5563; /* Letras em cinza opaco */
+    font-weight: 600; /* Deixa as palavras em negrito */
+    position: sticky; /* Mantém o cabeçalho fixo no topo ao rolar a lista para baixo */
+    top: 0; 
+    z-index: 5; 
+}
+
+/* Classe utilitária para encurtar e cortar textos de ingredientes longos adicionando reticências (...) */
+.txt-truncado {
+    max-width: 250px; /* Fixa um tamanho horizontal sutil para a coluna */
+    white-space: nowrap; /* Proíbe o texto de quebrar linha e estufar a tabela na vertical */
+    overflow: hidden; /* Esconde o texto que ultrapassar o limite fixado */
+    text-overflow: ellipsis; /* Injeta automaticamente os três pontinhos (...) no final da frase */
+    color: #4b5563; 
+}
+
+/* Alinhamento central para a coluna de ações rápidas (Editar e Excluir) */
+.celula-acoes-tabela {
+    text-align: center !important; /* Força a centralização na horizontal */
+    display: flex; /* Alinha os dois botões redondos lado a lado */
+    justify-content: center; 
+    gap: 6px; /* Folga sutil entre os botões */
+    align-items: center;
+}
+
+/* Estilização dos pequenos botões circulares de ação rápida de cada linha */
+.btn-acao-linha {
+    width: 24px; /* Tamanho redondo fixo muito sutil */
+    height: 24px; 
+    border-radius: 50%; /* Torna o botão perfeitamente circular */
+    border: 1px solid #d1d5db; /* Linha sutil de contorno */
+    background-color: #ffffff; /* Fundo branco limpo */
+    cursor: pointer; 
+    display: flex; /* Centraliza o ícone SVG interno */
+    align-items: center; 
+    justify-content: center;
+    transition: all 0.2s; 
+}
+
+/* Cores específicas dos ícones ao passar o mouse conforme o modelo da imagem */
+.btn-acao-linha.edit:hover { background-color: #f3f4f6; border-color: #9ca3af; } /* Cinza ao focar editar */
+.btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }   /* Vermelho ao focar excluir */
+
+/* Estilização dos mini ícones SVG inseridos dentro das células de ação */
+.svg-linha-acao {
+    width: 12px; /* Vetor ultra compacto */
+    height: 12px; 
+    stroke: #4b5563 !important; /* Tom padrão cinza escuro */
+    stroke-width: 2; 
+    fill: none !important; 
+}
+
+/* Altera o vetor do botão de lixeira para vermelho ao passar o mouse */
+.btn-acao-linha.del:hover .svg-linha-acao { stroke: #ef4444 !important; }
+
+/* Barra horizontal de rodapé localizada na base do card da direita */
+.rodape-paginacao-receitas {
+    display: flex; /* Coloca a contagem na esquerda e os seletores na direita */
+    justify-content: space-between; /* Empurra as informações para as extremidades */
+    align-items: center; /* Centraliza tudo horizontalmente na vertical */
+    border-top: 1px solid #e5e7eb; /* Desenha uma linha fina divisória cinza superior */
+    padding-top: 6px; /* Espaço sutil superior interno */
+}
+
+/* Texto informativo da contagem sutil de registros ativos */
+.info-contagem-itens {
+    font-size: 0.72rem; 
+    color: #6b7280; /* Tom cinza sutil */
+}
+
+/* Alinhamento horizontal para agrupar o "por página" com a fileira de botões */
+.controles-paginacao-direita {
+    display: flex; /* Alinha o select e as páginas lado a lado */
+    gap: 12px; /* Folga sutil entre os blocs */
+    align-items: center; 
+}
+
+/* Caixa compacta do seletor de quantidade de linhas exibidas por página */
+.seletor-linhas-pagina select {
+    padding: 3px 6px; /* Preenchimento ultra enxuto para economizar espaço */
+    border: 1px solid #d1d5db; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    outline: none; 
+    color: #4b5563; 
+    background-color: #ffffff; 
+}
+
+/* Fileira que empilha horizontalmente as caixinhas de numeração de páginas */
+.botoes-passar-pagina {
+    display: flex; /* Alinha os botões em linha horizontal */
+    gap: 3px; /* Folga de 3 pixels entre os números */
+}
+
+/* Estilização padrão para cada quadradinho numérico de página */
+.btn-pagi {
+    background-color: #ffffff; /* Fundo branco padrão */
+    border: 1px solid #d1d5db; /* Linha de contorno fina cinza */
+    min-width: 22px; /* Largura mínima compacta combinando com o print */
+    height: 22px; /* Altura fixa sutil */
+    padding: 0 4px; 
+    border-radius: 4px; /* Cantos arredondados sutis */
+    font-size: 0.72rem; /* Fonte compacta */
+    color: #4b5563; /* Letra cinza escuro */
+    cursor: pointer; 
+    display: flex; /* Centraliza o texto ou vetor na vertical e horizontal */
+    align-items: center; 
+    justify-content: center;
+}
+
+/* Customização de destaque para o botão do número da página atual activa (Número 1) */
+.ativo-pagi {
+    background-color: #273324 !important; /* Tom verde militar destacado do MIRA */
+    color: #ffffff !important; /* Inverte a letra para branco puro */
+    border-color: #273324 !important; 
+    font-weight: 600; 
+}
+
+/* Estilização dos pequenos vetores de setas duplas e simples de paginação */
+.svg-pag {
+    width: 10px; /* Vetor em miniatura sutil */
+    height: 10px; 
+    stroke: #4b5563 !important; 
+    stroke-width: 2; 
+    fill: none !important; 
+}

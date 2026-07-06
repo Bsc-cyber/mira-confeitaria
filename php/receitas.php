@@ -1,61 +1,6 @@
-<?php
-// ==========================================================================
-// MIRA CONFEITARIA - GESTÃO DE RECEITAS COMPLETA EM PDO
-// ==========================================================================
-
-$page = 'receitas';
-
-// Puxa a conexão PDO que está na mesma pasta php/
-include 'conexao.php';
-
-// Verifica se chegou alguma requisição AJAX enviada pelo JavaScript via POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
-    $acao = $_POST['acao'];
-    $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-    $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
-    $tempo = isset($_POST['tempo']) ? trim($_POST['tempo']) : '';
-    $rendimento = isset($_POST['rendimento']) ? trim($_POST['rendimento']) : '';
-    $ingredientes = isset($_POST['ingredientes']) ? trim($_POST['ingredientes']) : '';
-    $preparo = isset($_POST['preparo']) ? trim($_POST['preparo']) : '';
-
-    try {
-        // --- 1. OPERAÇÃO: SALVAR / CADASTRAR NOVA RECEITA ---
-        if ($acao === 'salvar' && !empty($nome)) {
-            $sql = "INSERT INTO receitas (nome, tempo_preparo, rendimento, ingredientes, modo_preparo) VALUES (:nome, :tempo, :rendimento, :ingredientes, :preparo)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':nome' => $nome,
-                ':tempo' => $tempo,
-                ':rendimento' => $rendimento,
-                ':ingredientes' => $ingredientes,
-                ':preparo' => $preparo
-            ]);
-        }
-
-        // --- 2. OPERAÇÃO: EDITAR / ATUALIZAR RECEITA EXISTENTE ---
-        if ($acao === 'editar' && $id > 0 && !empty($nome)) {
-            $sql = "UPDATE receitas SET nome = :nome, tempo_preparo = :tempo, rendimento = :rendimento, ingredientes = :ingredientes, modo_preparo = :preparo WHERE id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([
-                ':nome' => $nome,
-                ':tempo' => $tempo,
-                ':rendimento' => $rendimento,
-                ':ingredientes' => $ingredientes,
-                ':preparo' => $preparo,
-                ':id' => $id
-            ]);
-        }
-
-        // --- 3. OPERAÇÃO: EXCLUIR RECEITA PERMANENTEMENTE ---
-        if ($acao === 'excluir' && $id > 0) {
-            $sql = "DELETE FROM receitas WHERE id = :id";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([':id' => $id]);
-        }
-    } catch (PDOException $e) {
-        // Silencia erros em segundo plano para proteger a apresentação
-    }
-}
+<?php 
+// SEGURANÇA MÁXIMA: Valida se o usuário fez login puxando a regra da subpasta
+require_once "logica_php/home.php"; 
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -63,187 +8,189 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Receitas</title>
-    <!-- O ../ faz o arquivo sair da pasta php/ e achar a pasta css/ na raiz do projeto -->
-    <link rel="stylesheet" href="../css/receitas.css?v=1.0">
-    <link rel="stylesheet" href="../css/responsivo.css">
+    <!-- Inclusão das folhas de estilo voltando uma pasta para achar o diretório css/ -->
+    <link rel="stylesheet" href="../css/barra_lateral.css">
+    <link rel="stylesheet" href="../css/receitas.css">
 </head>
 <body>
 
-    <!-- Menu Lateral Embutido na Mesma Pasta para evitar falhas -->
-    <aside class="sidebar" id="sidebar">
-        <div class="logo">
-            <span class="avatar-mc">MC</span>
-            <h2>MIRA confeitaria</h2>
-        </div>
+    <div class="container-dashboard">
         
-        <nav class="menu">
-            <a href="home.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-                <span>Dashboard</span>
-            </a>
-            <a href="clientes.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                <span>Clientes</span>
-            </a>
-            <a href="produtos.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                <span>Produtos</span>
-            </a>
-            <a href="pedidos.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-                <span>Pedidos</span>
-            </a>
-            <a href="vendas.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-                <span>Vendas</span>
-            </a>
-            <a href="#" class="active">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                <span>Receitas</span>
-            </a>
-            <a href="fornecedores.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2" ry="2"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-                <span>Fornecedores</span>
-            </a>
-            <a href="financeiro.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                <span>Controle Financeiro</span>
-            </a>
-            <a href="configuracoes.php">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span>Configurações</span>
-            </a>
-            <a href="../login.html">
-                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                <span>Sair</span>
-            </a>
-        </nav>
+        <!-- Injeção da barra lateral localizada na mesma pasta corrente -->
+        <?php require_once "barra_lateral.php"; ?>
 
-        <div class="sidebar-footer">
-            <p class="brand-phrase">Doces feitos para transformar<br>momentos em memórias.</p>
-            <div class="user-profile">
-                <span class="avatar-lc">LC</span>
-                <div class="user-info">
-                    <h4>Lucas</h4>
-                    <small>Proprietário</small>
-                </div>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Área de Conteúdo Principal -->
-    <main class="main-content">
-        <header class="topbar">
-            <div class="topbar-left">
-                <h1>Fichas Técnicas de Receitas</h1>
-                <p class="subtitle">Cadastre e gerencie o modo de preparo e os custos de suas produções.</p>
-            </div>
-        </header>
-
-        <!-- Grade de alinhamento horizontal lado a lado (60/40) -->
-        <div class="recipes-grid-layout-unified">
-            <!-- COLUNA ESQUERDA: Ficha Técnica Detalhada (60%) -->
-            <div class="form-card">
-                <div style="margin-bottom: 12px;">
-                    <h3 class="card-section-title">Ficha Técnica</h3>
-                    <p style="font-size: 11px; color: var(--text-muted);">Insira os ingredientes e etapas detalhadas da receita.</p>
+        <!-- ÁREA PRINCIPAL DA GESTÃO DE RECEITAS -->
+        <main class="painel-conteudo-receitas">
+            
+            <!-- Cabeçalho Superior da Tela padronizado com os SVGs das outras telas -->
+            <header class="topo-receitas">
+                <div class="titulo-pagina-receitas">
+                    <div class="icone-titulo-rec">
+                        <svg class="svg-topo-rec" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    </div>
+                    <div class="alinhamento-texto-topo">
+                        <h1>Receitas</h1>
+                        <p>Cadastre e gerencie as receitas da sua confeitaria.</p>
+                    </div>
                 </div>
                 
-                <form id="recipeForm" class="custom-form" novalidate>
-                    <div class="form-row full-width">
-                        <label>Nome da Receita:</label>
-                        <input type="text" id="rec_nome" placeholder="Ex: Massa Amanteigada de Baunilha, Brigadeiro de Pistache...">
+                <!-- Controles de Pesquisa Rápidos do Topo Direito -->
+                <div class="controles-topo-receitas">
+                    <div class="wrapper-busca-topo">
+                        <svg class="svg-busca-topo" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" placeholder="Pesquisar receita...">
                     </div>
+                    <button class="btn-filtro-topo">
+                        <svg class="svg-btn-inline" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    </button>
+                    <button class="btn-nova-receita-topo">
+                        <svg class="svg-btn-inline" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Receita
+                    </button>
+                </div>
+            </header>
+            <!-- Bloco Geral Dividido em Duas Colunas (Cadastro e Listagem) -->
+            <div class="grid-receitas-container">
+                
+                <!-- COLUNA DA ESQUERDA: Formulário de Cadastro de Receitas -->
+                <div class="coluna-esquerda-cadastro">
+                    <div class="card-formulario-receitas">
+                        <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Cadastro de Receita</h3>
+                        
+                        <form id="formCadastroReceita">
+                            <!-- Campo 1: Nome da Receita -->
+                            <div class="grupo-input-receitas">
+                                <label>Nome da Receita <span class="obrigatorio">*</span></label>
+                                <div class="input-com-icone-interno">
+                                    <svg class="svg-interno-input" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                    <input type="text" id="nomeReceita" placeholder="Digite o nome da receita" required>
+                                </div>
+                            </div>
 
-                    <div class="form-row-grid">
-                        <div class="form-row">
-                            <label>Tempo de Preparo:</label>
-                            <input type="text" id="rec_tempo" placeholder="Ex: 45 min, 1h 20min...">
+                            <!-- Campo 2: Ingredientes -->
+                            <div class="grupo-input-receitas m-t-12">
+                                <label>Ingredientes <span class="obrigatorio">*</span></label>
+                                <textarea id="ingredientesReceita" placeholder="Liste todos os ingredientes utilizados na receita..." required></textarea>
+                                <small class="dica-campo">Dica: Separe cada ingrediente em uma nova linha.</small>
+                            </div>
+
+                            <!-- Campo 3: Modo de Preparo -->
+                            <div class="grupo-input-receitas m-t-12">
+                                <label>Modo de Preparo <span class="obrigatorio">*</span></label>
+                                <textarea id="preparoReceita" placeholder="Descreva o passo a passo do modo de preparo..." required></textarea>
+                            </div>
+
+                            <!-- Fileira de Ações Inferiores do Formulário -->
+                            <div class="botoes-acoes-formulario">
+                                <button type="submit" class="btn-form-rec salvar-btn">
+                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar
+                                </button>
+                                <button type="button" class="btn-form-rec editar-btn" disabled>
+                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar
+                                </button>
+                                <button type="button" class="btn-form-rec limpar-btn" id="btnLimparForm">
+                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><path d="M12 22c5.523 0 9-4.477 9-10S17.523 2 12 2 3 6.477 3 12s3.477 10 9 10z"/><path d="M8 12h8"/></svg> Limpar
+                                </button>
+                                <button type="button" class="btn-form-rec excluir-btn" disabled>
+                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Excluir
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- COLUNA DA DIREITA: Listagem e Tabela das Receitas Cadastradas -->
+                <div class="coluna-direita-listagem">
+                    <div class="card-tabela-receitas">
+                        <div class="topo-tabela-acoes">
+                            <!-- ÍCONE CORRIGIDO: Agora usando o desenho correto de livro sem blocos pretos -->
+                            <h3>
+                                <svg class="svg-card-titulo" viewBox="0 0 24 24">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                                </svg> 
+                                Receitas Cadastradas
+                            </h3>
+                            <div class="icones-topo-tabela">
+                                <button type="button" class="btn-mini-tabela-topo" id="btnRecarregarTabela" title="Recarregar">
+                                    <svg class="svg-mini-topo" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                                </button>
+                                <button type="button" class="btn-mini-tabela-topo" title="Adicionar Linha">
+                                    <svg class="svg-mini-topo" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+                                </button>
+                            </div>
                         </div>
-                        <div class="form-row">
-                            <label>Rendimento Base:</label>
-                            <input type="text" id="rec_rendimento" placeholder="Ex: 20 porções, 2 aros de 15cm...">
+
+                        <!-- Barra de Pesquisa Interna da Tabela -->
+                        <div class="linha-pesquisa-tabela">
+                            <div class="wrapper-busca-tabela">
+                                <svg class="svg-busca-tabela-interna" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="inputPesquisaTabela" placeholder="Pesquisar receita...">
+                            </div>
+                            <button type="button" class="btn-pesquisar-tabela">Pesquisar</button>
                         </div>
-                    </div>
 
-                    <div class="form-row full-width">
-                        <label>Ingredientes e Quantidades:</label>
-                        <textarea id="rec_ingredientes" style="height: 110px;" placeholder="Ex:&#10;- 200g de farinha de trigo&#10;- 4 ovos inteiros..."></textarea>
-                    </div>
+                        <!-- Área Ocupada pela Tabela com Rolagem Interna Travada -->
+                        <div class="wrapper-tabela-receitas-scroll">
+                            <table class="tabela-dados-receitas">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 10%;">ID</th>
+                                        <th style="width: 25%;">Nome da Receita</th>
+                                        <th style="width: 50%;">Ingredientes</th>
+                                        <th style="width: 15%; text-align: center;">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="corpoTabelaReceitas">
+                                    <tr>
+                                        <td>101</td>
+                                        <td><strong>Brigadeiro Gourmet</strong></td>
+                                        <td class="txt-truncado">Leite condensado, chocolate em pó, creme de leite, manteiga, granulado</td>
+                                        <td class="celula-acoes-tabela">
+                                            <button type="button" class="btn-acao-linha edit"><svg class="svg-linha-acao" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                            <button type="button" class="btn-acao-linha del"><svg class="svg-linha-acao" viewBox="0 0 24 24"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>102</td>
+                                        <td><strong>Bolo de Chocolate</strong></td>
+                                        <td class="txt-truncado">Farinha de trigo, açúcar, chocolate em pó, ovos, leite, óleo, fermento</td>
+                                        <td class="celula-acoes-tabela">
+                                            <button type="button" class="btn-acao-linha edit"><svg class="svg-linha-acao" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                                            <button type="button" class="btn-acao-linha del"><svg class="svg-linha-acao" viewBox="0 0 24 24"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                    <div class="form-row full-width">
-                        <label>Modo de Preparo / Passos:</label>
-                        <textarea id="rec_preparo" style="height: 130px;" placeholder="Descreva o passo a passo completo da produção..."></textarea>
-                    </div>
+                        <!-- Barra Inferior de Paginação e Métricas -->
+                        <div class="rodape-paginacao-receitas">
+                            <span class="info-contagem-itens">Mostrando 1 a 7 de 7 receitas</span>
+                            
+                            <div class="controles-paginacao-direita">
+                                <div class="seletor-linhas-pagina">
+                                    <select>
+                                        <option value="10">10 por página</option>
+                                        <option value="20">20 por página</option>
+                                    </select>
+                                </div>
+                                <div class="botoes-passar-pagina">
+                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg></button>
+                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+                                    <button type="button" class="btn-pagi ativo-pagi">1</button>
+                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg></button>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="form-actions-4">
-                        <button type="button" class="btn">Salvar</button>
-                        <button type="button" class="btn">Editar</button>
-                        <button type="button" class="btn">Limpar</button>
-                        <button type="button" class="btn">Excluir</button>
                     </div>
-                </form>
+                </div>
+
             </div>
+        </main>
+    </div>
 
-            <!-- COLUNA DIREITA: Tabela de Busca Rápida (40%) -->
-            <div class="list-card">
-                <div style="margin-bottom: 12px;">
-                    <h3 class="card-section-title">Receitas Cadastradas</h3>
-                    <p style="font-size: 11px; color: var(--text-muted);">Clique em uma linha para carregar ou digite para filtrar na hora.</p>
-                </div>
-
-                <div class="list-header" style="display: block; margin-bottom: 20px;">
-                    <div class="search-box-client" style="width: 100%;">
-                        <input type="text" id="searchRecipeInput" placeholder="Pesquisar receita por nome...">
-                        <svg xmlns="http://w3.org" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                    </div>
-                </div>
-
-                <div class="table-wrapper">
-                    <table class="products-table" id="recipesTable">
-                        <thead>
-                            <tr>
-                                <th style="width: 70px;">ID</th>
-                                <th>Nome da Receita</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            try {
-                                // Puxa todas as receitas cadastradas na base local via PDO
-                                $sql = "SELECT * FROM receitas ORDER BY id DESC";
-                                $stmt = $pdo->query($sql);
-                                $receitas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-                                if (count($receitas) > 0) {
-                                    foreach ($receitas as $linha) {
-                                        echo "<tr class='rec-row' 
-                                                  data-id='".htmlspecialchars($linha['id'])."' 
-                                                  data-nome='".htmlspecialchars($linha['nome'])."' 
-                                                  data-tempo='".htmlspecialchars($linha['tempo_preparo'])."' 
-                                                  data-rendimento='".htmlspecialchars($linha['rendimento'])."' 
-                                                  data-ingredientes='".htmlspecialchars($linha['ingredientes'])."' 
-                                                  data-preparo='".htmlspecialchars($linha['modo_preparo'])."'>";
-                                        echo "<td>#" . str_pad($linha['id'], 3, '0', STR_PAD_LEFT) . "</td>";
-                                        echo "<td class='item-name-cell'>" . htmlspecialchars($linha['nome']) . "</td>";
-                                        echo "</tr>";
-                                    }
-                                } else {
-                                    echo '<tr><td colspan="2" style="text-align: center; color: var(--text-muted); padding: 40px 0; font-style: italic;">Nenhuma receita salva no banco local.</td></tr>';
-                                }
-                            } catch (PDOException $e) {
-                                echo '<tr><td colspan="2" style="text-align: center; color: #C94A4A; padding: 40px 0;">Erro ao ler tabela: ' . htmlspecialchars($e->getMessage()) . '</td></tr>';
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <!-- Script externo unificado de receitas -->
+    <!-- Script de controle dinâmico -->
     <script src="../js/receitas.js"></script>
 </body>
 </html>

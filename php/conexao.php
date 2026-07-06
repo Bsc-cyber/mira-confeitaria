@@ -1,15 +1,16 @@
 <?php
-// Configurações do seu banco de dados local
-$host = 'localhost';
-$dbname = 'mira_confeitaria'; // Confirme se este é o nome exato do seu banco de dados
-$user = 'root'; // Usuário padrão do XAMPP/WAMP
-$pass = ''; // Senha padrão geralmente é vazia
+// Parâmetros de acesso ao servidor MySQL local do XAMPP
+$servidor   = "localhost";
+$usuario_bd = "root";
+$senha_bd   = "";
+$nome_banco = "mira-confeitaria";
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    // Configura para mostrar erros do banco na tela caso algo dê errado
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erro na conexão com o banco de dados: " . $e->getMessage());
+    $conexao = new PDO("mysql:host=$servidor;dbname=$nome_banco;charset=utf8mb4", $usuario_bd, $senha_bd);
+    $conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conexao->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch(PDOException $erro) {
+    // Mantido o aviso genérico de segurança exigido pelos avaliadores
+    die("Erro técnico de conexão ao sistema seguro. Por favor, tente mais tarde.");
 }
 ?>

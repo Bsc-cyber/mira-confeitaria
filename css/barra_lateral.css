@@ -1,0 +1,230 @@
+/* ==========================================================================
+   RESET DE ESTILOS E PARÂMETROS GLOBAIS DA HOME
+   ========================================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    background-color: #f3f4f6;
+    overflow: hidden;
+}
+
+.container-dashboard {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+/* ==========================================================================
+   ESTILIZAÇÃO EXCLUSIVA DA BARRA LATERAL (SIDEBAR)
+   ========================================================================== */
+.menu-lateral {
+    width: 65px; 
+    height: 100%;
+    background-color: #171d14; 
+    display: flex;
+    flex-direction: column;
+    padding: 25px 0px;
+    color: #ffffff;
+    overflow: hidden;
+    position: absolute; 
+    left: 0;
+    top: 0;
+    z-index: 100;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+    border-right: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.menu-lateral:hover {
+    width: 255px; 
+    padding: 25px 15px;
+}
+
+.bloco-marca {
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 15px;
+    margin-bottom: 30px;
+    width: 230px;
+}
+
+.emblema-logo {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.titulos-logo h2 {
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    font-weight: 300;
+    color: #ffffff;
+    line-height: 1.1;
+}
+
+.titulos-logo span {
+    font-size: 0.65rem;
+    color: #8fa08c; 
+    letter-spacing: 1px;
+    display: block;
+}
+
+.links-navegacao {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    width: 225px;
+}
+
+.item-menu {
+    display: flex;
+    align-items: center;
+    color: #a4b3a2; 
+    text-decoration: none;
+    padding: 10px 18px;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    position: relative;
+    transition: all 0.2s;
+    border-radius: 6px;
+}
+
+.icone-svg {
+    width: 18px;
+    height: 18px;
+    stroke: #a4b3a2;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+    transition: stroke 0.2s;
+}
+
+.texto-menu {
+    margin-left: 14px;
+    opacity: 0; 
+    transition: opacity 0.2s;
+}
+
+.menu-lateral:hover .texto-menu {
+    opacity: 1; 
+}
+
+.item-menu:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+.item-menu:hover .icone-svg,
+.item-menu.ativo .icone-svg {
+    stroke: #ffffff;
+}
+
+.item-menu.ativo {
+    background-color: #273324; 
+    color: #ffffff;
+    font-weight: 500;
+}
+
+.item-menu.ativo .marcador-selecionado {
+    position: absolute;
+    left: 0;
+    top: 15%;
+    width: 3px;
+    height: 70%;
+    background-color: #d4af37; 
+    border-radius: 0 4px 4px 0;
+}
+
+.bloco-perfil {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    margin-top: 15px;
+    width: 225px;
+}
+
+.foto-perfil {
+    width: 34px;
+    height: 34px;
+    background-color: #d2bc96; 
+    color: #172016;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+.identidade-usuario {
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.menu-lateral:hover .identidade-usuario { opacity: 1; }
+.identidade-usuario strong { font-size: 0.85rem; color: #ffffff; }
+.identidade-usuario span { font-size: 0.75rem; color: #8fa08c; }
+
+.banner-decorativo {
+    background-color: rgba(0, 0, 0, 0.15);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    width: 225px;
+    margin-top: 15px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.menu-lateral:hover .banner-decorativo { opacity: 1; }
+
+.miniatura-bolo {
+    width: 100%;
+    height: 105px;
+    background: url('../imagens/fundo.jpg') center center no-repeat; 
+    background-size: cover;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.slogan-rodape {
+    font-size: 0.72rem;
+    color: #8fa08c;
+    line-height: 1.3;
+    font-style: italic;
+}
+
+.saida-sistema {
+    width: 225px;
+    padding: 10px 12px 0 12px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.menu-lateral:hover .saida-sistema { opacity: 1; }
+.link-sair { color: #ff7675; text-decoration: none; font-size: 0.8rem; display: flex; align-items: center; }
+
+.icone-svg-sair {
+    width: 16px;
+    height: 16px;
+    stroke: #ff7675;
+    stroke-width: 2;
+    fill: none;
+    margin-right: 14px;
+}

@@ -56,8 +56,8 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <!-- Puxa o menu centralizado profissional em PHP -->
-    <?php include 'sidebar.php'; ?>
+    <<!-- Injeção da barra lateral localizada na mesma pasta corrente -->
+    <?php require_once "barra_lateral.php"; ?>
 
     <!-- Área de Conteúdo Principal -->
     <main class="main-content">
