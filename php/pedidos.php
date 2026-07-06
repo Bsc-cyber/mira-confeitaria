@@ -168,7 +168,7 @@ require_once "logica_php/home.php";
                             <span class="total-pedido-txt">Total do pedido: <strong id="totalPedidoDisplay">R$ 0,00</strong></span>
                             <div class="botoes-acoes-esquerda">
                                 <button type="button" class="btn-aux-esquerda" disabled>📝 Editar Produto</button>
-                                <button type="button" class="btn-aux-esquerda vermelho-btn" id="btnLimparCarrinho">🗑️ Excluir Produto</button>
+                                <button type="button" class="btn-aux-esquerda vermelho-btn" id="btnLimparCarrinho">🗑️ Limpar Carrinho</button>
                                 <button type="button" class="btn-acao-principal-esquerda" id="btnGerarPedido">⚙️ Gerar Pedido</button>
                             </div>
                         </div>
