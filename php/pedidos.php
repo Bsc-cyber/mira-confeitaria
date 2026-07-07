@@ -233,6 +233,6 @@ require_once "logica_php/home.php";
             </div>
         </main>
     </div>
-    <script src="../script/pedidos.js"></script>
+    <script src="../js/pedidos.js"></script>
 </body>
 </html>
