@@ -21,10 +21,10 @@
     <nav class="links-navegacao">
         
         <!-- 1. Dashboard -->
-        <a href="/mira-confeitaria/php/home.php" class="item-menu">
+        <a href="/mira-confeitaria/home.php" class="item-menu">
             <span class="marcador-selecionado"></span>
             <svg class="icone-svg" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
-            <span class="texto-menu">Dashboard</span>
+            <span class="texto-menu">Home</span>
         </a>
         
         <!-- 2. Clientes -->
@@ -67,20 +67,6 @@
             <span class="marcador-selecionado"></span>
             <svg class="icone-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polyline points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
             <span class="texto-menu">Fornecedores</span>
-        </a>
-        
-        <!-- 8. Controle Financeiro -->
-        <a href="/mira-confeitaria/php/controle_financeiro.php" class="item-menu">
-            <span class="marcador-selecionado"></span>
-            <svg class="icone-svg" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="12" y1="11" x2="12" y2="13"/><path d="M16 9.5a3.5 3.5 0 0 0-8 0"/></svg>
-            <span class="texto-menu">Controle Financeiro</span>
-        </a>
-        
-        <!-- 9. Relatórios -->
-        <a href="/mira-confeitaria/php/relatorios.php" class="item-menu">
-            <span class="marcador-selecionado"></span>
-            <svg class="icone-svg" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            <span class="texto-menu">Relatórios</span>
         </a>
         
         <!-- 10. Configurações -->

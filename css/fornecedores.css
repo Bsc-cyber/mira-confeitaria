@@ -1,521 +1,197 @@
 /* ==========================================================================
-   PARTE 1: CONFIGURAÇÃO DO TOPO DA TELA E SISTEMA DE CONTROLES SUPERIORES
+   FOLHA DE ESTILO PREMIUM: FORNECEDORES NO PADRÃO ESTREITO DE PEDIDOS
    ========================================================================== */
 
-/* Compacta a área interna da tela para travar tudo dentro dos limites horizontais e verticais */
+svg, path, rect, circle, polyline, line, polygon { fill: none !important; }
+
 .painel-conteudo-fornecedores {
-    padding: 12px 25px 12px 90px !important; /* Espaçamento dando recuo para a barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro oficial de todo o sistema MIRA */
-    height: 100vh; /* Trava a altura do bloco em exatamente 100% da tela do monitor */
-    width: 100%; /* Expande o painel por toda a largura restante da janela */
-    display: flex; /* Ativa flexbox para alinhar os componentes internos */
-    flex-direction: column; /* Organiza o fluxo dos blocos de cima para baixo verticalmente */
-    overflow: hidden; /* REGRA DE OURO: Elimina e proíbe qualquer barra de rolagem global na janela */
+    padding: 12px 25px 12px 90px !important; 
+    background-color: #f3f4f6; 
+    height: 100vh; 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; 
 }
 
-/* Margem sutil inferior abaixo do cabeçalho da página */
-.topo-fornecedores {
-    display: flex; /* Alinha o título na esquerda e os filtros na direita horizontalmente */
-    justify-content: space-between; /* Empurra os dois agrupamentos para as extremidades da tela */
-    align-items: flex-start; /* Mantém a base superior no mesmo nível horizontal */
-    margin-bottom: 8px; /* Margem espremida para maximizar o espaço útil vertical */
-}
-
-/* Agrupamento do ícone e dos textos do título principal da página */
-.titulo-pagina-fornecedores {
-    display: flex; /* Alinha a caixinha do ícone e as escritas lado a lado */
-    align-items: center; /* Centraliza verticalmente o ícone em relação ao texto */
-    gap: 12px; /* Folga sutil de 12 pixels entre eles */
-}
-
-/* Customização da caixinha branca que envolve o ícone de caminhão de entrega */
-.icone-titulo-forn {
-    background-color: #ffffff; /* Fundo branco puro */
-    width: 38px; /* Largura fixa sutil padrão do sistema */
-    height: 38px; /* Altura fixa sutil padrão do sistema */
-    border-radius: 8px; /* Cantos arredondados finos */
-    display: flex; /* Ativa flexbox interno para o desenho vetorial */
-    align-items: center; /* Centraliza o vetor na vertical */
-    justify-content: center; /* Centraliza o vetor na horizontal */
-    border: 1px solid #e5e7eb; /* Linha de contorno cinza bem clarinha */
-}
-
-/* Estilização do ícone vetorial SVG do topo esquerdo */
-.svg-topo-forn {
-    width: 18px; /* Largura do ícone */
-    height: 18px; /* Altura do ícone */
-    stroke: #171d14; /* Desenho no tom de verde musgo oficial do MIRA */
-    stroke-width: 2; /* Espessura padrão do contorno */
-    fill: none !important; /* Proíbe qualquer preenchimento preto automático */
-}
-
-/* Alinhamento dos textos da saudação do topo */
+.topo-fornecedores { margin-bottom: 8px; width: 100%; }
+.titulo-pagina-fornecedores { display: flex; align-items: center; gap: 12px; }
+.icone-titulo-forn { background-color: #ffffff; width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #e5e7eb; }
+.svg-topo-forn { width: 18px; height: 18px; stroke: #171d14 !important; stroke-width: 2; }
 .alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; } 
 .alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; } 
 
-/* Alinhamento dos botões e campos de busca do canto direito superior */
-.controles-topo-fornecedores {
-    display: flex; /* Coloca a pesquisa, o filtro e o botão novo lado a lado */
-    gap: 8px; /* Folga sutil de 8 pixels entre eles */
-    align-items: center; /* Centraliza todos horizontalmente */
-}
-
-/* Caixa branca decorativa da barra de pesquisa do topo direito */
-.wrapper-busca-topo {
-    background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    padding: 6px 10px; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-    width: 180px; 
-}
-
-.svg-busca-topo {
-    width: 14px;
-    height: 14px;
-    stroke: #6b7280; 
-    stroke-width: 2;
-    fill: none !important;
-}
-
-.wrapper-busca-topo input {
-    border: none;
-    outline: none;
-    font-size: 0.78rem;
-    color: #1f2937;
-    width: 100%;
-}
-
-/* Estilização padrão dos botões auxiliares cinzas do topo superior direito */
-.btn-filtro-topo, .btn-novo-fornecedor-topo {
-    padding: 6px 10px; 
-    border-radius: 6px; 
-    font-size: 0.75rem; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center;
-    justify-content: center;
-}
-
-.btn-filtro-topo {
-    background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    color: #374151; 
-}
-
-.btn-novo-fornecedor-topo {
-    background-color: #1f2937; 
-    border: none; 
-    color: #ffffff; 
-    font-weight: 500; 
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-/* ==========================================================================
-   PARTE 2: DISTRIBUIÇÃO DAS DUAS COLUNAS E FORMULÁRIO DE CADASTRO (ESQUERDA)
-   ========================================================================== */
-
-/* Caixa estrutural que divide a tela ao meio em duas metades simétricas */
 .grid-fornecedores-container {
-    display: flex; /* Alinha a coluna de cadastro e a de listagem lado a lado */
-    gap: 15px; /* Espaço de separação entre as duas colunas */
-    flex: 1; /* Força o bloco a expandir ocupando toda a altura livre central */
-    height: calc(100vh - 75px); /* Desconta a altura do cabeçalho superior */
-    overflow: hidden; /* Impede vazamento e trava barras de rolagem globais */
-}
-
-/* Divisão simétrica perfeita: cada coluna ocupa 50% do espaço livre da janela */
-.coluna-esquerda-cadastro, 
-.coluna-direita-listagem {
-    flex: 1; /* Divide a largura da tela em partes perfeitamente iguais */
-    display: flex; /* Ativa flexbox para alinhar seus cards internos */
-    flex-direction: column; /* Organiza os elementos internos verticalmente */
-    height: 100%; /* Força as colunas a ocuparem toda a altura disponível do grid */
-    overflow: hidden; /* Corta barras de rolagem externas indesejadas */
-}
-
-/* Card exclusivo do formulário de cadastro à esquerda */
-.card-formulario-fornecedores {
-    background-color: #ffffff; /* Fundo branco puro */
-    border-radius: 8px; /* Cantos arredondados macios */
-    padding: 10px 15px; /* Espaçamento interno padrão */
-    border: 1px solid #e5e7eb; /* Linha sutil cinza delimitando o bloco */
-    height: 100%; /* Ocupa 100% da altura da coluna da esquerda */
-    display: flex; /* Ativa flexbox interno para organizar os elementos */
-    flex-direction: column; /* Alinha o formulário de cima para baixo */
-}
-
-/* Títulos internos dos cards */
-.card-formulario-fornecedores h3 {
-    font-size: 0.8rem; 
-    color: #374151; 
-    font-weight: 600; 
-    margin-bottom: 8px; 
     display: flex; 
-    align-items: center; 
+    gap: 15px; 
+    flex: 1; 
+    height: calc(100vh - 75px); 
+    overflow: hidden; 
+}
+
+/* COLUNA DA ESQUERDA: Configuração de rolagem robusta idêntica a pedidos */
+.coluna-esquerda-cadastro {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
     gap: 8px; 
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    height: 100%; 
+    overflow-y: auto; 
+    padding-right: 6px;
 }
 
-/* Customização dos ícones nos títulos dos cards */
-.svg-card-titulo { 
-    width: 14px; 
-    height: 14px; 
-    stroke: #171d14 !important; /* Verde escuro do MIRA */
-    stroke-width: 2; 
-    fill: none !important; 
+/* GROSSURA DO SCROLL: Ajustado para o padrão cinza escuro de pedidos */
+.coluna-esquerda-cadastro::-webkit-scrollbar {
+    width: 6px; /* Engrossado de 4px para 6px */
+}
+.coluna-esquerda-cadastro::-webkit-scrollbar-thumb {
+    background: #5c6655; /* Tom cinza escuro militar de pedidos */
+    border-radius: 4px;
 }
 
-/* MÁGICA REQUISITADA: Caixa com rolagem sutil interna para espremer o formulário */
-.wrapper-inputs-scroll-cadastro {
-    flex: 1; /* Ocupa todo o espaço vertical livre antes da barra de botões */
-    overflow-y: auto; /* Ativa rolagem vertical apenas se os inputs transbordarem */
-    padding-right: 5px; /* Margem sutil para a barra de rolagem não grudar nos inputs */
-    margin-bottom: 5px; 
+.coluna-direita-listagem {
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+    overflow: hidden; 
 }
 
-/* Estruturação vertical para colocar a etiqueta acima das caixas */
-.grupo-input-fornecedores {
+.card-formulario-fornecedores {
+    background-color: #ffffff; 
+    border-radius: 8px; 
+    padding: 15px; 
+    border: 1px solid #e5e7eb; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     display: flex; 
     flex-direction: column; 
 }
 
-/* Estilização das etiquetas superiores */
-.grupo-input-fornecedores label {
-    font-size: 0.7rem; 
-    color: #4b5563; 
+.card-formulario-fornecedores h3 {
+    font-size: 0.8rem; 
+    color: #374151; 
     font-weight: 600; 
-    margin-bottom: 3px; 
+    margin-bottom: 12px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
+    text-transform: uppercase;
 }
 
-/* Asterisco vermelho para identificar os campos de preenchimento obrigatório */
-.obrigatorio {
-    color: #ef4444; 
-    margin-left: 2px; 
-}
+.svg-card-titulo { width: 14px; height: 14px; stroke: #171d14 !important; stroke-width: 2; }
+.wrapper-inputs-scroll-cadastro { display: block; width: 100%; }
+.grupo-input-fornecedores { display: flex; flex-direction: column; margin-bottom: 10px; }
+.grupo-input-fornecedores label { font-size: 0.7rem; color: #4b5563; font-weight: 600; margin-bottom: 4px; }
+.obrigatorio { color: #ef4444; margin-left: 2px; }
 
-/* Caixa com botão lateral (Exclusivo do campo Nome) */
-.input-com-botao-lateral {
-    display: flex;
-    gap: 4px;
-}
-
-.input-com-botao-lateral input {
-    flex: 1; /* Força o input a ocupar toda a largura livre empurrando o botão */
-}
-
-/* Pequeno botão de adicionar contato ao lado do input de nome */
-.btn-form-add-contato {
-    padding: 6px 10px;
-    background-color: #1f2937; /* Cinza escuro corporativo */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.svg-btn-menor {
-    width: 12px;
-    height: 12px;
-    stroke: white;
-    stroke-width: 2;
-    fill: none !important;
-}
-
-/* Customização geral de caixas, seletores e áreas de texto */
 .grupo-input-fornecedores input, 
 .grupo-input-fornecedores select, 
 .grupo-input-fornecedores textarea {
-    padding: 6px 10px; 
+    padding: 7px 10px; 
     border: 1px solid #d1d5db; 
     border-radius: 6px; 
     font-size: 0.78rem; 
     outline: none; 
     background-color: #ffffff; 
     color: #1f2937; 
+    width: 100%;
 }
 
-/* Limitação de tamanho e comportamento da caixa de texto grande */
-.grupo-input-fornecedores textarea {
-    resize: none; 
-    height: 48px; /* Fixa a altura para não esmagar os outros elementos */
-}
-
-/* Configuração de linhas com dois campos em posições inline */
-.linha-inputs-dupla {
-    display: flex;
-    gap: 10px;
-}
-
-.linha-inputs-dupla .grupo-input-fornecedores {
-    flex: 1; /* Reparte o espaço ao meio de forma igualitária */
-}
-
+.grupo-input-fornecedores textarea { resize: none; height: 52px; }
+.linha-inputs-dupla { display: flex; gap: 10px; }
+.linha-inputs-dupla .grupo-input-fornecedores { flex: 1; }
 .flex-8 { flex: 8 !important; }
 .flex-4 { flex: 4 !important; }
 
-/* Grade que organiza os 4 botões na base do formulário */
-.botoes-acoes-formulario {
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 8px; 
-    margin-top: 5px; 
-    border-top: 1px solid #e5e7eb; 
-    padding-top: 8px; 
+.botoes-acoes-formulario-forn-duplo {
+    display: grid !important; 
+    grid-template-columns: 1fr 1fr !important; 
+    gap: 12px !important; 
+    margin-top: 5px !important; 
+    border-top: 1px solid #e5e7eb !important; 
+    padding-top: 12px !important; 
+    width: 100% !important;
 }
 
-/* Estilo unificado das ações do formulário */
-.btn-form-forn {
-    padding: 6px 8px; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    font-size: 0.75rem; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 4px; 
-    font-weight: 500; 
-    background-color: #ffffff; 
-    color: #374151; 
-    transition: all 0.2s; 
+.btn-forn-base {
+    padding: 10px 12px !important; 
+    border-radius: 6px !important; 
+    font-size: 0.8rem !important; 
+    cursor: pointer !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    gap: 6px !important; 
+    font-weight: 600 !important; 
+    border: none !important;
+    transition: all 0.2s !important; 
 }
 
-.svg-btn-inline {
-    width: 14px;
-    height: 14px;
-    stroke: currentColor; 
-    stroke-width: 2;
-    fill: none !important;
-}
+.salvar-btn { background-color: #172016 !important; color: white !important; } 
+.limpar-btn { background-color: #2a3626 !important; color: white !important; } 
+.btn-forn-base:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* Cores customizadas individuais de botões */
-.salvar-btn { background-color: #172016 !important; color: white !important; border: none; } 
-.limpar-btn { background-color: #ffffff; color: #374151; } 
-.excluir-btn { color: #ef4444 !important; border-color: #fca5a5 !important; } 
-
-.btn-form-forn:disabled {
-    opacity: 0.4; 
-    cursor: not-allowed; 
-}
-
-.m-t-8 { margin-top: 5px; }
-
-/* ==========================================================================
-   PARTE 3: LISTAGEM, CRIAÇÃO DE BADGES COLORIDAS E PAGINAÇÃO (DIREITA)
-   ========================================================================== */
-
-/* Card principal que serve de base para toda a área da listagem à direita */
+/* CARD DA LISTAGEM DIREITA */
 .card-tabela-fornecedores {
-    background-color: #ffffff; /* Fundo branco puro */
-    border-radius: 8px; /* Cantos arredondados macios */
-    padding: 10px 15px; /* Preenchimento interno sutil */
-    border: 1px solid #e5e7eb; /* Linha de contorno fina cinza */
-    height: 100%; /* Força o card a preencher 100% da altura da coluna */
-    display: flex; /* Ativa o modo flexbox interno */
-    flex-direction: column; /* Organiza os elementos de cima para baixo */
-    justify-content: space-between; /* Empurra o painel de paginação para a base */
-    overflow: hidden; /* Bloqueia vazamentos e zera barras de rolagem externas */
-}
-
-/* Alinhamento horizontal para o título da tabela e os mini botões do canto superior */
-.topo-tabela-acoes {
-    display: flex; /* Coloca o título na esquerda e os ícones na direita */
-    justify-content: space-between; /* Empurra os blocos para as extremidades */
-    align-items: center; /* Centraliza ambos horizontalmente */
-    margin-bottom: 6px; /* Folga sutil inferior */
-}
-
-.topo-tabela-acoes h3 {
-    font-size: 0.8rem;
-    color: #374151;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Força as linhas do ícone a ficarem verdes e com o miolo transparente */
-.topo-tabela-acoes h3 .svg-card-titulo {
-    width: 14px;
-    height: 14px;
-    stroke: #171d14 !important; /* Verde padrão do MIRA */
-    stroke-width: 2;
-    fill: none !important; /* Limpa o preenchimento */
-}
-
-/* Agrupamento horizontal dos pequenos botões do topo direito da tabela */
-.icones-topo-tabela {
-    display: flex; 
-    gap: 4px; 
-}
-
-/* Customização dos mini botões brancos quadrados do topo da tabela */
-.btn-mini-tabela-topo {
     background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    width: 24px; 
-    height: 24px; 
-    border-radius: 4px; 
-    cursor: pointer; 
+    border-radius: 8px; 
+    padding: 15px; 
+    border: 1px solid #e5e7eb; 
+    height: 100%; 
     display: flex; 
-    align-items: center; 
-    justify-content: center;
+    flex-direction: column; 
+    overflow: hidden; 
 }
 
-.svg-mini-topo {
-    width: 12px; 
-    height: 12px; 
-    stroke: #4b5563 !important; 
-    stroke-width: 2; 
-    fill: none !important; 
-}
+.linha-pesquisa-interna-forn { display: flex !important; gap: 6px !important; align-items: center !important; width: 100% !important; margin-bottom: 10px !important; }
+.wrapper-busca-tabela-forn { background-color: #ffffff !important; border: 1px solid #d1d5db !important; border-radius: 6px !important; padding: 6px 12px !important; display: flex !important; align-items: center !important; gap: 6px !important; flex: 1 !important; }
+.svg-busca-tabela-interna { width: 14px !important; height: 14px !important; stroke: #6b7280 !important; stroke-width: 2 !important; }
+.wrapper-busca-tabela-forn input { border: none !important; outline: none !important; font-size: 0.78rem !important; color: #1f2937 !important; width: 100% !important; background: none !important; }
+.btn-mini-tabela-topo { background-color: #ffffff !important; border: 1px solid #d1d5db !important; width: 32px !important; height: 32px !important; border-radius: 6px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+.svg-mini-topo { width: 14px !important; height: 14px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
 
-/* Caixa contendo a rolagem interna que vai listar os fornecedores cadastrados */
+/* TABELA DE PROPORÇÃO FIXA CONTRA BUG DE ROLAGEM HORIZONTAL */
 .wrapper-tabela-fornecedores-scroll {
-    flex: 1; /* Ocupa de forma automática toda a área livre central do bloco */
-    overflow-y: auto; /* Cria uma barra de rolagem vertical sutil apenas na tabela se acumular itens */
-    border: 1px solid #edf2f7; /* Desenha um contorno sutil cinza ao redor da tabela */
+    flex: 1; 
+    overflow-y: auto; 
+    overflow-x: hidden; /* MÁGICA: Detona o scroll inferior da direita! */
+    border: 1px solid #edf2f7; 
     border-radius: 6px; 
-    margin-bottom: 6px; /* Folga sutil antes do rodapé de paginação */
-    max-height: calc(100vh - 160px); /* REGRA DE OURO: Limita a altura para travar e caber tudo no monitor */
+    max-height: calc(100vh - 120px); /* Ajustado para preencher o card todo já que o rodapé sumiu */
 }
 
-/* Formatação geral das linhas e fontes da tabela de fornecedores */
+.wrapper-tabela-fornecedores-scroll::-webkit-scrollbar { width: 4px; }
+.wrapper-tabela-fornecedores-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
+
 .tabela-dados-fornecedores {
-    width: 100%; /* Preenche 100% da largura interna da caixa de rolagem */
-    border-collapse: collapse; /* Une os contornos removendo linhas duplas */
-    font-size: 0.75rem; /* Letras compactas e elegantes de excelente legibilidade */
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 0.75rem; 
+    table-layout: fixed; /* Força o navegador a respeitar as larguras em % sem criar scroll horizontal */
 }
 
 .tabela-dados-fornecedores th, 
 .tabela-dados-fornecedores td {
-    padding: 8px 10px; /* Preenchimento interno sutil para espremer as linhas e caber na janela */
-    text-align: left; /* Alinha os textos à esquerda */
-    border-bottom: 1px solid #edf2f7; /* Linha sutil divisória horizontal entre os registros */
+    padding: 10px 8px !important; 
+    text-align: left; 
+    border-bottom: 1px solid #edf2f7; 
+    overflow: hidden;
+    text-overflow: ellipsis; /* Coloca reticências (...) se o nome for gigante, evitando o scroll */
+    white-space: nowrap; 
 }
 
-.tabela-dados-fornecedores th {
-    background-color: #f9fafb; /* Fundo cinza bem clarinho de destaque */
-    color: #4b5563; /* Letras em cinza opaco */
-    font-weight: 600; /* Deixa as palavras em negrito */
-    position: sticky; /* Mantém o cabeçalho fixo no topo ao rolar a lista para baixo */
-    top: 0; 
-    z-index: 5; 
-}
+.tabela-dados-fornecedores th { background-color: #f9fafb; color: #4b5563; font-weight: 600; position: sticky; top: 0; z-index: 5; }
 
-/* ==========================================================================
-   MÁGICA EXCLUSIVA DA IMAGEM: BADGES COLORIDAS PARA CADA TIPO DE FORNECEDOR
-   ========================================================================== */
-.badge-tipo {
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.68rem;
-    font-weight: 600;
-    display: inline-block;
-    text-align: center;
-}
+.badge-tipo { padding: 4px 8px !important; border-radius: 4px; font-size: 0.65rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
+.b-ingredientes { background-color: #e6f7ed; color: #1e7e45; } 
+.b-embalagens { background-color: #fff7ed; color: #c2410c; }   
+.b-laticinios { background-color: #e0f2fe; color: #0369a1; }   
+.b-hortifruti { background-color: #fce7f3; color: #be185d; }   
+.b-aromas { background-color: #f3e8ff; color: #6b21a8; }       
 
-/* Cores de fundo e letras foscas extraídas perfeitamente do modelo enviado */
-.b-ingredientes { background-color: #e6f7ed; color: #1e7e45; } /* Tom Verde Pastel */
-.b-embalagens { background-color: #fff7ed; color: #c2410c; }   /* Tom Laranja Pastel */
-.b-laticinios { background-color: #e0f2fe; color: #0369a1; }   /* Tom Azul Clarinho */
-.b-hortifruti { background-color: #fce7f3; color: #be185d; }   /* Tom Rosa Pastel */
-.b-aromas { background-color: #f3e8ff; color: #6b21a8; }       /* Tom Roxo Pastel */
-
-/* Configuração da coluna de ações rápidas (Editar e Excluir) */
-.celula-acoes-tabela {
-    text-align: center !important; 
-    display: flex; 
-    justify-content: center; 
-    gap: 6px; 
-    align-items: center;
-}
-
-.btn-acao-linha {
-    width: 24px; 
-    height: 24px; 
-    border-radius: 50%; 
-    border: 1px solid #d1d5db; 
-    background-color: #ffffff; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    transition: all 0.2s; 
-}
-
-.btn-acao-linha.edit:hover { background-color: #f3f4f6; border-color: #9ca3af; } 
+.celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 4px; align-items: center; }
+.btn-acao-linha { width: 22px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-acao-linha.edit:hover { background-color: #f3f4f6; } 
 .btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }   
-
-.svg-linha-acao {
-    width: 12px; 
-    height: 12px; 
-    stroke: #4b5563 !important; 
-    stroke-width: 2; 
-    fill: none !important; 
-}
-
+.svg-linha-acao { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
 .btn-acao-linha.del:hover .svg-linha-acao { stroke: #ef4444 !important; }
-
-/* Barra horizontal de rodapé localizada na base do card da direita */
-.rodape-paginacao-fornecedores {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    border-top: 1px solid #e5e7eb; 
-    padding-top: 6px; 
-}
-
-.info-contagem-itens { font-size: 0.72rem; color: #6b7280; }
-.controles-paginacao-direita { display: flex; gap: 12px; align-items: center; }
-
-.seletor-linhas-pagina select {
-    padding: 3px 6px; 
-    border: 1px solid #d1d5db; 
-    border-radius: 4px; 
-    font-size: 0.7rem; 
-    outline: none; 
-    color: #4b5563; 
-    background-color: #ffffff; 
-}
-
-.botoes-passar-pagina { display: flex; gap: 3px; }
-
-.btn-pagi {
-    background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    min-width: 22px; 
-    height: 22px; 
-    padding: 0 4px; 
-    border-radius: 4px; 
-    font-size: 0.72rem; 
-    color: #4b5563; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-}
-
-.ativo-pagi {
-    background-color: #273324 !important; /* Tom verde militar oficial */
-    color: #ffffff !important; 
-    border-color: #273324 !important; 
-    font-weight: 600; 
-}
-
-.svg-pag {
-    width: 10px; 
-    height: 10px; 
-    stroke: #4b5563 !important; 
-    stroke-width: 2; 
-    fill: none !important; 
-}

@@ -8,15 +8,42 @@ require_once "logica_php/home.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Gestão de Pedidos</title>
-    <!-- Inclusão das folhas de estilo voltando uma pasta para achar o diretório css/ -->
+    <!-- Inclusão das folhas de estilo unificadas a partir da subpasta -->
     <link rel="stylesheet" href="../css/barra_lateral.css">
     <link rel="stylesheet" href="../css/pedidos.css">
 </head>
 <body>
 
+    <!-- 💡 BANCO DE SUGESTÕES NATIVAS (DATALISTS) PARA O FILTRO ESTILO CHROME -->
+    <datalist id="listaClientesSugestoes">
+        <option value="Mariana Silva">
+        <option value="Carlos Eduardo">
+        <option value="Ana Beatriz">
+        <option value="Juliana Ribeiro">
+    </datalist>
+
+    <datalist id="listaProdutosSugestoes">
+        <option value="Bolo de Chocolate Premium" data-preco="85.00">
+        <option value="Cheesecake de Frutas Vermelhas" data-preco="95.00">
+        <option value="Torta de Limão Siciliano" data-preco="75.00">
+    </datalist>
+
+    <datalist id="listaSaboresSugestoes">
+        <option value="Tradicional">
+        <option value="Ninho com Morango">
+        <option value="Nutella com Leite Ninho">
+        <option value="Doce de Leite com Ameixa">
+    </datalist>
+
+    <datalist id="listaTamanhosSugestoes">
+        <option value="Pequeno (1kg)">
+        <option value="Médio (2kg)">
+        <option value="Grande (3kg)">
+    </datalist>
+
     <div class="container-dashboard">
         
-        <!-- Injeção da barra lateral localizada na mesma pasta corrente -->
+        <!-- Injeção da barra lateral componentizada -->
         <?php require_once "barra_lateral.php"; ?>
 
         <!-- ÁREA PRINCIPAL DA GESTÃO DE PEDIDOS -->
@@ -35,23 +62,20 @@ require_once "logica_php/home.php";
                 </div>
             </header>
 
-            <!-- Bloco Geral Dividido em Duas Colunas Principais -->
+            <!-- Bloco Grid Dividido em Duas Colunas (50% / 50%) -->
             <div class="grid-pedidos-container">
                 
-                <!-- COLUNA DA ESQUERDA: Criação do Pedido e Adição de Produtos -->
+                <!-- COLUNA DA ESQUERDA: Montagem do Pedido Corrente -->
                 <div class="coluna-esquerda-formulario">
                     
-                    <!-- 1. Bloco: Dados do Pedido -->
+                    <!-- 1. Bloco: Dados do Pedido (Cliente com seta e autocompletar combinados!) -->
                     <div class="card-formulario-pedidos">
                         <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Dados do Pedido</h3>
                         <div class="linha-inputs-inline">
                             <div class="grupo-input-pedidos">
                                 <label>Cliente</label>
-                                <select id="selectCliente">
-                                    <option value="">Selecione o cliente</option>
-                                    <option value="Mariana Silva">Mariana Silva</option>
-                                    <option value="Carlos Eduardo">Carlos Eduardo</option>
-                                </select>
+                                <!-- Mantém a setinha nativa do select combinando com a digitação livre do Chrome -->
+                                <input type="text" id="selectCliente" list="listaClientesSugestoes" placeholder="Selecione ou digite o cliente...">
                             </div>
                             <div class="grupo-input-pedidos">
                                 <label>Data do Pedido</label>
@@ -70,59 +94,35 @@ require_once "logica_php/home.php";
                             </div>
                         </div>
                     </div>
-                    <!-- 2. Bloco: Seleção do Produto -->
+                    <!-- 2. Bloco: Seleção do Produto (SEM BOTÕES LUPA, SEM BOTÕES + E COM AUTOCOMPLETAR COMPLETO) -->
                     <div class="card-formulario-pedidos">
                         <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Produto</h3>
+                        
+                        <!-- Fileira do Produto: Limpa, portando largura total e autocompletar -->
                         <div class="linha-produto-acoes">
                             <div class="grupo-input-pedidos esticar">
                                 <label>Produto</label>
-                                <select id="selectProduto">
-                                    <option value="">Selecione o produto</option>
-                                    <option value="Bolo de Chocolate Premium" data-preco="85.00">Bolo de Chocolate Premium</option>
-                                    <option value="Cheesecake de Frutas Vermelhas" data-preco="95.00">Cheesecake de Frutas Vermelhas</option>
-                                    <option value="Torta de Limão Siciliano" data-preco="75.00">Torta de Limão Siciliano</option>
-                                </select>
+                                <input type="text" id="selectProduto" list="listaProdutosSugestoes" placeholder="Selecione ou digite o produto...">
                             </div>
-                            <button type="button" class="btn-pesquisa">
-                                <svg class="svg-btn" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            </button>
-                            <button type="button" class="btn-cadastro-rapido">
-                                <svg class="svg-btn" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            </button>
                         </div>
 
+                        <!-- Fileira do Sabor: Limpa, portando largura total e autocompletar -->
                         <div class="linha-produto-acoes m-t-10">
                             <div class="grupo-input-pedidos esticar">
                                 <label>Sabor</label>
-                                <select id="selectSabor">
-                                    <option value="">Selecione o sabor</option>
-                                    <option value="Tradicional">Tradicional</option>
-                                    <option value="Ninho com Morango">Ninho com Morango</option>
-                                </select>
+                                <input type="text" id="selectSabor" list="listaSaboresSugestoes" placeholder="Selecione ou digite o sabor...">
                             </div>
-                            <button type="button" class="btn-pesquisa">
-                                <svg class="svg-btn" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            </button>
-                            <button type="button" class="btn-cadastro-rapido">
-                                <svg class="svg-btn" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            </button>
                         </div>
 
+                        <!-- Fileira do Tamanho: Limpa, portando largura total e autocompletar -->
                         <div class="linha-produto-acoes m-t-10">
                             <div class="grupo-input-pedidos esticar">
                                 <label>Tamanho</label>
-                                <select id="selectTamanho">
-                                    <option value="">Selecione o tamanho</option>
-                                    <option value="Pequeno (1kg)">Pequeno (1kg)</option>
-                                    <option value="Médio (2kg)">Médio (2kg)</option>
-                                    <option value="Grande (3kg)">Grande (3kg)</option>
-                                </select>
+                                <input type="text" id="selectTamanho" list="listaTamanhosSugestoes" placeholder="Selecione ou digite o tamanho...">
                             </div>
-                            <button type="button" class="btn-cadastro-rapido">
-                                <svg class="svg-btn" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            </button>
                         </div>
 
+                        <!-- Quantidade e Bloco de Exibição do Preço -->
                         <div class="linha-inputs-inline m-t-10">
                             <div class="grupo-input-pedidos">
                                 <label>Quantidade</label>
@@ -134,11 +134,13 @@ require_once "logica_php/home.php";
                             </div>
                         </div>
 
+                        <!-- Observações do Item -->
                         <div class="grupo-input-pedidos m-t-10">
                             <label>Observações</label>
                             <textarea id="txtObservacoes" placeholder="Digite observações sobre o item..."></textarea>
                         </div>
 
+                        <!-- Botão Adicionar ao Carrinho -->
                         <button type="button" class="btn-add-carrinho" id="btnAdicionarCarrinho">
                             <svg class="svg-btn-inline" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Adicionar ao Carrinho
                         </button>
@@ -154,8 +156,7 @@ require_once "logica_php/home.php";
                                         <th>Tam.</th>
                                         <th>Qtd.</th>
                                         <th>Preço</th>
-                                        <!-- Espaço para o botão de exclusão do item -->
-                                        <th style="width: 30px;"></th> </tr>
+                                        <th style="width: 35px; text-align: center;"></th>
                                     </tr>
                                 </thead>
                                 <tbody id="corpoTabelaCarrinho">
@@ -166,19 +167,20 @@ require_once "logica_php/home.php";
                         
                         <div class="rodape-valores-esquerda">
                             <span class="total-pedido-txt">Total do pedido: <strong id="totalPedidoDisplay">R$ 0,00</strong></span>
-                            <div class="botoes-acoes-esquerda">
-                                <button type="button" class="btn-aux-esquerda vermelho-btn" id="btnLimparCarrinho">🗑️ Limpar Carrinho</button>
-                                <button type="button" class="btn-acao-principal-esquerda" id="btnGerarPedido">⚙️ Gerar Pedido</button>
+                            <!-- BOTÕES CORRIGIDOS: Agora dividem o mesmo espaço de forma simétrica e destacada -->
+                            <div class="botoes-acoes-esquerda-unificados">
+                                <button type="button" class="btn-carrinho-base botao-limpar-lote" id="btnLimparCarrinho">🗑️ Limpar Carrinho</button>
+                                <button type="button" class="btn-carrinho-base botao-gerar-lote" id="btnGerarPedido">⚙️ Gerar Pedido</button>
                             </div>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- COLUNA DA DIREITA: Filtros e Área de Produção -->
+                <!-- COLUNA DA DIREITA: Filtros Unificados em Linha e Área de Produção -->
                 <div class="coluna-direita-producao">
                     
-                    <!-- 1. Bloco: Indicadores e Filtros de Produção -->
+                    <!-- 1. Bloco: Indicadores e Filtros de Produção UNIFICADOS EM UMA FILEIRA -->
                     <div class="card-producao-filtros">
                         <div class="topo-indicadores-producao">
                             <div class="badge-ind prod">⚙️ Em Produção: <span id="countProd">0</span></div>
@@ -187,20 +189,29 @@ require_once "logica_php/home.php";
                             <div class="badge-ind atr">🚨 Atrasados: <span id="countAtr">0</span></div>
                         </div>
 
-                        <div class="linha-filtros-producao">
-                            <input type="date" id="filtroData" value="2026-07-06">
-                            <select id="filtroStatus">
-                                <option value="">Selecione o status</option>
-                                <option value="Pendente">Pendente</option>
-                                <option value="Em Produção">Em Produção</option>
-                            </select>
-                            <button type="button" class="btn-filtrar-producao">
+                        <!-- NOVA FILEIRA HORIZONTAL INTEGRADORA DE QUATRO CAMPOS -->
+                        <div class="fatura-filtros-linha-unica">
+                            <div class="campo-filtros-unificados">
+                                <input type="date" id="filtroData" value="2026-07-06">
+                            </div>
+                            <div class="campo-filtros-unificados">
+                                <select id="filtroStatus">
+                                    <option value="">Status</option>
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Em Produção">Em Produção</option>
+                                </select>
+                            </div>
+                            <!-- Novo Campo de Pesquisa de Ordens solicitado por você -->
+                            <div class="campo-filtros-unificados esticar-pesquisa">
+                                <input type="text" id="pesquisaPedidoFila" placeholder="Pesquisar pedido...">
+                            </div>
+                            <button type="button" class="btn-filtrar-producao-novo">
                                 <svg class="svg-btn-inline" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filtrar
                             </button>
                         </div>
                     </div>
 
-                    <!-- 2. Bloco: Área de Detalhes / Lista de Produção -->
+                    <!-- 2. Bloco: Área de Detalhes / Lista de Produção (SEM O BOTÃO DETALHES) -->
                     <div class="card-lista-producao-status">
                         <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Detalhes</h3>
                         
@@ -212,9 +223,9 @@ require_once "logica_php/home.php";
                             </div>
                         </div>
 
-                        <div class="rodape-botoes-direita">
-                            <button type="button" class="btn-detalhes-final">Detalhes do Pedido</button>
-                            <button type="button" class="btn-finalizar-pedido-completo">✓ Finalizar Pedido</button>
+                        <!-- Botão único mantido conforme solicitado por você -->
+                        <div class="rodape-botoes-direita-unico">
+                            <button type="button" class="btn-finalizar-pedido-completo-unico">✓ Finalizar Pedido</button>
                         </div>
                     </div>
                 </div>
@@ -222,7 +233,5 @@ require_once "logica_php/home.php";
             </div>
         </main>
     </div>
-    <!-- Script de controle dinâmico -->
-    <script src="../js/pedidos.js"></script>
 </body>
 </html>

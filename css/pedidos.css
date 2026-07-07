@@ -1,208 +1,172 @@
 /* ==========================================================================
-   PARTE 1: RESET GLOBAL E COMPACTAÇÃO DA ÁREA DE CONTEÚDO PRINCIPAL
+   PARTE 1: RESET GLOBAL, GRID SIMÉTRICO E PADRONIZAÇÃO DE INPUTS
    ========================================================================== */
 
-/* Trava as margens de toda a folha de estilo e define a fonte padrão do painel */
+/* Trava as margens de toda a folha de estilo e define a altura máxima do monitor */
 .painel-conteudo-pedidos {
-    padding: 12px 25px 12px 90px !important; /* Espaçamento interno dando recuo para a barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro corporativo idêntico ao da imagem */
-    height: 100vh; /* Força o painel a ocupar exatamente 100% da altura da tela do monitor */
+    padding: 12px 25px 12px 90px !important; /* Recuo milimétrico dando espaço para a barra lateral */
+    background-color: #f3f4f6; /* Fundo cinza claro corporativo padrão de todo o sistema */
+    height: 100vh; /* Força o painel a ocupar exatamente 100% da altura da viewport */
     width: 100%; /* Ocupa 100% da largura restante da janela */
-    display: flex; /* Ativa o modo Flexbox para alinhar os blocos internos de forma flexível */
-    flex-direction: column; /* Organiza o fluxo dos blocos de cima para baixo (vertical) */
-    overflow: hidden; /* REGRA DE OURO: Bloqueia e elimina qualquer barra de rolagem global na tela */
+    display: flex; /* Ativa flexbox para alinhar o cabeçalho e as colunas */
+    flex-direction: column; /* Organiza o fluxo dos blocos de cima para baixo verticalmente */
+    overflow: hidden; /* REGRA DE OURO: Bloqueia e elimina qualquer barra de rolagem global na janela */
 }
 
-/* Formatação do espaçamento inferior do cabeçalho da página */
+/* Espaçamento sutil inferior abaixo do cabeçalho da página */
 .topo-pedidos { 
     margin-bottom: 8px; /* Margem pequena para espremer o conteúdo e caber na tela */
 }
 
-/* Alinhamento do ícone do documento ao lado dos textos do título */
+/* Alinhamento horizontal para o ícone e os textos do título principal */
 .titulo-pagina { 
-    display: flex; /* Coloca o ícone e os textos lado a lado */
-    align-items: center; /* Centraliza verticalmente o ícone com o texto */
-    gap: 12px; /* Espaçamento de 12 pixels entre o ícone e o texto */
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
 }
 
-/* Customização da caixinha branca que envolve o ícone do topo */
+/* Caixinha branca que envolve o ícone vetorial do topo */
 .icone-titulo {
-    background-color: #ffffff; /* Fundo branco puro */
-    width: 38px; /* Largura fixa da caixinha */
-    height: 38px; /* Altura fixa da caixinha */
-    border-radius: 8px; /* Cantos arredondados suaves */
-    display: flex; /* Ativa flexbox interno */
-    align-items: center; /* Centraliza o ícone SVG na vertical */
-    justify-content: center; /* Centraliza o ícone SVG na horizontal */
-    border: 1px solid #e5e7eb; /* Borda cinza bem clarinha */
+    background-color: #ffffff; 
+    width: 38px; 
+    height: 38px; 
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    border: 1px solid #e5e7eb; 
 }
 
-/* Estilização do ícone SVG matemático do cabeçalho */
 .svg-topo-ped { 
-    width: 18px; /* Tamanho horizontal do ícone */
-    height: 18px; /* Tamanho vertical do ícone */
-    stroke: #171d14; /* Cor verde musgo escuro na linha do desenho */
-    stroke-width: 2; /* Espessura da linha do desenho */
-    fill: none; /* Mantém o interior do desenho transparente */
+    width: 18px; 
+    height: 18px; 
+    stroke: #171d14; /* Tom verde musgo escuro oficial do MIRA */
+    stroke-width: 2; 
+    fill: none; 
 }
 
-/* Ajustes de tamanho e cores dos textos do cabeçalho */
-.titulo-pagina h1 { font-size: 1.2rem; color: #111827; } /* Título principal */
-.titulo-pagina p { font-size: 0.75rem; color: #6b7280; } /* Subtítulo explicativo */
+.titulo-pagina h1 { font-size: 1.2rem; color: #111827; } 
+.titulo-pagina p { font-size: 0.75rem; color: #6b7280; } 
 
-/* ==========================================================================
-   ESTRUTURA DE GRID: DIVISÃO EM DUAS COLUNAS LADO A LADO
-   ========================================================================== */
-
-/* Container que segura as duas metades da tela (Formulário e Produção) */
+/* Container que distribui a tela nas duas metades simétricas (50% / 50%) */
 .grid-pedidos-container {
-    display: flex; /* Coloca a coluna da esquerda e da direita lado a lado */
-    gap: 15px; /* Espaço de separação entre as duas colunas */
-    flex: 1; /* Força o bloco a se esticar e ocupar todo o espaço central da tela */
-    height: calc(100vh - 75px); /* Calcula a altura descontando o cabeçalho */
-    overflow: hidden; /* Impede que o grid crie barras de rolagem para fora dele */
+    display: flex; 
+    gap: 15px; 
+    flex: 1; 
+    height: calc(100vh - 75px); 
+    overflow: hidden; 
 }
 
-/* Configuração simétrica para as duas colunas ocuparem o mesmo tamanho (50% cada) */
 .coluna-esquerda-formulario, 
 .coluna-direita-producao {
-    flex: 1; /* Divide o espaço da tela em partes perfeitamente iguais */
-    display: flex; /* Ativa o flexbox para organizar seus cards internos */
-    flex-direction: column; /* Alinha os cards um embaixo do outro */
-    gap: 8px; /* Espaçamento de 8 pixels entre os cards */
-    height: 100%; /* Força as colunas a ocuparem toda a altura do grid */
-    overflow: hidden; /* Bloqueia rolagem nas colunas */
+    flex: 1; /* Divide as duas metades de forma idêntica */
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    height: 100%; 
+    overflow: hidden; 
 }
 
-/* Força apenas a coluna de formulários da esquerda a ter rolagem interna se a tela for muito pequena */
+/* Permite rolagem sutil apenas se o formulário esquerdo acumular muitos campos */
 .coluna-esquerda-formulario {
-    overflow-y: auto; /* Cria barra de rolagem interna sutil apenas se os campos não couberem */
+    overflow-y: auto; 
 }
 
-/* ==========================================================================
-   PARTE 2: DESIGN DOS CARDS, FORMULÁRIOS, INPUTS E PREÇOS (COLUNA ESQUERDA)
-   ========================================================================== */
-
-/* Definição de estilo padrão para todas as caixas brancas (Cards) do sistema */
+/* Definição estética de todas as caixas brancas (Cards) do sistema */
 .card-formulario-pedidos, 
 .card-tabela-carrinho, 
 .card-producao-filtros, 
 .card-lista-producao-status {
-    background-color: #ffffff; /* Define o fundo como branco puro */
-    border-radius: 8px; /* Arredonda os cantos das caixas em 8 pixels */
-    padding: 10px 15px; /* Define o espaçamento interno interno para as caixas */
-    border: 1px solid #e5e7eb; /* Aplica a linha sutil cinza ao redor do bloco */
+    background-color: #ffffff; 
+    border-radius: 8px; 
+    padding: 10px 15px; 
+    border: 1px solid #e5e7eb; 
 }
 
-/* Formatação padrão dos títulos dos blocos internos (Dados do Pedido, Produto, etc.) */
 .card-formulario-pedidos h3, 
 .card-lista-producao-status h3 {
-    font-size: 0.8rem; /* Define um tamanho de letra pequeno e discreto */
-    color: #374151; /* Aplica uma cor cinza escura elegante para os textos */
-    font-weight: 600; /* Deixa o título em negrito intermediário */
-    margin-bottom: 8px; /* Define um espaçamento abaixo do título do bloco */
-    display: flex; /* Coloca o ícone decorativo e o texto alinhados lado a lado */
-    align-items: center; /* Centraliza verticalmente o ícone com o texto */
-    gap: 8px; /* Deixa um espaço de 8 pixels entre o ícone e o texto do bloco */
+    font-size: 0.8rem; 
+    color: #374151; 
+    font-weight: 600; 
+    margin-bottom: 8px; 
+    display: flex; 
+    align-items: center; 
+    gap: 8px; 
 }
 
-/* Customização dos pequenos ícones SVG presentes nos títulos de cada Card */
 .svg-card-titulo { 
-    width: 14px; /* Define a largura fixa do ícone do card */
-    height: 14px; /* Define a altura fixa do ícone do card */
-    stroke: #171d14; /* Aplica a cor verde escura na linha do vetor */
-    stroke-width: 2; /* Define a espessura da linha do contorno */
-    fill: none; /* Mantém o preenchimento interno transparente */
+    width: 14px; 
+    height: 14px; 
+    stroke: #171d14; 
+    stroke-width: 2; 
+    fill: none; 
 }
 
-/* Organização em grade para colocar 4 caixas de texto ou seletores na mesma linha */
+/* Organização de fluxo flexível para os campos do formulário */
 .linha-inputs-inline { 
-    display: grid; /* Ativa o modo de grade matemática (Grid) */
-    grid-template-columns: repeat(4, 1fr); /* Divide a linha em 4 colunas de tamanhos idênticos */
-    gap: 10px; /* Define o espaço de separação de 10 pixels entre as caixas */
-    align-items: flex-end; /* Alinha a base de todas as caixas na mesma linha horizontal */
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas em linha para os dados do topo */
+    gap: 10px; 
+    align-items: flex-end; 
 }
 
-/* Organização de fluxo flexível para os campos com botões de ação na lateral */
+/* REMOÇÃO DOS BOTÕES LUPA E MAIS: Inputs assumem 100% da largura em linha */
 .linha-produto-acoes { 
-    display: flex; /* Coloca o campo select e os botões auxiliares lado a lado */
-    align-items: flex-end; /* Alinha a base do campo com a base dos botões */
-    gap: 4px; /* Deixa uma folga de 4 pixels entre os elementos */
+    width: 100%;
+    display: block;
+    margin-top: 5px;
 }
 
-/* Classe utilitária para forçar o campo select a ocupar todo o espaço restante */
 .esticar { 
-    flex: 1; /* Faz o seletor expandir e empurrar os botões para o canto */
+    flex: 1; 
 }
 
-/* Estruturação vertical para colocar a etiqueta (Label) acima da caixa de digitação */
 .grupo-input-pedidos { 
-    display: flex; /* Ativa o flexbox interno no grupo */
-    flex-direction: column; /* Força o Label a ficar no topo e o Input embaixo */
+    display: flex; 
+    flex-direction: column; 
 }
 
-/* Estilização das etiquetas de orientação dos campos */
 .grupo-input-pedidos label { 
-    font-size: 0.7rem; /* Define o tamanho da letra menor para a etiqueta */
-    color: #4b5563; /* Define uma cor cinza opaca discreta */
-    font-weight: 600; /* Aplica o negrito na etiqueta do campo */
-    margin-bottom: 3px; /* Deixa uma folga de 3 pixels antes da caixa de entrada */
+    font-size: 0.7rem; 
+    color: #4b5563; 
+    font-weight: 600; 
+    margin-bottom: 3px; 
 }
 
-/* Customização geral de todas as caixas de digitação, seletores e áreas de texto */
+/* Customização geral de caixas de entrada textuais e seletores autocompletar */
 .grupo-input-pedidos input, 
 .grupo-input-pedidos select, 
 .grupo-input-pedidos textarea {
-    padding: 6px 10px; /* Define o espaçamento interno interno para digitação sutil */
-    border: 1px solid #d1d5db; /* Aplica uma borda cinza padrão de formulários */
-    border-radius: 6px; /* Arredonda os cantos das caixas em 6 pixels */
-    font-size: 0.78rem; /* Define o tamanho do texto interno digitado */
-    outline: none; /* Desativa aquela borda preta grossa padrão ao clicar na caixa */
-    background-color: #ffffff; /* Força o fundo interno a ser branco puro */
-    color: #1f2937; /* Aplica uma cor escura nítida para os textos digitados */
+    padding: 6px 10px; 
+    border: 1px solid #d1d5db; 
+    border-radius: 6px; 
+    font-size: 0.78rem; 
+    outline: none; 
+    background-color: #ffffff; 
+    color: #1f2937; 
+    width: 100%; /* Força preenchimento total do espaço sem quebras */
 }
 
-/* Limitação de tamanho e comportamento da caixa de observações */
 .grupo-input-pedidos textarea { 
-    resize: none; /* Proíbe o usuário de puxar o canto e esticar a caixa, quebrando a tela */
-    height: 36px; /* Fixa a altura da área de observações para não estufar o card */
+    resize: none; 
+    height: 36px; 
 }
 
-/* Customização estética dos pequenos botões de lupa e cadastro rápido da tela */
-.btn-pesquisa, 
-.btn-cadastro-rapido {
-    padding: 6px 10px; /* Define o espaçamento interno interno dos botões */
-    background-color: #1f2937; /* Define a cor de fundo como cinza escuro corporativo */
-    color: white; /* Cor do caractere em branco */
-    border: none; /* Remove qualquer contorno padrão */
-    border-radius: 6px; /* Arredonda os cantos em 6 pixels */
-    cursor: pointer; /* Transforma a seta do mouse na mãozinha de clique */
-    display: flex; /* Ativa o flexbox interno para centralizar o vetor */
-    align-items: center; /* Centraliza verticalmente o ícone dentro do botão */
-    justify-content: center; /* Centraliza horizontalmente o ícone dentro do botão */
+/* ==========================================================================
+   PARTE 2: BOTÕES DO CARRINHO, FILTROS EM LINHA ÚNICA E ÁREA DE PRODUÇÃO
+   ========================================================================== */
+
+/* Oculta completamente os botões antigos de pesquisa e mais (+) */
+.btn-pesquisa, .btn-cadastro-rapido {
+    display: none !important; 
 }
 
-/* Altera a cor de fundo especificamente do botão de mais (+) para um tom verde combinando com a marca */
-.btn-cadastro-rapido { 
-    background-color: #273324; /* Verde musgo idêntico ao tom da barra lateral */
-}
-
-/* Estilização genérica dos pequenos vetores inseridos dentro dos botões laterais */
-.svg-btn { 
-    width: 14px; /* Define a largura fixa do ícone do botão */
-    height: 14px; /* Define a altura fixa do ícone do botão */
-    stroke: white; /* Define as linhas do desenho vetorial na cor branca */
-    stroke-width: 2; /* Espessura do contorno do desenho */
-    fill: none; /* Mantém o fundo transparente */
-}
-
-/* Alinhamento do bloco do mostrador de preço total na base */
+/* Mostrador de preço total na base da esquerda */
 .bloco-exibicao-preco { 
-    display: flex; /* Ativa flexbox no bloco */
-    flex-direction: column; /* Empilha a palavra Preço no topo do valor */
+    display: flex; 
+    flex-direction: column; 
 }
 
-/* Formatação do título do preço */
 .label-preco { 
     font-size: 0.7rem; 
     color: #4b5563; 
@@ -210,37 +174,35 @@
     margin-bottom: 3px; 
 }
 
-/* Customização da caixa de exibição de valor total acumulado do item selecionado */
 .caixa-preco-total {
-    background-color: #f3f4f6; /* Define o fundo como cinza claro fosco */
-    padding: 6px 10px; /* Espaçamento interno idêntico ao dos inputs */
-    border-radius: 6px; /* Cantos arredondados combinando */
-    font-size: 0.8rem; /* Letra ligeiramente maior */
-    font-weight: 700; /* Aplica negrito forte no valor */
-    text-align: center; /* Centraliza o texto "R$ 0,00" horizontalmente */
-    color: #111827; /* Aplica a cor preta em destaque */
-    border: 1px solid #e5e7eb; /* Adiciona uma linha sutil ao redor */
+    background-color: #f3f4f6; 
+    padding: 6px 10px; 
+    border-radius: 6px; 
+    font-size: 0.8rem; 
+    font-weight: 700; 
+    text-align: center; 
+    color: #111827; 
+    border: 1px solid #e5e7eb; 
 }
 
-/* Customização do botão largo de adicionar o item corrente ao carrinho */
+/* Botão largo de adicionar ao carrinho */
 .btn-add-carrinho {
-    width: 100%; /* Força o botão a se expandir por toda a largura do bloco */
-    background-color: #273324; /* Define o fundo verde musgo corporativo da confeitaria */
-    color: white; /* Cor da letra branca */
-    border: none; /* Elimina linhas de contorno */
-    padding: 8px; /* Define o preenchimento interno */
-    border-radius: 6px; /* Arredonda os cantos */
-    font-size: 0.8rem; /* Define a fonte */
-    font-weight: 600; /* Aplica o negrito */
-    cursor: pointer; /* Mãozinha de clique ativada */
-    margin-top: 8px; /* Cria uma folga em relação ao campo de cima */
-    display: flex; /* Alinha o ícone do carrinho e o texto lado a lado */
-    align-items: center; /* Centraliza na vertical */
-    justify-content: center; /* Centraliza na horizontal */
-    gap: 6px; /* Cria um espaço de 6 pixels entre o ícone e o texto */
+    width: 100%; 
+    background-color: #273324; 
+    color: white; 
+    border: none; 
+    padding: 8px; 
+    border-radius: 6px; 
+    font-size: 0.8rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    margin-top: 8px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 6px; 
 }
 
-/* Estilização do ícone do carrinho embutido no botão largo */
 .svg-btn-inline { 
     width: 14px; 
     height: 14px; 
@@ -249,57 +211,47 @@
     fill: none; 
 }
 
-/* ==========================================================================
-   PARTE 3: LISTAGEM DO CARRINHO, CARDS DE PRODUÇÃO E BOTÕES (DIREITA)
-   ========================================================================== */
-
-/* Caixa estrutural que envolve a tabela dinâmica do carrinho de compras */
+/* Tabela do Carrinho */
 .card-tabela-carrinho {
-    flex: 1; /* Faz a tabela ocupar todo o espaço restante da coluna da esquerda */
-    display: flex; /* Ativa o flexbox para organizar a tabela e os valores embaixo */
-    flex-direction: column; /* Coloca a tabela no topo e a barra de valores na base */
-    justify-content: space-between; /* Empurra o totalizador para o final do bloco */
-    overflow: hidden; /* Impede vazamentos de layout */
-    min-height: 180px; /* Define uma altura mínima fixa para manter a simetria */
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+    overflow: hidden; 
+    min-height: 180px; 
 }
 
-/* Área de rolagem sutil para a tabela caso ela acumule muitos doces */
 .wrapper-tabela-scroll { 
-    flex: 1; /* Ocupa o espaço livre interno do card */
-    overflow-y: auto; /* Adiciona uma barra de rolagem vertical apenas na tabela se acumular itens */
-    margin-bottom: 5px; /* Espaço sutil antes do rodapé de valores */
-    max-height: 100px; /* Limita a altura para travar tudo milimetricamente na janela */
+    flex: 1; 
+    overflow-y: auto; 
+    margin-bottom: 5px; 
+    max-height: 100px; 
 }
 
-/* Formatação geral das linhas e fontes da tabela de doces */
 .tabela-itens-pedido { 
-    width: 100%; /* Força a tabela a preencher 100% da largura interna do bloco */
-    border-collapse: collapse; /* Cola as linhas da tabela removendo espaços duplos */
-    font-size: 0.75rem; /* Define uma letra compacta e elegante para os itens */
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 0.75rem; 
 }
 
-/* Espaçamento e bordas das células de cabeçalho e dados da tabela */
 .tabela-itens-pedido th, 
 .tabela-itens-pedido td { 
-    padding: 6px 8px; /* Preenchimento interno sutil para economizar espaço vertical */
-    text-align: left; /* Alinha todos os textos à esquerda */
-    border-bottom: 1px solid #edf2f7; /* Desenha uma linha fina cinza dividindo os itens */
+    padding: 6px 8px; 
+    text-align: left; 
+    border-bottom: 1px solid #edf2f7; 
 }
 
-/* Cor de fundo sutil para a primeira linha (cabeçalho) da tabela */
 .tabela-itens-pedido th { 
-    background-color: #f9fafb; /* Cinza bem clarinho de destaque */
-    color: #4b5563; /* Letra em cinza escuro opaco */
-    font-weight: 600; /* Deixa o texto em negrito */
+    background-color: #f9fafb; 
+    color: #4b5563; 
+    font-weight: 600; 
 }
 
-/* Barra de fechamento de valores na base da tabela da esquerda */
 .rodape-valores-esquerda { 
-    border-top: 1px solid #e5e7eb; /* Cria uma linha divisória cinza acima das ações */
-    padding-top: 6px; /* Espaçamento interno sutil */
+    border-top: 1px solid #e5e7eb; 
+    padding-top: 6px; 
 }
 
-/* Texto do mostrador de valor acumulado do lote */
 .total-pedido-txt { 
     font-size: 0.8rem; 
     color: #374151; 
@@ -307,186 +259,165 @@
     margin-bottom: 5px; 
 }
 
-/* Destaca o valor numérico em reais do totalizador */
 .total-pedido-txt strong { 
-    color: #111827; /* Cor preta forte */
-    font-size: 0.95rem; /* Fonte ampliada */
+    color: #111827; 
+    font-size: 0.95rem; 
 }
 
-/* Alinhamento lado a lado para a fileira de botões na base da esquerda */
-.botoes-acoes-esquerda { 
-    display: flex; 
-    gap: 6px; /* Espaço de 6 pixels entre os botões */
+/* MUDANÇA: Os dois botões inferiores agora ganham tamanho e proporções idênticas */
+.botoes-acoes-esquerda-unificados {
+    display: grid;
+    grid-template-columns: 1fr 1fr; 
+    gap: 10px; 
+    width: 100%;
 }
 
-/* Estilo padrão para os botões secundários da esquerda (Editar e Excluir) */
-.btn-aux-esquerda {
-    background-color: #ffffff; /* Fundo branco limpo */
-    border: 1px solid #d1d5db; /* Borda cinza padrão */
-    padding: 6px 10px; /* Preenchimento interno */
-    border-radius: 6px; /* Cantos arredondados */
-    font-size: 0.75rem; /* Fonte compacta */
-    cursor: pointer; /* Mãozinha de clique */
-    color: #374151; /* Texto cinza escuro */
-}
-
-/* Customização de cor de alerta para o botão de exclusão ou limpeza */
-.btn-aux-esquerda.vermelho-btn { 
-    color: #ef4444; /* Letra vermelha viva */
-    border-color: #fca5a5; /* Borda avermelhada suave */
-}
-
-
-
-/* Botão de disparo principal para despachar o lote atual para a produção */
-.btn-acao-principal-esquerda {
-    flex: 1; /* Faz o botão ocupar todo o espaço restante da fileira */
-    background-color: #172016; /* Fundo escuro padrão da marca MIRA */
-    color: white; /* Letras brancas */
-    border: none; /* Sem contornos */
-    padding: 6px 10px; /* Preenchimento idêntico aos botões ao lado */
-    border-radius: 6px; /* Cantos arredondados */
-    font-size: 0.75rem; /* Fonte idêntica */
-    font-weight: 600; /* Negrito marcante */
-    cursor: pointer; /* Mãozinha de clique ativa */
-}
-
-/* COLUNA DA DIREITA: ESTEIRA DE PRODUÇÃO E MONITORAMENTO */
-
-/* Grade superior para organizar os 4 blocos coloridos de contadores */
-.topo-indicadores-producao { 
-    display: grid; /* Ativa o modo de grade */
-    grid-template-columns: repeat(4, 1fr); /* Divide em 4 colunas de tamanhos iguais */
-    gap: 6px; /* Espaço sutil de 6 pixels entre os contadores */
-    margin-bottom: 8px; /* Folga antes dos filtros */
-}
-
-/* Formatação das caixinhas coloridas de indicadores (Badges) */
-.badge-ind { 
-    padding: 4px; /* Espaçamento interno muito compacto para não quebrar a tela */
-    border-radius: 6px; /* Cantos arredondados */
-    font-size: 0.68rem; /* Fonte pequena e discreta */
-    font-weight: 600; /* Letras em negrito */
-    text-align: center; /* Centraliza as informações no meio do bloco */
-}
-
-/* Definição de cores exclusivas para cada status conforme a imagem enviada */
-.badge-ind.prod { background-color: #eff6ff; color: #1e40af; } /* Azul para Em Produção */
-.badge-ind.pend { background-color: #fff7ed; color: #9a3412; } /* Laranja para Pendentes */
-.badge-ind.fin { background-color: #f0fdf4; color: #166534; }  /* Verde para Finalizados */
-.badge-ind.atr { background-color: #fef2f2; color: #991b1b; }  /* Vermelho para Atrasados */
-
-/* Alinhamento em 3 colunas para a linha de filtros da esteira */
-.linha-filtros-producao { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 6px; 
-}
-
-/* Botão largo de disparo do filtro de encomendas */
-.btn-filtrar-producao {
-    background-color: #1f2937; /* Fundo cinza escuro */
-    color: white; /* Letras brancas */
-    border: none; 
+.btn-carrinho-base {
+    padding: 10px; 
     border-radius: 6px; 
-    font-size: 0.75rem; 
+    font-size: 0.8rem; 
+    font-weight: 600; 
     cursor: pointer; 
-    grid-column: span 3; /* Força o botão a ocupar as 3 colunas sozinho, ficando largo */
-    padding: 5px; /* Espaçamento compacto */
-    margin-top: 2px; /* Margem sutil superior */
-    display: flex; /* Alinha o vetor inline e o texto */
+    text-align: center; 
+    display: flex; 
     align-items: center; 
     justify-content: center; 
-    gap: 4px; 
+    gap: 6px; 
+    border: none; 
+    transition: all 0.2s ease;
 }
 
-/* Bloco central da direita que guarda os detalhes e a lista de produção ativa */
+.botao-limpar-lote { background-color: #2a3626; color: #ffffff; }
+.botao-gerar-lote { background-color: #172016; color: #ffffff; }
+.btn-carrinho-base:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ESTEIRA DE PRODUÇÃO (DIREITA) */
+.topo-indicadores-producao { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 6px; 
+    margin-bottom: 8px; 
+}
+
+.badge-ind { 
+    padding: 4px; 
+    border-radius: 6px; 
+    font-size: 0.68rem; 
+    font-weight: 600; 
+    text-align: center; 
+}
+
+.badge-ind.prod { background-color: #eff6ff; color: #1e40af; } 
+.badge-ind.pend { background-color: #fff7ed; color: #9a3412; } 
+.badge-ind.fin { background-color: #f0fdf4; color: #166534; }  
+.badge-ind.atr { background-color: #fef2f2; color: #991b1b; }  
+
+/* MUDANÇA: Organiza os 4 filtros (Data, Status, Busca e Botão) em linha única */
+.fatura-filtros-linha-unica {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    width: 100%;
+    margin-top: 4px;
+}
+
+.campo-filtros-unificados { flex: 1; }
+.esticar-pesquisa { flex: 2 !important; }
+
+.campo-filtros-unificados input,
+.campo-filtros-unificados select {
+    padding: 5px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    outline: none;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+.btn-filtrar-producao-novo {
+    background-color: #1f2937;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 29px; 
+}
+
 .card-lista-producao-status {
-    flex: 1; /* Ocupa todo o espaço restante vertical da coluna da direita */
+    flex: 1; 
     display: flex; 
     flex-direction: column; 
     justify-content: space-between; 
-    overflow: hidden; /* Corta vazamentos e trava barras de rolagem globais */
+    overflow: hidden; 
 }
 
-/* Caixa com rolagem interna que vai listar os cards de encomendas despachadas */
 .wrapper-producao-scroll { 
-    flex: 1; /* Ocupa a área livre central do bloco */
-    overflow-y: auto; /* Cria rolagem sutil vertical apenas se acumular muitos cards de produção */
+    flex: 1; 
+    overflow-y: auto; 
     display: flex; 
     flex-direction: column; 
-    gap: 6px; /* Espaço de 6 pixels entre cada card de encomenda */
+    gap: 6px; 
     margin-bottom: 5px; 
 }
 
-/* Estilização do estado vazio padrão (Prancheta central cinza) */
-.estado-vazio-producao { 
-    margin: auto auto; /* Força a prancheta a ficar perfeitamente no centro do bloco branco */
-    text-align: center; /* Centraliza os textos */
-    max-width: 220px; /* Limita a largura máxima do texto descritivo */
-}
-
-/* Customização do ícone de prancheta em código vetorial SVG */
-.svg-vazio { 
-    width: 32px; 
-    height: 32px; 
-    stroke: #9ca3af; /* Cor cinza clara fosca */
-    stroke-width: 1.5; 
-    fill: none; 
-    margin-bottom: 4px; /* Folga antes do título */
-}
-
+.estado-vazio-producao { margin: auto auto; text-align: center; max-width: 220px; }
+.svg-vazio { width: 32px; height: 32px; stroke: #9ca3af; stroke-width: 1.5; fill: none; margin-bottom: 4px; }
 .estado-vazio-producao h4 { font-size: 0.8rem; color: #374151; margin-bottom: 2px; }
 .estado-vazio-producao p { font-size: 0.7rem; color: #6b7280; line-height: 1.3; }
 
-/* Customização estética dos cards de encomendas geradas dinamicamente via JS */
 .card-pedido-producao-ativo {
-    background-color: #f9fafb; /* Fundo off-white sutil */
-    border: 1px solid #e5e7eb; /* Linha de contorno cinza clara */
+    background-color: #f9fafb; 
+    border: 1px solid #e5e7eb; 
     border-radius: 6px; 
-    padding: 8px 12px; /* Margem interna interna confortável */
-    display: flex; /* Coloca os textos na esquerda e a etiqueta de status na direita */
+    padding: 8px 12px; 
+    display: flex; 
     justify-content: space-between; 
     align-items: center; 
 }
 
-/* Textos informativos de dentro do card de produção */
 .info-card-prod h4 { font-size: 0.78rem; color: #111827; }
 .info-card-prod p { font-size: 0.7rem; color: #6b7280; }
 
-/* Pequenas etiquetas ovais de status do card dinâmico */
-.status-badge-dinamica { 
-    padding: 3px 6px; 
-    border-radius: 12px; 
-    font-size: 0.65rem; 
-    font-weight: 600; 
-}
-.status-badge-dinamica.pendente { background-color: #fff7ed; color: #c2410c; } /* Tom laranja suave */
-.status-badge-dinamica.producao { background-color: #f0fdf4; color: #16a34a; } /* Tom verde suave */
+.status-badge-dinamica { padding: 3px 6px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
+.status-badge-dinamica.pendente { background-color: #fff7ed; color: #c2410c; } 
+.status-badge-dinamica.producao { background-color: #f0fdf4; color: #16a34a; } 
 
-/* Fileira de botões de ação finais no rodapé da direita */
-.rodape-botoes-direita { 
-    display: flex; 
-    gap: 8px; 
-    border-top: 1px solid #e5e7eb; /* Cria uma linha divisória cinza */
-    padding-top: 6px; /* Espaço sutil superior */
+/* MUDANÇA: Rodapé direito limpo sem o botão de detalhes antigo */
+.rodape-botoes-direita-unico {
+    width: 100%;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 6px;
 }
 
-/* Customização dos botões finais largos da direita (Detalhes e Finalizar) */
-.btn-detalhes-final, 
-.btn-finalizar-pedido-completo { 
-    flex: 1; /* Força ambos a dividirem o espaço da fileira igualmente (50% cada) */
-    padding: 8px; 
-    border-radius: 6px; 
-    font-size: 0.78rem; 
-    font-weight: 600; 
-    cursor: pointer; 
+.btn-finalizar-pedido-completo-unico {
+    width: 100%;
+    background-color: #172016;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.btn-detalhes-final { background-color: white; border: 1px solid #d1d5db; color: #374151; }
-.btn-finalizar-pedido-completo { background-color: #273324; border: none; color: white; }
-
-/* Margem utilitária compacta de separação vertical */
-.m-t-10 { 
-    margin-top: 5px; 
+.btn-remover-item {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
 }
+.btn-remover-item:hover { background-color: #fef2f2; }
+.m-t-10 { margin-top: 5px; }
