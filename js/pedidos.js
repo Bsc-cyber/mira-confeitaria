@@ -133,109 +133,80 @@ document.addEventListener("DOMContentLoaded", function () {
             atualizarTabelaCarrinho();
         }
     });
+
 /* ==========================================================================
    PARTE 3: GERAÇÃO DA ORDEM DE PRODUÇÃO E LIMPEZA DE FLUXO (DIREITA)
    ========================================================================== */
 
-    // 3. EVENTO DE CLIQUE: Limpa todas as informações do carrinho corrente na esquerda
+    // 3. EVENTO DE CLIQUE: Botão auxiliar para limpar todo o carrinho de uma vez
     btnLimpar.addEventListener("click", function () {
-        itensCarrinho = []; // Esvazia o array de itens guardados em memória RAM
-        totalGeral = 0; // Zera o acumulador de faturamento do lote
-        corpoTabela.innerHTML = ""; // Apaga todas as linhas de doces de dentro da tabela HTML
-        totalDisplay.textContent = "R$ 0,00"; // Redefine o mostrador de totalizador para zero
-        precoDisplay.textContent = "R$ 0,00"; // Redefine o mostrador de subtotal para zero
-        selectProduto.value = ""; // Volta a seleção do produto para o estado inicial neutro
+        if(confirm("Tem certeza que deseja limpar todo o carrinho?")) {
+            itensCarrinho = []; // Zera a memória de itens
+            atualizarTabelaCarrinho(); // Redesenha a tabela (que agora ficará vazia)
+            selectProduto.value = ""; // Reseta o select de produto
+            precoDisplay.textContent = "R$ 0,00";
+        }
     });
-    
-// 4. EVENTO DE CLIQUE: Despacha o pedido para o Banco de Dados e gera o card
+
+    // 4. EVENTO DE CLIQUE: Despacha o pedido atual para a coluna da direita
     btnGerar.addEventListener("click", function () {
-        // Captura os dados do formulário
-        const clienteName = document.getElementById("selectCliente").value; 
+        // Captura o cliente e o status selecionados no topo
+        const clienteName = document.getElementById("selectCliente").value;
         const statusPed = document.getElementById("statusInicial").value; 
-        const dataPed = document.getElementById("dataPedido").value;
-        const dataEnt = document.getElementById("dataEntrega").value;
         
         // VALIDAÇÃO: Impede a geração se a tabela estiver vazia
         if (itensCarrinho.length === 0) {
             alert("A tabela do pedido está vazia! Adicione doces ao carrinho primeiro.");
-            return; 
+            return;
         }
 
-        // Muda o texto do botão para mostrar que está carregando
-        const textoOriginalBotao = btnGerar.innerHTML;
-        btnGerar.innerHTML = "⏳ Salvando...";
-        btnGerar.disabled = true;
+        if (!clienteName) {
+            alert("Selecione um cliente no topo da página antes de gerar o pedido.");
+            return;
+        }
         
-        // 1. PREPARA O PACOTE DE DADOS (JSON)
-        const pacoteDados = {
-            cliente: clienteName,
-            data_pedido: dataPed,
-            data_entrega: dataEnt,
-            status: statusPed,
-            total: totalGeral,
-            itens: itensCarrinho // Manda a lista inteira de doces!
-        };
-
-        // 2. ENVIA PARA O PHP USANDO FETCH (O Carteiro)
-        fetch('../php/salvar_pedido.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(pacoteDados)
-        })
-        .then(resposta => resposta.json()) // Lê a resposta do PHP
-        .then(retorno => {
-            
-            // SE O PHP AVISAR QUE SALVOU COM SUCESSO:
-            if (retorno.sucesso) {
-                // Esconde a prancheta vazia
-                if (estadoVazio) { estadoVazio.style.display = "none"; }
-                
-                // CRIA O CARD NA TELA (Seu código visual original)
-                const novoCardProd = document.createElement("div");
-                novoCardProd.className = "card-pedido-producao-ativo"; 
-                const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
-                
-                novoCardProd.innerHTML = `
-                    <div class="info-card-prod">
-                        <h4>
-                            <svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            Cliente: ${clienteName}
-                        </h4>
-                        <p style="margin-top: 4px;">🎂 Lote: ${itensCarrinho.length} doce(s) cadastrado(s)</p>
-                        <p style="margin-top: 2px;">💰 Líquido: R$ ${totalGeral.toFixed(2).replace('.', ',')}</p>
-                    </div>
-                    <span class="status-badge-dinamica ${classeBadge}">${statusPed}</span>
-                `;
-                
-                containerProducao.appendChild(novoCardProd);
-                
-                // Atualiza contadores numéricos
-                if (statusPed === "Pendente") {
-                    countPend.textContent = parseInt(countPend.textContent) + 1;
-                } else {
-                    countProd.textContent = parseInt(countProd.textContent) + 1;
-                }
-                
-                // Limpa o formulário esquerdo
-                btnLimpar.click();
-                
-                // Avisa o usuário!
-                alert("Sucesso! O pedido foi salvo no banco de dados e enviado para produção.");
-            } else {
-                // SE O PHP DEVOLVER ERRO (Ex: banco de dados fora do ar)
-                alert("Erro ao salvar o pedido no banco de dados:\n" + retorno.erro);
-            }
-        })
-        .catch(erro => {
-            alert("Erro de comunicação com o servidor.");
-            console.error(erro);
-        })
-        .finally(() => {
-            // Devolve o botão ao estado normal
-            btnGerar.innerHTML = textoOriginalBotao;
-            btnGerar.disabled = false;
-        });
+        // 1. Esconde a prancheta cinza de aviso "Nenhum item adicionado"
+        if (estadoVazio) { 
+            estadoVazio.style.display = "none"; 
+        }
+        
+        // 2. Desenha a caixinha estrutural (Card) da ordem de produção
+        const novoCardProd = document.createElement("div");
+        novoCardProd.className = "card-pedido-producao-ativo"; 
+        
+        // Define a cor da etiqueta baseado no status
+        const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
+        
+        // 3. Injeta os dados do pedido formatados no card da direita
+        novoCardProd.innerHTML = `
+            <div class="info-card-prod">
+                <h4>
+                    <svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Cliente: ${clienteName}
+                </h4>
+                <p style="margin-top: 4px;">🎂 Lote: ${itensCarrinho.length} doce(s) cadastrado(s)</p>
+                <p style="margin-top: 2px;">💰 Líquido: R$ ${totalGeral.toFixed(2).replace('.', ',')}</p>
+            </div>
+            <span class="status-badge-dinamica ${classeBadge}">${statusPed}</span>
+        `;
+        
+        // 4. Adiciona o card gerado na lista da coluna da direita
+        containerProducao.appendChild(novoCardProd);
+        
+        // 5. Atualiza os números dos contadores no topo da tela
+        if (statusPed === "Pendente") {
+            countPend.textContent = parseInt(countPend.textContent) + 1;
+        } else if (statusPed === "Em Produção") {
+            countProd.textContent = parseInt(countProd.textContent) + 1;
+        }
+        
+        // 6. Limpeza pós-geração: Zera a tela da esquerda para o próximo pedido
+        itensCarrinho = []; 
+        atualizarTabelaCarrinho(); 
+        document.getElementById("selectCliente").value = "";
+        selectProduto.value = "";
+        precoDisplay.textContent = "R$ 0,00";
+        
+        alert("Sucesso! O lote de pedidos foi despachado para a esteira de produção.");
     });
-});
+}); // <-- IMPORTANTE: Este fechamento encerra o arquivo! Não apague.
