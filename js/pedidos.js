@@ -31,24 +31,21 @@ document.addEventListener("DOMContentLoaded", function () {
     
     // 1. FUNÇÃO TÉCNICA: Calcula e atualiza dinamicamente o preço do item em tempo real na tela
     function atualizarPrecoDisplay() {
-        // Captura a tag <option> que está selecionada no momento dentro do seletor de produtos
-        const opcaoSelecionada = selectProduto.options[selectProduto.selectedIndex];
+        const valProduto = selectProduto.value;
+        const datalist = document.getElementById("listaProdutosSugestoes");
         
-        // Extrai o valor numérico escondido no atributo customizado 'data-preco' da tag selecionada
-        const precoUnitario = opcaoSelecionada.getAttribute("data-preco");
+        // Procura dentro da datalist a tag <option> que tenha o mesmo nome digitado no input
+        const opcaoSelecionada = Array.from(datalist.options).find(opt => opt.value === valProduto);
         
-        // Lê a quantidade atual informada pelo usuário, convertendo para número inteiro (padrão é 1)
+        // Se a opção existir na lista, captura o data-preco. Caso contrário, assume 0.
+        const precoUnitario = opcaoSelecionada ? opcaoSelecionada.getAttribute("data-preco") : 0;
         const qtd = parseInt(inputQuantidade.value) || 1;
         
-        // Verifica de forma lógica se existe um produto válido selecionado portando preço
-        if (precoUnitario) {
-            // Executa a multiplicação matemática básica: preço unitário vezes a quantidade
+        // Verifica se conseguiu extrair um valor válido
+        if (precoUnitario > 0) {
             const subtotal = parseFloat(precoUnitario) * qtd;
-            
-            // Injeta o resultado formatado em padrão moeda brasileira (R$) com duas casas decimais
             precoDisplay.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
         } else {
-            // Caso nenhum produto esteja marcado no seletor, redefine a caixinha cinza para zero
             precoDisplay.textContent = "R$ 0,00";
         }
     }
@@ -109,10 +106,20 @@ document.addEventListener("DOMContentLoaded", function () {
             return; 
         }
         
-        const precoUnit = parseFloat(selectProduto.options[selectProduto.selectedIndex].getAttribute("data-preco"));
+        // NOVO MÉTODO: Procura a opção na datalist para capturar o preço
+        const datalist = document.getElementById("listaProdutosSugestoes");
+        const opcaoSelecionada = Array.from(datalist.options).find(opt => opt.value === produtoNome);
+
+        if (!opcaoSelecionada) {
+            alert("Selecione um produto válido da lista sugerida para resgatar o preço correto!");
+            return;
+        }
+        
+        // Extrai o preço da opção encontrada
+        const precoUnit = parseFloat(opcaoSelecionada.getAttribute("data-preco"));
         const precoTotalItem = precoUnit * qtd;
         
-        // Em vez de desenhar o HTML aqui, nós guardamos na memória [cite: 88]
+        // Em vez de desenhar o HTML aqui, nós guardamos na memória
         itensCarrinho.push({ produtoNome, sabor, tamanho, qtd, precoTotalItem });
         
         // E chamamos a função inteligente que desenha tudo e calcula
