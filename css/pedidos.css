@@ -336,11 +336,7 @@
     border-color: #fca5a5; /* Borda avermelhada suave */
 }
 
-/* Estado visual do botão desativado automaticamente pelo sistema */
-.btn-aux-esquerda:disabled { 
-    opacity: 0.5; /* Deixa o botão semi-transparente */
-    cursor: not-allowed; /* Altera o mouse para o símbolo de bloqueado */
-}
+
 
 /* Botão de disparo principal para despachar o lote atual para a produção */
 .btn-acao-principal-esquerda {
