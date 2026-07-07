@@ -233,6 +233,7 @@ require_once "logica_php/home.php";
             </div>
         </main>
     </div>
+    <!-- Inclusão do script JavaScript específico para a página de pedidos. Direciona para a pasta correta -->
     <script src="../js/pedidos.js"></script>
 </body>
 </html>
