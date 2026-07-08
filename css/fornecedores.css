@@ -262,7 +262,7 @@ svg, path, rect, circle, polyline, line, polygon {
     flex: 1;
     overflow-y: auto !important;
     overflow-x: hidden !important; /* Mata o scroll horizontal inferior */
-    border: 1px solid #edf2f7;
+    border: 1px solid #b8bfc7;
     border-radius: 6px;
     margin-bottom: 6px;
     max-height: calc(100vh - 170px);
@@ -271,16 +271,16 @@ svg, path, rect, circle, polyline, line, polygon {
 .wrapper-tabela-fornecedores-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
 
 .tabela-dados-fornecedores { width: 100% !important; border-collapse: collapse; font-size: 0.75rem; table-layout: fixed !important; }
-.tabela-dados-fornecedores th, .tabela-dados-fornecedores td { padding: 10px 12px !important; text-align: left; border-bottom: 1px solid #edf2f7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tabela-dados-fornecedores th, .tabela-dados-fornecedores td { padding: 10px 12px !important; text-align: left; border-bottom: 1px solid #b8bfc7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tabela-dados-fornecedores th { background-color: #f9fafb; color: #4b5563; font-weight: 600; position: sticky; top: 0; z-index: 5; }
 
 /* Badges Coloridas Pastéis Conforme o seu Mockup */
 .badge-tipo { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
-.b-ingredientes { background-color: #e6f7ed; color: #1e7e45; } 
-.b-embalagens { background-color: #fff7ed; color: #c2410c; }   
-.b-laticinios { background-color: #e0f2fe; color: #0369a1; }   
-.b-hortifruti { background-color: #fce7f3; color: #be185d; }   
-.b-aromas { background-color: #f3e8ff; color: #6b21a8; }       
+.b-ingredientes { background-color: #88c5a1; color: #082d17; } 
+.b-embalagens { background-color: #c0795d; color: #591a01; }   
+.b-laticinios { background-color: #387ba8; color: #022e46; }   
+.b-hortifruti { background-color: #ff76c4; color: #6c0631; }   
+.b-aromas { background-color: #8256b1; color: #1a012f; }       
 
 /* Alinhamento dos mini botões circulares de ação da linha */
 .celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
