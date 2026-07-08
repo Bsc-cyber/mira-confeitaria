@@ -25,6 +25,45 @@ document.addEventListener("DOMContentLoaded", function () {
     let itensCarrinho = [];
     let totalGeral = 0;
     
+    // ==========================================================================
+    // CARREGAMENTO AUTOMÁTICO DOS PEDIDOS DO BANCO
+    // ==========================================================================
+    function carregarPedidosDoBanco() {
+        fetch('buscar_todos_pedidos.php')
+        .then(res => res.json())
+        .then(retorno => {
+            if (retorno.sucesso && retorno.pedidos.length > 0) {
+                // Esconde a div de "Nenhum item adicionado"
+                if (estadoVazio) { estadoVazio.style.display = "none"; }
+
+                // Passa por cada pedido que veio do banco e desenha o card
+                retorno.pedidos.forEach(pedido => {
+                    const novoCardProd = document.createElement("div");
+                    novoCardProd.className = "card-pedido-producao-ativo"; 
+                    const classeBadge = (pedido.status === "Pendente") ? "pendente" : "producao";
+                    
+                    novoCardProd.innerHTML = `
+                        <div class="info-card-prod">
+                            <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${pedido.cliente}</h4>
+                            <p style="margin-top: 4px;"><strong>📦 Pedido #${pedido.id}</strong> • 🎂 Lote: ${pedido.qtd_itens} doce(s)</p>
+                            <p style="margin-top: 2px;">💰 Líquido: R$ ${parseFloat(pedido.total).toFixed(2).replace('.', ',')}</p>
+                            
+                            <button type="button" class="btn-ver-detalhes" data-id="${pedido.id}">👁️ Ver Detalhes</button>
+                        </div>
+                        <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${pedido.id}">${pedido.status}</span>
+                    `;
+                    
+                    containerProducao.appendChild(novoCardProd);
+                });
+            }
+        })
+        .catch(erro => console.error("Erro ao puxar pedidos:", erro));
+    }
+
+    // Chama a função imediatamente ao abrir a tela
+    carregarPedidosDoBanco();
+    // ==========================================================================
+    
     /* ==========================================================================
        PARTE 1: CÁLCULO DE PREÇO EM TEMPO REAL (CORRIGIDO PARA DATALIST)
        ========================================================================== */
@@ -298,7 +337,7 @@ document.addEventListener("DOMContentLoaded", function () {
             btnSalvar.disabled = false;
         });
     });
-    
+
     // AÇÃO DE CANCELAR O PEDIDO
     document.getElementById("btnCancelarPedidoModal").addEventListener("click", function() {
         // A caixinha de pergunta nativa do navegador
