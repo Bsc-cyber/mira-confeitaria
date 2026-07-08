@@ -386,8 +386,8 @@
 .info-card-prod p { font-size: 0.7rem; color: #6b7280; }
 
 .status-badge-dinamica { padding: 3px 6px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
-.status-badge-dinamica.pendente { background-color: #ff6122; color: #c2410c; } 
-.status-badge-dinamica.producao { background-color: #2cea72; color: #16a34a; } 
+.status-badge-dinamica.pendente { background-color: #ff6122; color: #000000; } 
+.status-badge-dinamica.producao { background-color: #2cea72; color: #000000; } 
 
 /* MUDANÇA: Rodapé direito limpo sem o botão de detalhes antigo */
 .rodape-botoes-direita-unico {
