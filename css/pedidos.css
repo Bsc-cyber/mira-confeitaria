@@ -457,3 +457,22 @@
 .modal-rodape { padding: 15px; border-top: 1px solid #e5e7eb; text-align: right; background-color: #f9fafb; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
 .btn-salvar-status { background-color: #172016; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.8rem; }
 .btn-salvar-status:hover { background-color: #273324; }
+
+/* ==========================================================================
+   PARTE 5: Botão cancerlar pedido
+   ========================================================================== */
+
+.btn-cancelar-pedido {
+    background-color: transparent; 
+    color: #dc2626; /* Vermelho escuro */
+    border: 1px solid #dc2626; 
+    padding: 8px 15px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+.btn-cancelar-pedido:hover {
+    background-color: #fef2f2; /* Fundo levemente vermelho ao passar o mouse */
+}

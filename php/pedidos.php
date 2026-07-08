@@ -257,7 +257,8 @@ require_once "logica_php/home.php";
                     </select>
                 </div>
             </div>
-            <div class="modal-rodape">
+            <div class="modal-rodape" style="display: flex; justify-content: space-between; align-items: center;">
+                <button type="button" class="btn-cancelar-pedido" id="btnCancelarPedidoModal">🗑️ Cancelar Pedido</button>
                 <button type="button" class="btn-salvar-status" id="btnSalvarStatusModal">💾 Salvar Alteração</button>
             </div>
         </div>

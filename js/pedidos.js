@@ -298,5 +298,40 @@ document.addEventListener("DOMContentLoaded", function () {
             btnSalvar.disabled = false;
         });
     });
+    
+    // AÇÃO DE CANCELAR O PEDIDO
+    document.getElementById("btnCancelarPedidoModal").addEventListener("click", function() {
+        // A caixinha de pergunta nativa do navegador
+        const confirmacao = confirm(`Tem certeza que deseja CANCELAR e EXCLUIR o Pedido #${idPedidoAtualModal}? Essa ação não pode ser desfeita.`);
+        
+        if (confirmacao) {
+            const btnCancelar = this;
+            const textoOriginal = btnCancelar.innerHTML;
+            btnCancelar.innerHTML = "⏳ Excluindo...";
+            btnCancelar.disabled = true;
 
+            // Manda o ID para o novo arquivo PHP apagar
+            fetch(`excluir_pedido.php?id=${idPedidoAtualModal}`, { method: 'GET' })
+            .then(res => res.json())
+            .then(retorno => {
+                if (retorno.sucesso) {
+                    // Encontra o card lá fora pelo ID da badge e remove ele da tela
+                    const cardParaRemover = document.getElementById(`badge-pedido-${idPedidoAtualModal}`).closest('.card-pedido-producao-ativo');
+                    if (cardParaRemover) {
+                        cardParaRemover.remove();
+                    }
+                    
+                    // Fecha o modal
+                    modal.className = "modal-oculto"; 
+                } else {
+                    alert("Erro ao excluir: " + retorno.erro);
+                }
+            })
+            .catch(erro => alert("Erro de comunicação com o excluir_pedido.php"))
+            .finally(() => {
+                btnCancelar.innerHTML = textoOriginal;
+                btnCancelar.disabled = false;
+            });
+        }
+    });
 }); // <-- O FECHAMENTO DO ARQUIVO CONTINUA AQUI NO FINALZINHO!);
