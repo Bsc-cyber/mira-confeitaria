@@ -196,16 +196,15 @@ require_once "logica_php/home.php";
                             </div>
                             <div class="campo-filtros-unificados">
                                 <select id="filtroStatus">
-                                    <option value="">Status</option>
+                                    <option value="">Todos</option>
                                     <option value="Pendente">Pendente</option>
                                     <option value="Em Produção">Em Produção</option>
                                 </select>
                             </div>
-                            <!-- Novo Campo de Pesquisa de Ordens solicitado por você -->
                             <div class="campo-filtros-unificados esticar-pesquisa">
-                                <input type="text" id="pesquisaPedidoFila" placeholder="Pesquisar pedido...">
+                                <input type="text" id="filtroBusca" placeholder="Pesquisar pedido...">
                             </div>
-                            <button type="button" class="btn-filtrar-producao-novo">
+                            <button type="button" id="btnFiltrar" class="btn-filtrar-producao-novo">
                                 <svg class="svg-btn-inline" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> Filtrar
                             </button>
                         </div>
