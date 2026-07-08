@@ -233,6 +233,35 @@ require_once "logica_php/home.php";
             </div>
         </main>
     </div>
+    <!-- MODAL DE DETALHES DO PEDIDO (INICIALMENTE OCULTO) -->
+    <div id="modalDetalhes" class="modal-oculto">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h3 id="modalTitulo">Pedido #00</h3>
+                <button type="button" id="btnFecharModal">❌</button>
+            </div>
+            <div class="modal-corpo">
+                <p><strong>Cliente:</strong> <span id="modalCliente"></span></p>
+                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #e5e7eb;">
+                <h4 style="font-size: 0.8rem; color: #4b5563; margin-bottom: 5px;">Itens do Pedido:</h4>
+                <ul id="modalListaItens" class="lista-itens-modal">
+                    </ul>
+                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #e5e7eb;">
+                <p class="modal-total"><strong>Total:</strong> <strong id="modalTotal">R$ 0,00</strong></p>
+                
+                <div class="modal-status-box">
+                    <label style="font-size: 0.75rem; font-weight: bold;">Status da Produção:</label>
+                    <select id="modalSelectStatus">
+                        <option value="Pendente">Pendente</option>
+                        <option value="Em Produção">Em Produção</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-rodape">
+                <button type="button" class="btn-salvar-status" id="btnSalvarStatusModal">💾 Salvar Alteração</button>
+            </div>
+        </div>
+    </div>
     <!-- Inclusão do script JavaScript específico para a página de pedidos. Direciona para a pasta correta -->
     <script src="../js/pedidos.js"></script>
 </body>

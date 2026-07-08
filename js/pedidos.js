@@ -156,27 +156,34 @@ document.addEventListener("DOMContentLoaded", function () {
         // ENVIO SILENCIOSO PARA O PHP (FETCH)
         fetch('../php/salvar_pedido.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },    
             body: JSON.stringify(pacoteDados)
         })
+
         .then(resposta => resposta.json())
         .then(retorno => {
             if (retorno.sucesso) {
                 // Desenha a tela se salvou com sucesso
                 if (estadoVazio) { estadoVazio.style.display = "none"; }
                 
+                // Cria o visual do card na tela
                 const novoCardProd = document.createElement("div");
                 novoCardProd.className = "card-pedido-producao-ativo"; 
                 const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
                 
+                // 👇 ESTE É O BLOCO QUE GANHOU O BOTÃO 👇
                 novoCardProd.innerHTML = `
                     <div class="info-card-prod">
                         <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${clienteName}</h4>
-                        <p style="margin-top: 4px;">🎂 Lote: ${itensCarrinho.length} doce(s) cadastrado(s)</p>
+                        <p style="margin-top: 4px;"><strong>📦 Pedido #${retorno.id_pedido}</strong> • 🎂 Lote: ${itensCarrinho.length} doce(s)</p>
                         <p style="margin-top: 2px;">💰 Líquido: R$ ${totalGeral.toFixed(2).replace('.', ',')}</p>
+                        
+                        <button type="button" class="btn-ver-detalhes" data-id="${retorno.id_pedido}">👁️ Ver Detalhes</button>
                     </div>
-                    <span class="status-badge-dinamica ${classeBadge}">${statusPed}</span>
+                    
+                    <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${retorno.id_pedido}">${statusPed}</span>
                 `;
+                // 👆 ------------------------------------------------ 👆
                 
                 containerProducao.appendChild(novoCardProd);
                 
@@ -202,9 +209,94 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Erro de comunicação com o arquivo PHP.");
             console.error(erro);
         })
-        .finally(() => {
+    .finally(() => {
             btnGerar.innerHTML = textoOriginalBotao;
             btnGerar.disabled = false;
         });
     });
-});
+
+    /* ==========================================================================
+       PARTE 4: LÓGICA DO MODAL DIRETAMENTE LIGADO AO BANCO DE DADOS
+       ========================================================================== */
+    const modal = document.getElementById("modalDetalhes");
+    let idPedidoAtualModal = null; 
+
+    // Escuta os cliques no botão "Ver Detalhes"
+    containerProducao.addEventListener("click", function(evento) {
+        if (evento.target.classList.contains("btn-ver-detalhes")) {
+            const id = evento.target.getAttribute("data-id");
+            idPedidoAtualModal = id;
+            
+            const btnClicado = evento.target;
+            const textoOriginal = btnClicado.innerHTML;
+            btnClicado.innerHTML = "⏳ Buscando..."; 
+            
+            // BUSCA OS DADOS REAIS NO BANCO
+            fetch(`buscar_detalhes_pedido.php?id=${id}`)
+            .then(res => res.json())
+            .then(retorno => {
+                btnClicado.innerHTML = textoOriginal; 
+                
+                if (retorno.sucesso) {
+                    const pedido = retorno.dados;
+
+                    document.getElementById("modalTitulo").textContent = `📦 Pedido #${pedido.id}`;
+                    document.getElementById("modalCliente").textContent = pedido.cliente;
+                    document.getElementById("modalTotal").textContent = `R$ ${parseFloat(pedido.total).toFixed(2).replace('.', ',')}`;
+                    document.getElementById("modalSelectStatus").value = pedido.status;
+
+                    const listaUl = document.getElementById("modalListaItens");
+                    listaUl.innerHTML = "";
+                    pedido.itens.forEach(item => {
+                        listaUl.innerHTML += `<li><span>${item.quantidade}x ${item.produto}</span> <strong>R$ ${parseFloat(item.preco_total).toFixed(2).replace('.', ',')}</strong></li>`;
+                    });
+
+                    modal.className = "modal-ativo"; 
+                } else {
+                    alert("Erro do banco: " + retorno.erro);
+                }
+            })
+            .catch(erro => {
+                btnClicado.innerHTML = textoOriginal;
+                alert("Erro de comunicação com o buscar_detalhes_pedido.php");
+            });
+        }
+    });
+
+    // Fechar o modal no 'X'
+    document.getElementById("btnFecharModal").addEventListener("click", () => modal.className = "modal-oculto");
+
+    // SALVAR O NOVO STATUS NO BANCO DE DADOS
+    document.getElementById("btnSalvarStatusModal").addEventListener("click", function() {
+        const novoStatus = document.getElementById("modalSelectStatus").value;
+        const btnSalvar = this;
+
+        btnSalvar.innerHTML = "⏳ Salvando...";
+        btnSalvar.disabled = true;
+
+        fetch('atualizar_status_pedido.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: idPedidoAtualModal, status: novoStatus })
+        })
+        .then(res => res.json())
+        .then(retorno => {
+            if (retorno.sucesso) {
+                const badgeFora = document.getElementById(`badge-pedido-${idPedidoAtualModal}`);
+                if(badgeFora) {
+                    badgeFora.textContent = novoStatus;
+                    badgeFora.className = `status-badge-dinamica ${novoStatus === "Pendente" ? "pendente" : "producao"}`;
+                }
+                modal.className = "modal-oculto"; 
+            } else {
+                alert("Erro ao atualizar: " + retorno.erro);
+            }
+        })
+        .catch(erro => alert("Erro ao salvar status no PHP."))
+        .finally(() => {
+            btnSalvar.innerHTML = "💾 Salvar Alteração";
+            btnSalvar.disabled = false;
+        });
+    });
+
+}); // <-- O FECHAMENTO DO ARQUIVO CONTINUA AQUI NO FINALZINHO!);

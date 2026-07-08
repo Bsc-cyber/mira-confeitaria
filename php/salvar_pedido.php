@@ -51,8 +51,12 @@ try {
     // Se chegou até aqui sem erros, confirma o salvamento
     $conexao->commit();
 
-    // Avisa ao JavaScript que deu tudo certo!
-    echo json_encode(['sucesso' => true, 'mensagem' => 'Pedido salvo com sucesso!']);
+    // Avisa ao JavaScript que deu tudo certo e DEVOLVE O ID GERADO!
+    echo json_encode([
+        'sucesso' => true, 
+        'mensagem' => 'Pedido salvo com sucesso!',
+        'id_pedido' => $id_pedido
+    ]);
 
 } catch (Exception $e) {
     // Se der erro, desfaz tudo usando a variável correta
