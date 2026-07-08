@@ -12,7 +12,7 @@ svg, path, rect, circle, polyline, line, polygon {
 /* Prende todo o conteúdo na tela e elimina rolagem na janela do navegador */
 .painel-conteudo-fornecedores {
     padding: 12px 25px 12px 90px !important; /* Respiro para não sumir atrás da barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro padrão MIRA */
+    background-color: #dcdddf; /* Fundo cinza claro padrão MIRA */
     height: 100vh; /* Ocupa exatamente 100% da altura do monitor */
     width: 100%; 
     display: flex; 

@@ -5,7 +5,7 @@
 /* Trava as margens de toda a folha de estilo e define a altura máxima do monitor */
 .painel-conteudo-pedidos {
     padding: 12px 25px 12px 90px !important; /* Recuo milimétrico dando espaço para a barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro corporativo padrão de todo o sistema */
+    background-color: #dcdddf; /* Fundo cinza claro corporativo padrão de todo o sistema */
     height: 100vh; /* Força o painel a ocupar exatamente 100% da altura da viewport */
     width: 100%; /* Ocupa 100% da largura restante da janela */
     display: flex; /* Ativa flexbox para alinhar o cabeçalho e as colunas */

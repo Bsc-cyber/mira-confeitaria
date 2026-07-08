@@ -5,7 +5,7 @@
 /* Trava todo o painel de receitas na tela eliminando barras de rolagem globais */
 .painel-conteudo-receitas {
     padding: 12px 25px 12px 90px !important; /* Espaço para a barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro oficial */
+    background-color: #dcdddf; /* Fundo cinza claro oficial */
     height: 100vh; /* Altura máxima da janela */
     width: 100%; 
     display: flex; 

@@ -10,7 +10,7 @@ svg, path, rect, circle, polyline, line, polygon {
 /* Painel mestre travado na viewport do monitor, seguindo o padrão MIRA */
 .painel-conteudo-config {
     padding: 12px 25px 12px 90px !important; /* Espaço para a barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro oficial das telas de sucesso */
+    background-color: #dcdddf; /* Fundo cinza claro oficial das telas de sucesso */
     height: 100vh; 
     width: 100%; 
     display: flex; 
