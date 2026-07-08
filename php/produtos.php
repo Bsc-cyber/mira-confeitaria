@@ -1,24 +1,21 @@
 <?php 
-// SEGURANÇA MÁXIMA: Executa o script que valida a sessão do usuário logado antes de desenhar a página
+// SEGURANÇA MÁXIMA: Valida se o usuário fez login puxando a regra da subpasta
 require_once "logica_php/home.php"; 
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <!-- Define a codificação padrão de caracteres para aceitar acentuações em português -->
     <meta charset="UTF-8">
-    <!-- Ajusta a visualização para se adaptar perfeitamente ao tamanho da janela de qualquer monitor -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Cadastro de Produtos</title>
-    
-    <!-- Inclusão das folhas de estilo: primeiro a barra lateral fixa e depois o layout específico de produtos -->
+    <!-- Inclusão das folhas de estilo unificadas de forma local -->
     <link rel="stylesheet" href="../css/barra_lateral.css">
-    <!-- O "?v=9.0" força o navegador a limpar o cache antigo e carregar o design novo imediatamente -->
-    <link rel="stylesheet" href="../css/produtos.css?v=9.0">
+    <!-- Força o carregamento do CSS renovado na versão 12.0 -->
+    <link rel="stylesheet" href="../css/produtos.css?v=12.0">
 </head>
 <body>
 
-    <!-- 💡 DATALISTS: Banco de sugestões nativas do HTML5 que cria o autocompletar inteligente estilo Chrome -->
+    <!-- 💡 BANCO NATIVO DE SUGESTÕES (DATALISTS) PARA O AUTOCOMPLETAR CHROME -->
     <datalist id="listaCategorias">
         <option value="Bolos">
         <option value="Cheesecakes">
@@ -26,149 +23,120 @@ require_once "logica_php/home.php";
         <option value="Doces">
     </datalist>
 
-    <!-- container-dashboard: Envelopa a barra lateral e a área útil principal lado a lado -->
     <div class="container-dashboard">
         
-        <!-- Injeta dinamicamente a barra lateral componentizada no sistema -->
+        <!-- Injeção da barra lateral componentizada -->
         <?php require_once "barra_lateral.php"; ?>
 
-        <!-- main: Define a área principal da tela portando a blindagem de tamanho e fundo cinza de pedidos -->
+        <!-- ÁREA PRINCIPAL DA GESTÃO DE PRODUTOS -->
         <main class="painel-conteudo-produtos">
             
-            <!-- header: Faixa do topo que segura o título da página e as ações de busca na direita -->
+            <!-- Cabeçalho Superior Limpo sem buscas soltas no topo direito, igual ao seu print -->
             <header class="topo-produtos">
-                
-                <!-- Lado Esquerdo do Topo: Título e subtítulo orientadores -->
                 <div class="titulo-pagina-produtos">
-                    <!-- Caixinha branca flutuante do ícone -->
                     <div class="icone-titulo-prod">
-                        <!-- Desenha o ícone vetorial de cubo/caixa em linhas verdes escuras -->
                         <svg class="svg-topo-prod" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                     </div>
                     <div class="alinhamento-texto-topo">
-                        <h1>Cadastro de Produtos</h1>
-                        <p>Gerencie e organize os produtos da sua confeitaria</p>
+                        <h1>Produtos</h1>
+                        <p>Cadastre e gerencie os produtos da sua confeitaria.</p>
                     </div>
-                </div>
-
-                <!-- Lado Direito do Topo: Barra de busca global e botões rápidos -->
-                <div class="controles-topo-produtos">
-                    <!-- Envelopa a lupa e o campo de texto na mesma área visual branca -->
-                    <div class="wrapper-busca-topo-prod">
-                        <svg class="svg-busca-topo" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" id="inputPesquisaGlobal" placeholder="Pesquisar produto...">
-                    </div>
-                    <!-- Botão quadrado branco de filtro rápido -->
-                    <button type="button" class="btn-filtro-topo">
-                        <svg class="svg-btn-inline" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                    </button>
-                    <!-- Botão verde escuro de disparo para focar em um novo registro -->
-                    <button type="button" class="btn-novo-produto-topo">
-                        <svg class="svg-btn-inline" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Novo Produto
-                    </button>
                 </div>
             </header>
-            <!-- grid-produtos-container: Divide a tela nas duas metades simétricas (50% / 50%) -->
+            <!-- Bloco Geral Dividido em Duas Colunas Simétricas (50% / 50%) -->
             <div class="grid-produtos-container">
                 
-                <!-- COLUNA DA ESQUERDA: Ativa a rolagem mestre na coluna inteira, idêntico a Pedidos -->
-                <form id="formCadastroProduto" class="coluna-esquerda-formulario">
-                    
-                    <!-- Card Solto 1: Bloco flutuante contendo os campos de digitação do produto -->
-                    <div class="card-formulario-produtos">
-                        <!-- Título do card com ícone de camadas decorativo -->
-                        <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Dados do Produto</h3>
+                <!-- COLUNA DA ESQUERDA: Formulário Contínuo com Scroll Interno dos Inputs -->
+                <div class="coluna-esquerda-cadastro-produtos">
+                    <div class="card-formulario-produtos-unico">
+                        <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg> Cadastro de Produto</h3>
                         
-                        <!-- Campo: Nome do Produto -->
-                        <div class="grupo-input-produtos">
-                            <label>Produto <span class="obrigatorio">*</span></label>
-                            <input type="text" id="nomeProduto" placeholder="Digite o nome do produto" required>
-                        </div>
+                        <form id="formCadastroProduto">
+                            <!-- wrapper-inputs-scroll-produtos: Segura a rolagem interna de forma limpa -->
+                            <div class="wrapper-inputs-scroll-produtos">
+                                
+                                <!-- Campo: Produto -->
+                                <div class="grupo-input-produtos">
+                                    <label>Produto <span class="obrigatorio">*</span></label>
+                                    <input type="text" id="nomeProduto" placeholder="Digite o nome do produto" required>
+                                </div>
 
-                        <!-- Campo: Categoria (Conectado à lista oculta de sugestões Chrome e botão mais) -->
-                        <div class="grupo-input-produtos m-t-10">
-                            <label>Categoria <span class="obrigatorio">*</span></label>
-                            <div class="linha-input-com-botao">
-                                <input type="text" id="categoriaProduto" list="listaCategorias" placeholder="Selecione a categoria" required>
-                                <button type="button" class="btn-add-categoria-rapida">+</button>
+                                <!-- Campo: Categoria (SEM BOTÃO +, LARGURA 100% LIMPA!) -->
+                                <div class="grupo-input-produtos m-t-8">
+                                    <label>Categoria <span class="obrigatorio">*</span></label>
+                                    <input type="text" id="categoriaProduto" list="listaCategorias" placeholder="Selecione ou digite a categoria..." required>
+                                </div>
+
+                                <!-- Campo: Tamanho -->
+                                <div class="grupo-input-produtos m-t-8">
+                                    <label>Tamanho</label>
+                                    <input type="text" id="tamanhoProduto" placeholder="Digite o tamanho (ex: 20cm, 1kg)">
+                                </div>
+
+                                <!-- Campo: Preço com moeda integrada -->
+                                <div class="grupo-input-produtos m-t-8">
+                                    <label>Preço <span class="obrigatorio">*</span></label>
+                                    <div class="prefixo-moeda-wrapper">
+                                        <span class="prefixo-rs">R$</span>
+                                        <input type="text" id="precoProduto" placeholder="Digite o preço" required>
+                                    </div>
+                                </div>
+
+                                <!-- Campo: Sabores -->
+                                <div class="grupo-input-produtos m-t-8">
+                                    <label>Sabores</label>
+                                    <input type="text" id="saboresProduto" placeholder="Digite os sabores (ex: Chocolate, Ninho)">
+                                </div>
+
+                                <!-- Campo: Descrição -->
+                                <div class="grupo-input-produtos m-t-8">
+                                    <label>Descrição</label>
+                                    <textarea id="descricaoProduto" placeholder="Digite detalhes ou descrição do produto..."></textarea>
+                                </div>
+
+                                <!-- Campo: Switch Ativo -->
+                                <div class="grupo-input-produtos m-t-8">
+                                    <label>Ativo</label>
+                                    <div class="alinhamento-switch-ativo">
+                                        <label class="switch-container-item">
+                                            <input type="checkbox" id="statusProduto" checked>
+                                            <span class="slider-switch-bola"></span>
+                                        </label>
+                                        <span class="texto-switch-label" id="labelStatusFiltro">Sim, produto ativo</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Campo: Tamanho do Doce -->
-                        <div class="grupo-input-produtos m-t-10">
-                            <label>Tamanho</label>
-                            <input type="text" id="tamanhoProduto" placeholder="Digite o tamanho">
-                        </div>
-
-                        <!-- Campo: Preço com Prefixo "R$" embutido diretamente na caixinha -->
-                        <div class="grupo-input-produtos m-t-10">
-                            <label>Preço (R$) <span class="obrigatorio">*</span></label>
-                            <div class="prefixo-moeda-wrapper">
-                                <span class="prefixo-rs">R$</span>
-                                <input type="text" id="precoProduto" placeholder="Ex: 25,00" required>
+                            <!-- Fileira de dois botões grandes da mesma cor e tamanho, idêntico ao seu print! -->
+                            <div class="botoes-acoes-formulario-prod-duplo">
+                                <button type="submit" class="btn-prod-base salvar-btn">💾 Salvar Produto</button>
+                                <button type="button" class="btn-prod-base limpar-btn" id="btnLimparProd">🧹 Limpar Campos</button>
                             </div>
-                        </div>
-
-                        <!-- Campo: Sabores -->
-                        <div class="grupo-input-produtos m-t-10">
-                            <label>Sabores</label>
-                            <input type="text" id="saboresProduto" placeholder="Digite os sabores (ex: Chocolate, Morango...)">
-                        </div>
-
-                        <!-- Campo: Descrição/Ingredientes -->
-                        <div class="grupo-input-produtos m-t-10">
-                            <label>Descrição</label>
-                            <textarea id="descricaoProduto" placeholder="Descreva o produto, ingredientes, detalhes..."></textarea>
-                        </div>
-
-                        <!-- Campo: Interruptor Switch Deslizante Moderno de Status -->
-                        <div class="grupo-input-produtos m-t-10">
-                            <label>Ativo</label>
-                            <div class="alinhamento-switch-ativo">
-                                <label class="switch-container-item">
-                                    <input type="checkbox" id="statusProduto" checked>
-                                    <span class="slider-switch-bola"></span>
-                                </label>
-                                <span class="texto-switch-label" id="labelStatusFiltro">Sim, produto ativo</span>
-                            </div>
-                        </div>
+                        </form>
                     </div>
-
-                    <!-- Card Solto 2: Bloco flutuante na base da coluna para travar os botões administrativos -->
-                    <div class="card-formulario-produtos-acoes">
-                        <!-- Grade simétrica que alinha os 4 botões com tamanhos idênticos de Clientes -->
-                        <div class="botoes-acoes-formulario-prod">
-                            <button type="submit" class="btn-prod-base salvar-btn">💾 Salvar</button>
-                            <button type="button" class="btn-prod-base" id="btnEditarProd" disabled>📝 Editar</button>
-                            <button type="button" class="btn-prod-base limpar-btn" id="btnLimparProd">🧹 Limpar</button>
-                            <button type="button" class="btn-prod-base excluir-btn" id="btnExcluirProd" disabled>🗑️ Excluir</button>
-                        </div>
-                    </div>
-                </form>
-                <!-- COLUNA DA DIREITA: Contêiner que isola a listagem e a tabela de produtos cadastrados -->
+                </div>
+                <!-- COLUNA DA DIREITA: Listagem, Tabela e Busca Unificada em Linha -->
                 <div class="coluna-direita-listagem">
-                    
-                    <!-- Card Branco da Tabela Independente (Estilo o monitor de esteira de pedidos) -->
                     <div class="card-tabela-produtos">
-                        
-                        <!-- Cabeçalho Interno do Card da Direita: Alinha o título e o botão de refresh -->
                         <div class="topo-tabela-acoes-prod">
-                            <h3>
-                                <svg class="svg-card-title-prod" viewBox="0 0 24 24" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> 
-                                Produtos Cadastrados
-                            </h3>
-                            <button type="button" class="btn-mini-atualizar" id="btnRecarregarProdutos" title="Recarregar Tabela">
+                            <h3><svg class="svg-card-title-prod" viewBox="0 0 24 24" width="14" height="14"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Produtos Cadastrados</h3>
+                        </div>
+
+                        <!-- Pesquisa interna de produto e botão de atualizar unificados em linha única (Estilo Fornecedores) -->
+                        <div class="linha-pesquisa-interna-prod">
+                            <div class="wrapper-busca-tabela-prod">
+                                <svg class="svg-busca-tabela-interna" viewBox="0 0 24 24" width="12" height="12"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="inputPesquisaGlobal" placeholder="Pesquisar produto...">
+                            </div>
+                            <button type="button" class="btn-mini-tabela-topo" id="btnRecarregarProdutos" title="Recarregar/Atualizar">
                                 <svg class="svg-mini-topo-prod" viewBox="0 0 24 24" width="12" height="12"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
                             </button>
                         </div>
 
-                        <!-- wrapper-tabela-produtos-scroll: Caixa de rolagem interna com trava horizontal agressiva -->
+                        <!-- Área Ocupada pela Tabela com Rolagem Interna Travada e Blindagem Direta -->
                         <div class="wrapper-tabela-produtos-scroll">
-                            
-                            <!-- 💡 BLINDAGEM SUPREMA DIRETA: Obriga o HTML a renderizar uma tabela clássica ignorando heranças flex ocultas -->
                             <table class="tabela-dados-produtos" style="display: table !important; width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important;">
                                 <thead>
-                                    <!-- Congela a barra de títulos no topo e força formato de fileira horizontal clássica -->
                                     <tr style="display: table-row !important;">
                                         <th style="width: 8%;">ID</th>
                                         <th style="width: 25%;">Produto</th>
@@ -181,8 +149,7 @@ require_once "logica_php/home.php";
                                     </tr>
                                 </thead>
                                 <tbody id="corpoTabelaProdutos">
-                                    
-                                    <!-- Registro 1: Bolo de Chocolate Premium (style="display: table-row !important" deita a linha horizontalmente) -->
+                                    <!-- Registro 1 -->
                                     <tr class="linha-selecionavel-prod" data-id="101" style="display: table-row !important;">
                                         <td>101</td>
                                         <td><strong>Bolo de Chocolate Premium</strong></td>
@@ -196,8 +163,7 @@ require_once "logica_php/home.php";
                                             <button type="button" class="btn-linha-prod del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-                                    
-                                    <!-- Registro 2: Cheesecake de Frutas Vermelhas -->
+                                    <!-- Registro 2 -->
                                     <tr class="linha-selecionavel-prod" data-id="102" style="display: table-row !important;">
                                         <td>102</td>
                                         <td><strong>Cheesecake de Frutas Vermelhas</strong></td>
@@ -211,8 +177,7 @@ require_once "logica_php/home.php";
                                             <button type="button" class="btn-linha-prod del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-                                    
-                                    <!-- Registro 3: Torta de Limão Siciliano -->
+                                    <!-- Registro 3 -->
                                     <tr class="linha-selecionavel-prod" data-id="103" style="display: table-row !important;">
                                         <td>103</td>
                                         <td><strong>Torta de Limão Siciliano</strong></td>
@@ -226,7 +191,7 @@ require_once "logica_php/home.php";
                                             <button type="button" class="btn-linha-prod del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-                                    <!-- Registro 4: Brigadeiro Gourmet (Blindado em Linha Horizontal) -->
+                                    <!-- Registro 4: Brigadeiro Gourmet -->
                                     <tr class="linha-selecionavel-prod" data-id="104" style="display: table-row !important;">
                                         <td>104</td>
                                         <td><strong>Brigadeiro Gourmet</strong></td>
@@ -240,7 +205,6 @@ require_once "logica_php/home.php";
                                             <button type="button" class="btn-linha-prod del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-
                                     <!-- Registro 5: Macarons Sortidos -->
                                     <tr class="linha-selecionavel-prod" data-id="105" style="display: table-row !important;">
                                         <td>105</td>
@@ -255,7 +219,6 @@ require_once "logica_php/home.php";
                                             <button type="button" class="btn-linha-prod del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-
                                     <!-- Registro 6: Bolo Red Velvet -->
                                     <tr class="linha-selecionavel-prod" data-id="106" style="display: table-row !important;">
                                         <td>106</td>
@@ -270,7 +233,6 @@ require_once "logica_php/home.php";
                                             <button type="button" class="btn-linha-prod del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-
                                     <!-- Registro 7: Brownie com Nozes -->
                                     <tr class="linha-selecionavel-prod" data-id="107" style="display: table-row !important;">
                                         <td>107</td>
@@ -316,7 +278,7 @@ require_once "logica_php/home.php";
         </main>
     </div> <!-- Fecha o container-dashboard -->
 
-    <!-- Vinculação do motor comportamental unificado do JS de produtos -->
+    <!-- Vinculação externa única do motor manipulador JavaScript de Produtos -->
     <script src="../js/produtos.js"></script>
 </body>
 </html>

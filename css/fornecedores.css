@@ -1,197 +1,293 @@
 /* ==========================================================================
-   FOLHA DE ESTILO PREMIUM: FORNECEDORES NO PADRÃO ESTREITO DE PEDIDOS
+   MIRA CONFEITARIA - ESTILO PREMIUM DE FORNECEDORES (PADRÃO FLUXO CONTÍNUO)
    ========================================================================== */
 
-svg, path, rect, circle, polyline, line, polygon { fill: none !important; }
+/* 1. RESET E TRATAMENTO VETORIAL */
+/* Evita preenchimentos pretos automáticos nos ícones do sistema */
+svg, path, rect, circle, polyline, line, polygon {
+    fill: none !important;
+}
 
+/* 2. PAINEL DE CONTEÚDO MESTRE */
+/* Prende todo o conteúdo na tela e elimina rolagem na janela do navegador */
 .painel-conteudo-fornecedores {
-    padding: 12px 25px 12px 90px !important; 
-    background-color: #f3f4f6; 
-    height: 100vh; 
+    padding: 12px 25px 12px 90px !important; /* Respiro para não sumir atrás da barra lateral */
+    background-color: #f3f4f6; /* Fundo cinza claro padrão MIRA */
+    height: 100vh; /* Ocupa exatamente 100% da altura do monitor */
     width: 100%; 
     display: flex; 
     flex-direction: column; 
-    overflow: hidden; 
+    overflow: hidden; /* Proíbe o navegador de rolar a página inteira */
+    box-sizing: border-box;
 }
 
-.topo-fornecedores { margin-bottom: 8px; width: 100%; }
-.titulo-pagina-fornecedores { display: flex; align-items: center; gap: 12px; }
-.icone-titulo-forn { background-color: #ffffff; width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; border: 1px solid #e5e7eb; }
-.svg-topo-forn { width: 18px; height: 18px; stroke: #171d14 !important; stroke-width: 2; }
-.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; } 
-.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; } 
-
-.grid-fornecedores-container {
-    display: flex; 
-    gap: 15px; 
-    flex: 1; 
-    height: calc(100vh - 75px); 
-    overflow: hidden; 
-}
-
-/* COLUNA DA ESQUERDA: Configuração de rolagem robusta idêntica a pedidos */
-.coluna-esquerda-cadastro {
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-    height: 100%; 
-    overflow-y: auto; 
-    padding-right: 6px;
-}
-
-/* GROSSURA DO SCROLL: Ajustado para o padrão cinza escuro de pedidos */
-.coluna-esquerda-cadastro::-webkit-scrollbar {
-    width: 6px; /* Engrossado de 4px para 6px */
-}
-.coluna-esquerda-cadastro::-webkit-scrollbar-thumb {
-    background: #5c6655; /* Tom cinza escuro militar de pedidos */
-    border-radius: 4px;
-}
-
-.coluna-direita-listagem {
-    flex: 1; 
-    display: flex; 
-    flex-direction: column; 
-    height: 100%; 
-    overflow: hidden; 
-}
-
-.card-formulario-fornecedores {
-    background-color: #ffffff; 
-    border-radius: 8px; 
-    padding: 15px; 
-    border: 1px solid #e5e7eb; 
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    display: flex; 
-    flex-direction: column; 
-}
-
-.card-formulario-fornecedores h3 {
-    font-size: 0.8rem; 
-    color: #374151; 
-    font-weight: 600; 
-    margin-bottom: 12px; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    text-transform: uppercase;
-}
-
-.svg-card-titulo { width: 14px; height: 14px; stroke: #171d14 !important; stroke-width: 2; }
-.wrapper-inputs-scroll-cadastro { display: block; width: 100%; }
-.grupo-input-fornecedores { display: flex; flex-direction: column; margin-bottom: 10px; }
-.grupo-input-fornecedores label { font-size: 0.7rem; color: #4b5563; font-weight: 600; margin-bottom: 4px; }
-.obrigatorio { color: #ef4444; margin-left: 2px; }
-
-.grupo-input-fornecedores input, 
-.grupo-input-fornecedores select, 
-.grupo-input-fornecedores textarea {
-    padding: 7px 10px; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    font-size: 0.78rem; 
-    outline: none; 
-    background-color: #ffffff; 
-    color: #1f2937; 
+/* 3. CABEÇALHO SUPERIOR */
+.topo-fornecedores {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
     width: 100%;
 }
 
-.grupo-input-fornecedores textarea { resize: none; height: 52px; }
-.linha-inputs-dupla { display: flex; gap: 10px; }
+.titulo-pagina-fornecedores { display: flex; align-items: center; gap: 12px; }
+
+/* Caixinha branca do ícone do caminhão */
+.icone-titulo-forn {
+    background-color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
+}
+
+.svg-topo-forn {
+    width: 18px;
+    height: 18px;
+    stroke: #171d14 !important; /* Verde escuro oficial MIRA */
+    stroke-width: 2;
+}
+
+.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; }
+.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; }
+
+/* 4. GRID REPARTIDO EM DUAS COLUNAS (50% / 50%) */
+.grid-fornecedores-container {
+    display: flex !important;
+    flex-direction: row !important; /* Força colunas lado a lado */
+    gap: 15px;
+    flex: 1;
+    height: calc(100vh - 75px); /* Deduz a altura do topo para travar na tela */
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Força as duas metades da tela a dividirem o espaço igualmente */
+.coluna-esquerda-cadastro, 
+.coluna-direita-listagem {
+    flex: 1 !important;
+    width: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box;
+}
+
+/* Caixa branca flutuante do formulário de cadastro esquerdo */
+.card-formulario-fornecedores {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+.card-formulario-fornecedores h3 {
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
+.svg-card-titulo { width: 14px; height: 14px; stroke: #171d14 !important; stroke-width: 2; }
+
+/* ROLAGEM MESTRE DE PEDIDOS: Ativa a barra vertical cinza-militar e mata a horizontal feia */
+.wrapper-inputs-scroll-cadastro {
+    flex: 1;
+    overflow-y: auto !important; /* Libera apenas a rolagem para baixo */
+    overflow-x: hidden !important; /* DETONA A ROLAGEM DE LADO DO WINDOWS! */
+    padding-right: 6px;
+    margin-bottom: 5px;
+    max-height: calc(100vh - 110px); /* Deixa o formulário alto e livre */
+    box-sizing: border-box;
+}
+
+/* Customização estética do scroll gordinho militar igual a Pedidos */
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar {
+    width: 6px !important;
+}
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar-thumb {
+    background: #5c6655 !important; /* Tom cinza escuro militar */
+    border-radius: 4px !important;
+}
+
+/* Estruturação vertical para colocar a legenda acima das caixas */
+.grupo-input-fornecedores {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grupo-input-fornecedores label {
+    font-size: 0.7rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+.obrigatorio { color: #ef4444; margin-left: 2px; }
+
+/* Customização e respiro de todas as caixas de digitação textuais */
+.grupo-input-fornecedores input,
+.grupo-input-fornecedores select,
+.grupo-input-fornecedores textarea {
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    outline: none;
+    background-color: #ffffff;
+    color: #1f2937;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grupo-input-fornecedores textarea { resize: none; height: 48px; }
+
+/* Organização de fileiras com campos duplos na horizontal */
+.linha-inputs-dupla { display: flex; gap: 10px; width: 100%; box-sizing: border-box; }
 .linha-inputs-dupla .grupo-input-fornecedores { flex: 1; }
 .flex-8 { flex: 8 !important; }
 .flex-4 { flex: 4 !important; }
+.m-t-8 { margin-top: 5px; }
 
-.botoes-acoes-formulario-forn-duplo {
-    display: grid !important; 
-    grid-template-columns: 1fr 1fr !important; 
-    gap: 12px !important; 
-    margin-top: 5px !important; 
-    border-top: 1px solid #e5e7eb !important; 
-    padding-top: 12px !important; 
+/* ==========================================================================
+   PARTE 3: BOTÕES TRIPLOS SLIDERS E BLINDAGEM DA LISTAGEM DIREITA
+   ========================================================================== */
+
+/* FILEIRA DE BOTÕES TRIPLOS: Agora desliza de forma contínua no final do scroll */
+.botoes-acoes-formulario-forn-triplo {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important; /* Cria 3 colunas perfeitamente iguais */
+    gap: 8px !important;
+    margin-top: 15px !important; /* Espaço confortável após a caixa de Informações Adicionais */
+    border-top: 1px solid #e5e7eb !important; /* Linha cinza fina e elegante de separação */
+    padding-top: 12px !important; /* Espaço interno entre a linha e os botões */
     width: 100% !important;
+    box-sizing: border-box !important;
 }
 
+/* Customização robusta unificada para os 3 botões possuírem o mesmo tamanho */
 .btn-forn-base {
-    padding: 10px 12px !important; 
-    border-radius: 6px !important; 
-    font-size: 0.8rem !important; 
-    cursor: pointer !important; 
-    display: flex !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    gap: 6px !important; 
-    font-weight: 600 !important; 
+    padding: 10px !important; /* Altura confortável para o clique */
+    border-radius: 6px !important;
+    font-size: 0.78rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    font-weight: 600 !important;
     border: none !important;
-    transition: all 0.2s !important; 
+    transition: all 0.2s;
+    color: white !important;
 }
 
-.salvar-btn { background-color: #172016 !important; color: white !important; } 
-.limpar-btn { background-color: #2a3626 !important; color: white !important; } 
+/* Tons escuros corporativos combinando com as regras do MIRA Confeitaria */
+/* Altere este bloco de cores no seu css/fornecedores.css: */
+.salvar-btn { background-color: #172016 !important; } 
+.limpar-btn { background-color: #2a3626 !important; } 
+.editar-btn { background-color: #172016 !important; } /* Deixa o mesmo verde escuro do Salvar */
+
 .btn-forn-base:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* CARD DA LISTAGEM DIREITA */
+/* 2. CARD DA LISTAGEM DIREITA */
 .card-tabela-fornecedores {
-    background-color: #ffffff; 
-    border-radius: 8px; 
-    padding: 15px; 
-    border: 1px solid #e5e7eb; 
-    height: 100%; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; 
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
-.linha-pesquisa-interna-forn { display: flex !important; gap: 6px !important; align-items: center !important; width: 100% !important; margin-bottom: 10px !important; }
-.wrapper-busca-tabela-forn { background-color: #ffffff !important; border: 1px solid #d1d5db !important; border-radius: 6px !important; padding: 6px 12px !important; display: flex !important; align-items: center !important; gap: 6px !important; flex: 1 !important; }
-.svg-busca-tabela-interna { width: 14px !important; height: 14px !important; stroke: #6b7280 !important; stroke-width: 2 !important; }
+/* FILEIRA INTERNA: Une a busca por nomes e o botão atualizar dentro do card */
+.linha-pesquisa-interna-forn {
+    display: flex !important;
+    gap: 6px !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+}
+
+.wrapper-busca-tabela-forn {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex: 1 !important;
+}
+
+.svg-busca-tabela-interna { width: 12px !important; height: 12px !important; stroke: #6b7280 !important; stroke-width: 2 !important; }
 .wrapper-busca-tabela-forn input { border: none !important; outline: none !important; font-size: 0.78rem !important; color: #1f2937 !important; width: 100% !important; background: none !important; }
-.btn-mini-tabela-topo { background-color: #ffffff !important; border: 1px solid #d1d5db !important; width: 32px !important; height: 32px !important; border-radius: 6px !important; cursor: pointer !important; display: flex !important; align-items: center !important; justify-content: center !important; }
-.svg-mini-topo { width: 14px !important; height: 14px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
 
-/* TABELA DE PROPORÇÃO FIXA CONTRA BUG DE ROLAGEM HORIZONTAL */
-.wrapper-tabela-fornecedores-scroll {
-    flex: 1; 
-    overflow-y: auto; 
-    overflow-x: hidden; /* MÁGICA: Detona o scroll inferior da direita! */
-    border: 1px solid #edf2f7; 
-    border-radius: 6px; 
-    max-height: calc(100vh - 120px); /* Ajustado para preencher o card todo já que o rodapé sumiu */
+.btn-mini-tabela-topo {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    width: 31px !important;
+    height: 31px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
+.svg-mini-topo { width: 12px !important; height: 12px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
 
+/* 3. TABELA DE FORNECEDORES COM TRAVA VERTICAL E HORIZONTAL */
+.wrapper-tabela-fornecedores-scroll {
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: hidden !important; /* Mata o scroll horizontal inferior */
+    border: 1px solid #edf2f7;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    max-height: calc(100vh - 170px);
+}
 .wrapper-tabela-fornecedores-scroll::-webkit-scrollbar { width: 4px; }
 .wrapper-tabela-fornecedores-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
 
-.tabela-dados-fornecedores {
-    width: 100%; 
-    border-collapse: collapse; 
-    font-size: 0.75rem; 
-    table-layout: fixed; /* Força o navegador a respeitar as larguras em % sem criar scroll horizontal */
-}
-
-.tabela-dados-fornecedores th, 
-.tabela-dados-fornecedores td {
-    padding: 10px 8px !important; 
-    text-align: left; 
-    border-bottom: 1px solid #edf2f7; 
-    overflow: hidden;
-    text-overflow: ellipsis; /* Coloca reticências (...) se o nome for gigante, evitando o scroll */
-    white-space: nowrap; 
-}
-
+.tabela-dados-fornecedores { width: 100% !important; border-collapse: collapse; font-size: 0.75rem; table-layout: fixed !important; }
+.tabela-dados-fornecedores th, .tabela-dados-fornecedores td { padding: 10px 12px !important; text-align: left; border-bottom: 1px solid #edf2f7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tabela-dados-fornecedores th { background-color: #f9fafb; color: #4b5563; font-weight: 600; position: sticky; top: 0; z-index: 5; }
 
-.badge-tipo { padding: 4px 8px !important; border-radius: 4px; font-size: 0.65rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
+/* Badges Coloridas Pastéis Conforme o seu Mockup */
+.badge-tipo { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
 .b-ingredientes { background-color: #e6f7ed; color: #1e7e45; } 
 .b-embalagens { background-color: #fff7ed; color: #c2410c; }   
 .b-laticinios { background-color: #e0f2fe; color: #0369a1; }   
 .b-hortifruti { background-color: #fce7f3; color: #be185d; }   
 .b-aromas { background-color: #f3e8ff; color: #6b21a8; }       
 
-.celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 4px; align-items: center; }
-.btn-acao-linha { width: 22px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.btn-acao-linha.edit:hover { background-color: #f3f4f6; } 
-.btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }   
-.svg-linha-acao { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
-.btn-acao-linha.del:hover .svg-linha-acao { stroke: #ef4444 !important; }
+/* Alinhamento dos mini botões circulares de ação da linha */
+.celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
+.btn-acao-linha { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.btn-acao-linha svg { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
+.btn-acao-linha.edit:hover { background-color: #f3f4f6; }
+.btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }
+
+.rodape-paginacao-fornecedores { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 6px; font-size: 0.72rem; color: #6b7280; }
+.info-contagem-itens { font-weight: 500; }
