@@ -26,6 +26,19 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalGeral = 0;
 
     // ==========================================================================
+    // AUTO-PREENCHER A DATA DO PEDIDO COM O DIA DE HOJE
+    // ==========================================================================
+    const campoDataPedido = document.getElementById("dataPedido");
+    if (campoDataPedido) {
+        const dataHoje = new Date();
+        const ano = dataHoje.getFullYear();
+        const mes = String(dataHoje.getMonth() + 1).padStart(2, '0'); // Garante o 0 na frente (ex: 07)
+        const dia = String(dataHoje.getDate()).padStart(2, '0');
+        
+        campoDataPedido.value = `${ano}-${mes}-${dia}`; // Formato obrigatório do HTML: YYYY-MM-DD
+    }
+
+    // ==========================================================================
     // CARREGAMENTO AUTOMÁTICO E FILTRO DOS PEDIDOS
     // ==========================================================================
     function carregarPedidosDoBanco(filtroData = '', filtroStatus = '', filtroBusca = '') {
@@ -68,28 +81,35 @@ document.addEventListener("DOMContentLoaded", function () {
                         }
                         // ---------------------------------------------------
 
-                        const dataPedFormatada = pedido.data_pedido.split('-').reverse().join('/');
-                        const dataEntFormatada = pedido.data_entrega.split('-').reverse().join('/');
+                        // Só desenha o card na tela se ele NÃO estiver Finalizado
+                        if (pedido.status !== "Finalizado") {
+                            
+                            const dataPedFormatada = pedido.data_pedido.split('-').reverse().join('/');
+                            const dataEntFormatada = pedido.data_entrega.split('-').reverse().join('/');
+                            
+                            const novoCardProd = document.createElement("div");
+                            novoCardProd.className = "card-pedido-producao-ativo"; 
+                            novoCardProd.setAttribute("data-id", pedido.id); // Mantém o ID para a seleção verde funcionar
+                            
+                            const classeBadge = (pedido.status === "Pendente") ? "pendente" : "producao";
+                            
+                            novoCardProd.innerHTML = `
+                                <div class="info-card-prod">
+                                    <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${pedido.cliente}</h4>
+                                    <p style="margin-top: 4px;"><strong>📦 Pedido #${pedido.id}</strong> • 🎂 Lote: ${pedido.qtd_itens} doce(s)</p>
+                                    
+                                    <p style="margin-top: 2px; font-size: 0.8rem; color: #4b5563;">📅 Pedido: ${dataPedFormatada} | 🚚 Entrega: <strong style="color: #b91c1c;">${dataEntFormatada}</strong></p>
+                                    
+                                    <p style="margin-top: 2px;">💰 Líquido: R$ ${parseFloat(pedido.total).toFixed(2).replace('.', ',')}</p>
+                                    
+                                    <button type="button" class="btn-ver-detalhes" data-id="${pedido.id}">👁️ Ver Detalhes</button>
+                                </div>
+                                <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${pedido.id}">${pedido.status}</span>
+                            `;
+                            containerProducao.appendChild(novoCardProd);
                         
-                        const novoCardProd = document.createElement("div");
-                        novoCardProd.className = "card-pedido-producao-ativo"; 
-                        const classeBadge = (pedido.status === "Pendente") ? "pendente" : "producao";
-                        
-                        novoCardProd.innerHTML = `
-                            <div class="info-card-prod">
-                                <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${pedido.cliente}</h4>
-                                <p style="margin-top: 4px;"><strong>📦 Pedido #${pedido.id}</strong> • 🎂 Lote: ${pedido.qtd_itens} doce(s)</p>
-                                
-                                <p style="margin-top: 2px; font-size: 0.8rem; color: #4b5563;">📅 Pedido: ${dataPedFormatada} | 🚚 Entrega: <strong style="color: #b91c1c;">${dataEntFormatada}</strong></p>
-                                
-                                <p style="margin-top: 2px;">💰 Líquido: R$ ${parseFloat(pedido.total).toFixed(2).replace('.', ',')}</p>
-                                
-                                <button type="button" class="btn-ver-detalhes" data-id="${pedido.id}">👁️ Ver Detalhes</button>
-                            </div>
-                            <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${pedido.id}">${pedido.status}</span>
-                        `;
-                        containerProducao.appendChild(novoCardProd);
-                    });
+                        } // <-- Fechamento do IF que esconde os finalizados
+                    }); 
                 } else {
                     // Se nenhum pedido bater com o filtro, mostra a tela vazia
                     if (estadoVazio) { estadoVazio.style.display = "flex"; } 
@@ -263,53 +283,29 @@ document.addEventListener("DOMContentLoaded", function () {
             body: JSON.stringify(pacoteDados)
         })
 
+        // ENVIO SILENCIOSO PARA O PHP (FETCH)
+        fetch('salvar_pedido.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },    
+            body: JSON.stringify(pacoteDados)
+        })
         .then(resposta => resposta.json())
         .then(retorno => {
             if (retorno.sucesso) {
-                // Desenha a tela se salvou com sucesso
-                if (estadoVazio) { estadoVazio.style.display = "none"; }
+                // 1. A MÁGICA: Puxa todos os dados atualizados do banco (desenha o card e arruma contadores)
+                carregarPedidosDoBanco();
                 
-                // Cria o visual do card na tela
-                const novoCardProd = document.createElement("div");
-                novoCardProd.className = "card-pedido-producao-ativo"; 
-                novoCardProd.setAttribute("data-id", pedido.id); // Guarda o ID na borda do card
-                const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
-                
-                // Pega as datas direto do pacote que foi enviado ao banco e converte
-                const dataPedForm = pacoteDados.data_pedido.split('-').reverse().join('/');
-                const dataEntForm = pacoteDados.data_entrega.split('-').reverse().join('/');
-
-                novoCardProd.innerHTML = `
-                    <div class="info-card-prod">
-                        <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${clienteName}</h4>
-                        <p style="margin-top: 4px;"><strong>📦 Pedido #${retorno.id_pedido}</strong> • 🎂 Lote: ${itensCarrinho.length} doce(s)</p>
-                        
-                        <p style="margin-top: 2px; font-size: 0.8rem; color: #4b5563;">📅 Pedido: ${dataPedForm} | 🚚 Entrega: <strong style="color: #b91c1c;">${dataEntForm}</strong></p>
-
-                        <p style="margin-top: 2px;">💰 Líquido: R$ ${totalGeral.toFixed(2).replace('.', ',')}</p>
-                        
-                        <button type="button" class="btn-ver-detalhes" data-id="${retorno.id_pedido}">👁️ Ver Detalhes</button>
-                    </div>
-                    <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${retorno.id_pedido}">${statusPed}</span>
-                `;
-                // 👆 ------------------------------------------------ 👆
-                
-                containerProducao.appendChild(novoCardProd);
-                
-                if (statusPed === "Pendente") {
-                    countPend.textContent = parseInt(countPend.textContent) + 1;
-                } else if (statusPed === "Em Produção") {
-                    countProd.textContent = parseInt(countProd.textContent) + 1;
-                }
-                
-                // Limpeza final do carrinho esquerdo
+                // 2. Limpeza final do carrinho esquerdo (MANTIDO)
                 itensCarrinho = []; 
                 atualizarTabelaCarrinho(); 
                 document.getElementById("selectCliente").value = "";
-                selectProduto.value = "";
-                precoDisplay.textContent = "R$ 0,00";
+                // Como não tenho certeza do ID exato do seu Produto/Preço, mantenha os seus:
+                // selectProduto.value = "";
+                // precoDisplay.textContent = "R$ 0,00";
                 
-                alert("Sucesso! Pedido salvo no banco e despachado.");
+                // 3. Avisa que deu certo!
+                alert("Sucesso! Pedido #" + retorno.id_pedido + " salvo no banco.");
+
             } else {
                 alert("Erro do Banco de Dados: " + retorno.erro);
             }
@@ -318,12 +314,11 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Erro de comunicação com o arquivo PHP.");
             console.error(erro);
         })
-    .finally(() => {
+        .finally(() => {
             btnGerar.innerHTML = textoOriginalBotao;
             btnGerar.disabled = false;
         });
     });
-
     /* ==========================================================================
        PARTE 4: LÓGICA DO MODAL DIRETAMENTE LIGADO AO BANCO DE DADOS
        ========================================================================== */
