@@ -276,7 +276,7 @@ svg, path, rect, circle, polyline, line, polygon {
 
 /* Badges Coloridas Pastéis Conforme o seu Mockup */
 .badge-tipo { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
-.b-ingredientes { background-color: #88c5a1; color: #082d17; } 
+.b-ingredientes { background-color: #88c5a1; color: #000000; } 
 .b-embalagens { background-color: #c0795d; color: #591a01; }   
 .b-laticinios { background-color: #387ba8; color: #022e46; }   
 .b-hortifruti { background-color: #ff76c4; color: #6c0631; }   
