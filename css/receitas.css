@@ -221,20 +221,38 @@
     width: 100%; 
 }
 
-/* Customização estética das caixas de texto grandes */
-.grupo-input-receitas textarea {
-    padding: 6px 10px; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    font-size: 0.78rem; 
-    outline: none; 
-    background-color: #ffffff; 
-    color: #1f2937; 
-    resize: none; /* Bloqueia o ajuste manual de tamanho pelo usuário */
+/* 1. Garanta que o container principal ocupe toda a altura disponível da tela */
+.seu-container-formulario {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 120px); /* Ajuste os 120px com base na altura do seu cabeçalho superior */
+    box-sizing: border-box;
 }
 
-#ingredientesReceita { height: 110px; } /* Altura justa para ingredientes */
-#preparoReceita { height: 160px; flex: 1; } /* Se estica para preencher o bloco livre */
+/* 2. Customização estética geral das caixas de texto */
+.grupo-input-receitas textarea {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.85rem; /* Leve aumento para acompanhar o tamanho maior */
+    outline: none;
+    background-color: #ffffff;
+    color: #1f2937;
+    resize: none;
+    box-sizing: border-box;
+}
+
+/* 3. Distribuição do espaço restante da tela entre os dois campos */
+#ingredientesReceita {
+    flex: 1; /* Ocupa metade do espaço livre */
+    min-height: 200px; /* Evita que o campo esmague em telas muito pequenas */
+}
+
+#preparoReceita {
+    flex: 2; /* Ocupa o dobro do espaço de ingredientes, pois o modo de preparo costuma ser maior */
+    min-height: 300px; /* Evita que o campo esmague em telas muito pequenas */
+}
+
 
 /* Legenda explicativa cinza em itálico */
 .dica-campo {
