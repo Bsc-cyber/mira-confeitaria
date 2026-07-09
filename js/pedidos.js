@@ -472,7 +472,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             // Pega o número (ID) de cada card selecionado e guarda numa lista
-            const listaIds = Array.from(cardsSelecionados).map(card => card.querySelector('.btn-ver-detalhes').getAttribute('data-id'));
+            const listaIds = Array.from(cardsSelecionados).map(card => card.querySelector('.btn-ver-detalhes').getAttribute('data-id'));    
 
             // =================================================================
             // INTELIGÊNCIA DA MENSAGEM DE CONFIRMAÇÃO
