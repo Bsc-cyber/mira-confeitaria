@@ -476,3 +476,14 @@
 .btn-cancelar-pedido:hover {
     background-color: #fef2f2; /* Fundo levemente vermelho ao passar o mouse */
 }
+
+/* Efeito de seleção do card inteiro */
+.card-pedido-producao-ativo {
+    cursor: pointer; /* Deixa o mouse com a mãozinha */
+    transition: all 0.2s ease;
+}
+.card-selecionado {
+    border: 2px solid #10b981 !important; /* Borda verde forte */
+    background-color: #f0fdf4 !important; /* Fundo verde bem clarinho */
+    transform: scale(1.01); /* Dá uma leve "crescida" no card */
+}

@@ -38,40 +38,77 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch(url)
         .then(res => res.json())
         .then(retorno => {
-            if (retorno.sucesso && retorno.pedidos.length > 0) {
-                // Esconde a div de "Vazio"
-                if (estadoVazio) { estadoVazio.style.display = "none"; }
+            if (retorno.sucesso) {
+                
+                // 👇 1. CRIA OS CONTADORES ZERADOS PARA CADA BUSCA 👇
+                let contProducao = 0;
+                let contPendente = 0;
+                let contFinalizado = 0;
+                let contAtrasado = 0;
+                
+                // Pega a data de hoje para calcular os atrasos
+                const hoje = new Date();
+                hoje.setHours(0, 0, 0, 0);
 
-                retorno.pedidos.forEach(pedido => {
-                    const novoCardProd = document.createElement("div");
-                    novoCardProd.className = "card-pedido-producao-ativo"; 
-                    const classeBadge = (pedido.status === "Pendente") ? "pendente" : "producao";
+                if (retorno.pedidos.length > 0) {
+                    // Esconde a div de "Vazio"
+                    if (estadoVazio) { estadoVazio.style.display = "none"; }
 
-                    const dataPedFormatada = pedido.data_pedido.split('-').reverse().join('/');
-                    const dataEntFormatada = pedido.data_entrega.split('-').reverse().join('/');
-                    
-                    novoCardProd.innerHTML = `
-                        <div class="info-card-prod">
-                            <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${pedido.cliente}</h4>
-                            <p style="margin-top: 4px;"><strong>📦 Pedido #${pedido.id}</strong> • 🎂 Lote: ${pedido.qtd_itens} doce(s)</p>
-                            
-                            <p style="margin-top: 2px; font-size: 0.8rem; color: #4b5563;">📅 Pedido: ${dataPedFormatada} | 🚚 Entrega: <strong style="color: #b91c1c;">${dataEntFormatada}</strong></p>
-                            
-                            <p style="margin-top: 2px;">💰 Líquido: R$ ${parseFloat(pedido.total).toFixed(2).replace('.', ',')}</p>
-                            
-                            <button type="button" class="btn-ver-detalhes" data-id="${pedido.id}">👁️ Ver Detalhes</button>
-                        </div>
-                        <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${pedido.id}">${pedido.status}</span>
-                    `;
-                    containerProducao.appendChild(novoCardProd);
-                });
-            } else {
-                // Se nenhum pedido bater com o filtro, mostra a tela vazia
-                if (estadoVazio) { estadoVazio.style.display = "flex"; } 
+                    retorno.pedidos.forEach(pedido => {
+                        
+                        // 👇 2. CONTA CADA STATUS ENQUANTO PARTE PARA O DESENHO 👇
+                        if (pedido.status === "Em Produção") contProducao++;
+                        if (pedido.status === "Pendente") contPendente++;
+                        if (pedido.status === "Finalizado") contFinalizado++; 
+                        
+                        // Lógica inteligente de atraso: data passou e não está Finalizado
+                        const dataEntrega = new Date(pedido.data_entrega + "T00:00:00");
+                        if (dataEntrega < hoje && pedido.status !== "Finalizado") {
+                            contAtrasado++;
+                        }
+                        // ---------------------------------------------------
+
+                        const dataPedFormatada = pedido.data_pedido.split('-').reverse().join('/');
+                        const dataEntFormatada = pedido.data_entrega.split('-').reverse().join('/');
+                        
+                        const novoCardProd = document.createElement("div");
+                        novoCardProd.className = "card-pedido-producao-ativo"; 
+                        const classeBadge = (pedido.status === "Pendente") ? "pendente" : "producao";
+                        
+                        novoCardProd.innerHTML = `
+                            <div class="info-card-prod">
+                                <h4><svg style="width:12px; height:12px; stroke:#171d14; fill:none; stroke-width:2; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Cliente: ${pedido.cliente}</h4>
+                                <p style="margin-top: 4px;"><strong>📦 Pedido #${pedido.id}</strong> • 🎂 Lote: ${pedido.qtd_itens} doce(s)</p>
+                                
+                                <p style="margin-top: 2px; font-size: 0.8rem; color: #4b5563;">📅 Pedido: ${dataPedFormatada} | 🚚 Entrega: <strong style="color: #b91c1c;">${dataEntFormatada}</strong></p>
+                                
+                                <p style="margin-top: 2px;">💰 Líquido: R$ ${parseFloat(pedido.total).toFixed(2).replace('.', ',')}</p>
+                                
+                                <button type="button" class="btn-ver-detalhes" data-id="${pedido.id}">👁️ Ver Detalhes</button>
+                            </div>
+                            <span class="status-badge-dinamica ${classeBadge}" id="badge-pedido-${pedido.id}">${pedido.status}</span>
+                        `;
+                        containerProducao.appendChild(novoCardProd);
+                    });
+                } else {
+                    // Se nenhum pedido bater com o filtro, mostra a tela vazia
+                    if (estadoVazio) { estadoVazio.style.display = "flex"; } 
+                }
+
+                // 👇 3. ATUALIZA AS SUAS CAIXINHAS DO TOPO NA TELA COM OS SPERPANELS 👇
+                const elProd = document.getElementById("countProd");
+                const elPend = document.getElementById("countPend");
+                const elFin  = document.getElementById("countFin");
+                const elAtras= document.getElementById("countAtr");
+
+                if(elProd) elProd.textContent = contProducao;
+                if(elPend) elPend.textContent = contPendente;
+                if(elFin)  elFin.textContent  = contFinalizado;
+                if(elAtras) elAtras.textContent = contAtrasado;
             }
         })
         .catch(erro => console.error("Erro ao puxar pedidos:", erro));
-    }
+}
 
     // Chama a função vazia ao abrir a tela (para carregar todos os pedidos)
     carregarPedidosDoBanco();
@@ -235,6 +272,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // Cria o visual do card na tela
                 const novoCardProd = document.createElement("div");
                 novoCardProd.className = "card-pedido-producao-ativo"; 
+                novoCardProd.setAttribute("data-id", pedido.id); // Guarda o ID na borda do card
                 const classeBadge = (statusPed === "Pendente") ? "pendente" : "producao";
                 
                 // Pega as datas direto do pacote que foi enviado ao banco e converte
@@ -405,4 +443,83 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         }
     });
+    // ==========================================================================
+    // SELEÇÃO MÚLTIPLA DE CARDS E FINALIZAÇÃO
+    // ==========================================================================
+    
+    // 1. Marca/Desmarca o card ao clicar nele
+    containerProducao.addEventListener("click", function(evento) {
+        // Se a pessoa clicou no botão "Ver Detalhes", a gente não seleciona o card (ignora)
+        if (evento.target.closest('.btn-ver-detalhes')) return;
+
+        // Verifica se clicou em um card
+        const cardClicado = evento.target.closest('.card-pedido-producao-ativo');
+        if (cardClicado) {
+            cardClicado.classList.toggle('card-selecionado'); // Pinta de verde ou tira o verde
+        }
+    });
+
+    // 2. Ação do Botão Preto "Finalizar Pedido"
+    const btnFinalizar = document.getElementById("btnFinalizarSelecionados");
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener("click", function() {
+            // Pega todos os cards que estão com a bordinha verde
+            const cardsSelecionados = document.querySelectorAll('.card-selecionado');
+            
+            if (cardsSelecionados.length === 0) {
+                alert("Por favor, selecione pelo menos um pedido clicando no card.");
+                return;
+            }
+
+            // Pega o número (ID) de cada card selecionado e guarda numa lista
+            const listaIds = Array.from(cardsSelecionados).map(card => card.querySelector('.btn-ver-detalhes').getAttribute('data-id'));
+
+            // =================================================================
+            // INTELIGÊNCIA DA MENSAGEM DE CONFIRMAÇÃO
+            // =================================================================
+            const qtdPedidos = listaIds.length;
+            const listaFormatada = listaIds.map(id => `#${id}`).join(', '); // Fica assim: #17, #14, #13
+            
+            let mensagem = "";
+            if (qtdPedidos === 1) {
+                mensagem = `Você está prestes a FINALIZAR o Pedido ${listaFormatada}.\n\nTem certeza que deseja continuar?`;
+            } else {
+                mensagem = `Você está prestes a FINALIZAR ${qtdPedidos} pedidos de uma vez (${listaFormatada}).\n\nTem certeza que deseja continuar?`;
+            }
+
+            // Exibe a caixinha de confirmação na tela
+            const confirmacao = confirm(mensagem);
+
+            // Se o usuário clicar em "Cancelar", a função aborta aqui mesmo
+            if (!confirmacao) {
+                return;
+            }
+            // =================================================================
+
+            // Se o usuário clicou em "OK", segue o baile para o banco de dados!
+            const textoOriginal = btnFinalizar.innerHTML;
+            btnFinalizar.innerHTML = "⏳ Finalizando...";
+            btnFinalizar.disabled = true;
+
+            // Envia os IDs para o PHP trabalhar
+            fetch('finalizar_pedidos.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ids: listaIds })
+            })
+            .then(res => res.json())
+            .then(retorno => {
+                if (retorno.sucesso) {
+                    carregarPedidosDoBanco();
+                } else {
+                    alert("Erro ao finalizar: " + retorno.erro);
+                }
+            })
+            .catch(erro => alert("Erro na comunicação com finalizar_pedidos.php"))
+            .finally(() => {
+                btnFinalizar.innerHTML = textoOriginal;
+                btnFinalizar.disabled = false;
+            });
+        });
+    }
 }); // <-- O FECHAMENTO DO ARQUIVO CONTINUA AQUI NO FINALZINHO!);

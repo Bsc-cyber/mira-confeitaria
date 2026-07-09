@@ -79,11 +79,11 @@ require_once "logica_php/home.php";
                             </div>
                             <div class="grupo-input-pedidos">
                                 <label>Data do Pedido</label>
-                                <input type="date" id="dataPedido" value="2026-07-06">
+                                <input type="date" id="dataPedido">
                             </div>
                             <div class="grupo-input-pedidos">
                                 <label>Entrega</label>
-                                <input type="date" id="dataEntrega" value="2026-07-06">
+                                <input type="date" id="dataEntrega">
                             </div>
                             <div class="grupo-input-pedidos">
                                 <label>Status</label>
@@ -192,7 +192,7 @@ require_once "logica_php/home.php";
                         <!-- NOVA FILEIRA HORIZONTAL INTEGRADORA DE QUATRO CAMPOS -->
                         <div class="fatura-filtros-linha-unica">
                             <div class="campo-filtros-unificados">
-                                <input type="date" id="filtroData" value="2026-07-06">
+                                <input type="date" id="filtroData">
                             </div>
                             <div class="campo-filtros-unificados">
                                 <select id="filtroStatus">
@@ -224,7 +224,7 @@ require_once "logica_php/home.php";
 
                         <!-- Botão único mantido conforme solicitado por você -->
                         <div class="rodape-botoes-direita-unico">
-                            <button type="button" class="btn-finalizar-pedido-completo-unico">✓ Finalizar Pedido</button>
+                            <button type="button" id="btnFinalizarSelecionados" class="btn-finalizar-pedido-completo-unico">✓ Finalizar Pedido</button>
                         </div>
                     </div>
                 </div>
