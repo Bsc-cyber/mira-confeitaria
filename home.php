@@ -27,7 +27,7 @@ require_once "php/logica_php/home.php";
             <!-- Bloco 1: Cabeçalho Superior de Boas-Vindas -->
             <header class="topo-dashboard">
                 <div class="saudacao">
-                    <span class="usuario-log">Olá, Admin! 👋</span>
+                    <span class="usuario-log">Olá, Lucas! </span>
                     <h1>Bem-vindo ao Mira Confeitaria</h1>
                     <p class="sub-painel">Aqui está o resumo do que acontece no seu negócio hoje.</p>
                 </div>

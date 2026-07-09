@@ -87,9 +87,9 @@
 
     <!-- Seção Inferior: Perfil do Administrador -->
     <div class="bloco-perfil">
-        <div class="foto-perfil">AD</div>
+        <div class="foto-perfil">LC</div>
         <div class="identidade-usuario">
-            <strong>Admin</strong>
+            <strong>Lucas</strong>
             <span>Administrador ▾</span>
         </div>
     </div>

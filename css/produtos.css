@@ -12,7 +12,7 @@ svg, path, rect, circle, polyline, line, polygon {
 /* Prende todo o conteúdo na tela e elimina rolagem na janela do navegador */
 .painel-conteudo-produtos {
     padding: 12px 25px 12px 90px !important; /* Respiro para não sumir atrás da barra lateral */
-    background-color: #f3f4f6; /* Fundo cinza claro padrão MIRA */
+    background-color: #dcdddf; /* Fundo cinza claro padrão MIRA */
     height: 100vh; /* Ocupa exatamente 100% da altura do monitor */
     width: 100%; 
     display: flex; 
@@ -312,10 +312,10 @@ svg, path, rect, circle, polyline, line, polygon {
 
 /* Badges Coloridas Pastéis Conforme o seu Mockup */
 .badge-cat { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
-.b-bolos { background-color: #fef3c7; color: #b45309; } /* Amarelo pastel */
-.b-cheesecakes { background-color: #fee2e2; color: #b91c1c; } /* Vermelho suave */
-.b-tortas { background-color: #ffedd5; color: #c2410c; } /* Laranja suave */
-.b-doces { background-color: #f3e8ff; color: #6b21a8; } /* Lilás pastel */
+.b-bolos { background-color: #fac800; color: #000000; } /* Amarelo pastel */
+.b-cheesecakes { background-color: #df0000; color: #000000; } /* Vermelho suave */
+.b-tortas { background-color: #c44105; color: #000000; } /* Laranja suave */
+.b-doces { background-color: #66005e; color: #000000; } /* Lilás pastel */
 
 /* Etiquetas ovais indicadoras de status ativo/inativo */
 .badge-status { padding: 2px 6px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }

@@ -276,11 +276,11 @@ svg, path, rect, circle, polyline, line, polygon {
 
 /* Badges Coloridas Pastéis Conforme o seu Mockup */
 .badge-tipo { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
-.b-ingredientes { background-color: #88c5a1; color: #000000; } 
-.b-embalagens { background-color: #c0795d; color: #591a01; }   
-.b-laticinios { background-color: #387ba8; color: #022e46; }   
-.b-hortifruti { background-color: #ff76c4; color: #6c0631; }   
-.b-aromas { background-color: #8256b1; color: #1a012f; }       
+.b-ingredientes { background-color: #037c35; color: #000000; } 
+.b-embalagens { background-color: #92320c; color: #000000; }   
+.b-laticinios { background-color: #004b7c; color: #000000; }   
+.b-hortifruti { background-color: #720041; color: #000000; }   
+.b-aromas { background-color: #3e1864; color: #000000; }       
 
 /* Alinhamento dos mini botões circulares de ação da linha */
 .celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
