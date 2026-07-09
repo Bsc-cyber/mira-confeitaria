@@ -229,28 +229,51 @@
     box-sizing: border-box;
 }
 
-/* 2. Customização estética geral das caixas de texto */
+/* ==========================================================================
+   CONFIGURAÇÃO DOS CAMPOS DE TEXTO COM ACESSO AO SCROLL MILITAR
+   ========================================================================== */
+
+/* 1. Área de Rolagem Otimizada na Esquerda (Padrão Pedidos e Fornecedores) */
+.wrapper-inputs-scroll-cadastro {
+    flex: 1;
+    overflow-y: auto !important; /* Ativa a rolagem vertical macia */
+    overflow-x: hidden !important; /* Mata o scroll horizontal indesejado do Windows */
+    padding-right: 8px; /* Folga na direita para a barra gordinha não cobrir o texto */
+    margin-bottom: 5px;
+    max-height: calc(100vh - 180px); /* Trava o tamanho máximo proporcional à tela do monitor */
+    box-sizing: border-box;
+}
+
+/* 2. Customização da esteira e da barra gordinha cinza-militar de Pedidos */
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar {
+    width: 6px !important; /* Fixa a largura gordinha idêntica à de pedidos */
+}
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar-thumb {
+    background: #5c6655 !important; /* Cor cinza escuro militar oficial da marca */
+    border-radius: 4px !important;
+}
+
+/* 3. Customização estética geral e unificada das caixas de texto */
 .grupo-input-receitas textarea {
     padding: 10px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
-    font-size: 0.85rem; /* Leve aumento para acompanhar o tamanho maior */
+    font-size: 0.82rem; /* Tamanho confortável para leitura */
     outline: none;
     background-color: #ffffff;
     color: #1f2937;
-    resize: none;
+    resize: none; /* Proíbe o usuário de puxar o canto do campo e quebrar a tela */
     box-sizing: border-box;
+    width: 100%;
 }
 
-/* 3. Distribuição do espaço restante da tela entre os dois campos */
+/* 4. Alturas físicas fixas e equilibradas para as caixas de texto */
 #ingredientesReceita {
-    flex: 1; /* Ocupa metade do espaço livre */
-    min-height: 200px; /* Evita que o campo esmague em telas muito pequenas */
+    height: 140px !important; /* Altura ideal para listar insumos sem ocupar a tela inteira */
 }
 
 #preparoReceita {
-    flex: 2; /* Ocupa o dobro do espaço de ingredientes, pois o modo de preparo costuma ser maior */
-    min-height: 300px; /* Evita que o campo esmague em telas muito pequenas */
+    height: 220px !important; /* Altura maior e dedicada para detalhar o passo a passo */
 }
 
 
