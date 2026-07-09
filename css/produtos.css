@@ -1,402 +1,334 @@
 /* ==========================================================================
-   MIRA CONFEITARIA - ESTILO PRODUTOS NO PADRÃO EXCLUSIVO DE PEDIDOS
+   MIRA CONFEITARIA - ESTILO PRODUTOS (NOVO PADRÃO FLUXO CONTÍNUO)
    ========================================================================== */
 
-/* 1. RESET E BLINDAGEM DE ÍCONES VETORIAIS SUTIL */
-/* Garante que nenhum elemento de vetor (ícone) herde preenchimentos pretos nativos */
+/* 1. RESET E TRATAMENTO VETORIAL */
+/* Evita preenchimentos pretos automáticos nos ícones do sistema */
 svg, path, rect, circle, polyline, line, polygon {
-    fill: none !important; /* MIOLO TRANSPARENTE: Pulveriza qualquer mancha ou círculo preto gigante */
+    fill: none !important;
 }
 
 /* 2. PAINEL DE CONTEÚDO MESTRE */
-/* Caixa principal que envelopa toda a área útil de trabalho da tela de produtos */
+/* Prende todo o conteúdo na tela e elimina rolagem na janela do navegador */
 .painel-conteudo-produtos {
-    padding: 12px 25px 12px 90px !important; /* Recuo à esquerda de 90px para dar espaço para a barra lateral */
-    background-color: #dcdddf; /* Fundo cinza claro corporativo idêntico ao da tela de pedidos */
-    height: 100vh; /* Força o painel a ocupar exatamente 100% da altura visível da tela do monitor */
-    width: 100%; /* Ocupa 100% da largura restante da janela do navegador */
-    display: flex; /* Ativa o flexbox para alinhar o cabeçalho e o grid central */
-    flex-direction: column; /* Organiza o fluxo dos elementos principais de cima para baixo (vertical) */
-    overflow: hidden; /* REGRA DE OURO: Bloqueia e elimina qualquer barra de rolagem global na janela */
-    box-sizing: border-box; /* Garante que bordas e preenchimentos não inflem a largura total calculada */
+    padding: 12px 25px 12px 90px !important; /* Respiro para não sumir atrás da barra lateral */
+    background-color: #f3f4f6; /* Fundo cinza claro padrão MIRA */
+    height: 100vh; /* Ocupa exatamente 100% da altura do monitor */
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    overflow: hidden; /* Proíbe o navegador de rolar a página inteira */
+    box-sizing: border-box;
 }
 
-/* 3. CABEÇALHO SUPERIOR (TOP BAR) */
-/* Alinha o título da página na esquerda e as ações de pesquisa na direita */
+/* 3. CABEÇALHO SUPERIOR */
 .topo-produtos {
-    display: flex; /* Coloca os blocos de títulos e controles lado a lado na horizontal */
-    justify-content: space-between; /* Empurra o título para a extrema esquerda e os botões para a direita */
-    align-items: center; /* Centraliza verticalmente ambos os blocos na mesma linha invisível */
-    margin-bottom: 8px; /* Margem pequena inferior para espremer o layout e travar na tela */
-    width: 100%; /* Ocupa a largura total interna */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    width: 100%;
 }
 
-/* Agrupa o ícone do documento e os textos do título na horizontal */
 .titulo-pagina-produtos { display: flex; align-items: center; gap: 12px; }
 
-/* Customização da caixinha branca que envolve o ícone vetorial do topo */
+/* Caixinha branca do ícone da engrenagem/cubo */
 .icone-titulo-prod {
-    background-color: #ffffff; /* Fundo branco puro */
-    width: 38px; /* Largura fixa da caixinha */
-    height: 38px; /* Altura fixa da caixinha */
-    border-radius: 8px; /* Cantos levemente arredondados */
-    display: flex; /* Ativa flexbox interno */
-    align-items: center; /* Centraliza o ícone SVG na vertical */
-    justify-content: center; /* Centraliza o ícone SVG na horizontal */
-    border: 1px solid #e5e7eb; /* Linha de contorno cinza bem clarinha */
+    background-color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e5e7eb;
 }
 
-/* Define as proporções e cores do ícone de cubo/caixa do cabeçalho */
 .svg-topo-prod {
-    width: 18px; /* Tamanho horizontal do ícone */
-    height: 18px; /* Tamanho vertical do ícone */
-    stroke: #171d14 !important; /* Cor verde musgo escuro oficial nas linhas do contorno */
-    stroke-width: 2; /* Espessura da linha do desenho vetorial */
+    width: 18px;
+    height: 18px;
+    stroke: #171d14 !important; /* Verde escuro oficial MIRA */
+    stroke-width: 2;
 }
 
-/* Ajustes finos de tipografia para os textos principais do topo */
-.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; } 
-.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; } 
+.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; }
+.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; }
 
-/* 4. CONTROLES DO CABEÇALHO DIREITO */
-/* Alinha a caixa de pesquisa superior, filtro e o botão novo produto */
-.controles-topo-produtos { display: flex; gap: 8px; align-items: center; }
-
-/* Caixinha branca de pesquisa global com ícone embutido */
-.wrapper-busca-topo-prod {
-    background-color: #ffffff; 
-    border: 1px solid #e5e7eb; 
-    border-radius: 6px; 
-    padding: 6px 12px; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-    width: 200px; /* Largura fixa horizontal da barra de busca superior */
-}
-
-.svg-busca-topo { width: 14px; height: 14px; stroke: #9ca3af !important; stroke-width: 2; }
-/* Remove as bordas e fundos nativos do campo invisível de digitação */
-.wrapper-busca-topo-prod input { border: none; outline: none; font-size: 0.75rem; width: 100%; color: #111827; background: none; }
-
-/* Pequenos botões brancos quadrados auxiliares de filtro e atualização */
-.btn-filtro-topo, .btn-mini-atualizar {
-    background-color: #ffffff; 
-    border: 1px solid #e5e7eb; 
-    width: 31px; 
-    height: 31px; 
-    border-radius: 6px; 
-    cursor: pointer; /* Transforma a seta do mouse na mãozinha de clique */
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-}
-
-/* Botão principal escuro de atalho "+ Novo Produto" */
-.btn-novo-produto-topo {
-    background-color: #172016; /* Tom verde musgo escuro militar oficial do MIRA */
-    color: white; 
-    border: none; 
-    border-radius: 6px; 
-    padding: 6px 14px; 
-    font-size: 0.75rem; 
-    font-weight: 600; /* Negrito intermediário marcante */
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-}
-.svg-btn-inline { width: 14px; height: 14px; stroke: white !important; stroke-width: 2; }
-
-/* 5. ARQUITETURA DO GRID DIVIDIDO (COLUNA ESQUERDA E COLUNA DIREITA) */
-/* Contêiner que divide o monitor em duas metades horizontais lado a lado */
+/* 4. GRID REPARTIDO EM DUAS COLUNAS (50% / 50%) */
 .grid-produtos-container {
-    display: flex !important; /* Ativa flexbox no grid */
-    flex-direction: row !important; /* FORÇA COMPORTAMENTO: Garante as duas colunas lado a lado na horizontal */
-    gap: 15px; /* Espaço de folga e respiro entre o formulário e a listagem da tabela */
-    flex: 1; /* Faz o bloco se esticar verticalmente ocupando toda a área central */
-    height: calc(100vh - 75px); /* Desconta os 75px do topo para travar no monitor do avaliador */
-    overflow: hidden; /* Corta vazamentos estruturais externos */
+    display: flex !important;
+    flex-direction: row !important; /* Força colunas lado a lado */
+    gap: 15px;
+    flex: 1;
+    height: calc(100vh - 75px); /* Deduz a altura do topo para travar na tela */
+    overflow: hidden;
     width: 100%;
     box-sizing: border-box;
 }
 
-/* Força ambas as colunas a possuírem tamanhos idênticos (50% de largura cada) */
-.coluna-esquerda-formulario, 
+/* Força as duas metades da tela a dividirem o espaço igualmente */
+.coluna-esquerda-cadastro, 
 .coluna-direita-listagem {
-    flex: 1 !important; 
-    width: 50% !important; /* Trava a largura horizontal em exatamente metade da tela */
-    display: flex !important; 
-    flex-direction: column !important; 
-    height: 100% !important; 
-    overflow: hidden !important; /* Proíbe o surgimento de barras fantasmas na base */
+    flex: 1 !important;
+    width: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
     box-sizing: border-box;
 }
 
-/* PADRÃO DE PEDIDOS: Ativa a rolagem mestre e gordinha na coluna inteira da esquerda */
-.coluna-esquerda-formulario {
-    overflow-y: auto !important; /* MÁGICA: Os cards sobem e descem juntos de forma sutil */
-    padding-right: 6px; /* Folga sutil para a barra de rolagem não amassar as caixas */
-    gap: 10px; /* Espaçamento de separação vertical entre os cards soltos */
-}
-
-/* Customização estética da grossura do scroll da coluna esquerda idêntica à de pedidos */
-.coluna-esquerda-formulario::-webkit-scrollbar { width: 6px !important; }
-.coluna-esquerda-formulario::-webkit-scrollbar-thumb { background: #5c6655 !important; border-radius: 4px !important; }
-
-/* 6. FORMULÁRIO DE CADASTRO (CARDS INDEPENDENTES DA ESQUERDA) */
-/* Design dos cards brancos flutuantes soltos sobre o fundo cinza claro */
-.card-formulario-produtos,
-.card-formulario-produtos-acoes {
-    background-color: #ffffff !important; /* Fundo branco puro */
-    border-radius: 8px !important; /* Cantos arredondados das caixas */
-    padding: 15px !important; /* Margem interna confortável */
-    border: 1px solid #e5e7eb !important; /* Linha fina divisória ao redor do bloco */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04) !important; /* Sombra sutil na base dando o efeito de card solto */
-    width: 100% !important;
+/* Caixa branca flutuante do formulário de cadastro esquerdo */
+.card-formulario-produtos {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
 }
 
-/* Card 1: Remove a altura fixa para o bloco se moldar livremente ao tamanho das caixas */
-.card-formulario-produtos { display: flex !important; flex-direction: column !important; height: auto !important; }
-.card-formulario-produtos h3, .card-tabela-produtos h3 { font-size: 0.8rem; color: #374151; font-weight: 600; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+.card-formulario-produtos h3 {
+    font-size: 0.8rem;
+    color: #374151;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    margin-top: 0;
+}
+
 .svg-card-titulo { width: 14px; height: 14px; stroke: #171d14 !important; stroke-width: 2; }
-.wrapper-inputs-scroll-produtos { display: block !important; width: 100% !important; }
 
-/* Estruturação vertical para colocar a etiqueta (Label) acima do input */
-.grupo-input-produtos { display: flex !important; flex-direction: column !important; margin-bottom: 10px !important; }
-.grupo-input-produtos label { font-size: 0.7rem; color: #4b5563; font-weight: 600; margin-bottom: 4px; text-align: left; }
-.obrigatorio { color: #ef4444; margin-left: 2px; } /* Asterisco obrigatório em vermelho vivo */
+/* ROLAGEM MESTRE DE PEDIDOS: Ativa a barra vertical cinza-militar e mata a horizontal feia */
+.wrapper-inputs-scroll-cadastro {
+    flex: 1;
+    overflow-y: auto !important; /* Libera apenas a rolagem para baixo */
+    overflow-x: hidden !important; /* DETONA A ROLAGEM DE LADO DO WINDOWS! */
+    padding-right: 6px;
+    margin-bottom: 5px;
+    max-height: calc(100vh - 110px); /* Deixa o formulário alto e livre */
+    box-sizing: border-box;
+}
 
-/* Estilização padrão de todas as caixas de digitação textuais */
+/* Customização estética do scroll gordinho militar igual a Pedidos */
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar {
+    width: 6px !important;
+}
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar-thumb {
+    background: #5c6655 !important; /* Tom cinza escuro militar */
+    border-radius: 4px !important;
+}
+
+/* Estruturação vertical para colocar a legenda acima das caixas */
+.grupo-input-produtos {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.grupo-input-produtos label {
+    font-size: 0.7rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 3px;
+    text-align: left;
+}
+
+.obrigatorio { color: #ef4444; margin-left: 2px; }
+
+/* Customização e respiro de todas as caixas de digitação textuais */
 .grupo-input-produtos input,
 .grupo-input-produtos select,
 .grupo-input-produtos textarea {
-    padding: 7px 10px !important; 
-    border: 1px solid #d1d5db !important; 
-    border-radius: 6px !important; 
-    font-size: 0.78rem !important; 
-    outline: none !important; /* Desativa aquela borda preta grossa padrão do navegador ao clicar */
-    background-color: #ffffff !important; 
-    color: #1f2937 !important; 
-    width: 100% !important;
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    outline: none;
+    background-color: #ffffff;
+    color: #1f2937;
+    width: 100%;
     box-sizing: border-box;
 }
-.grupo-input-produtos textarea { resize: none !important; height: 58px !important; } /* Proíbe esticar a caixa manualmente */
 
-/* Linha com layout flexível para acoplar o botão + ao lado do campo categoria */
-.linha-input-com-botao { display: flex !important; gap: 6px; width: 100%; }
-.btn-add-categoria-rapida { background-color: #172016; color: white; border: none; width: 32px; height: 32px; border-radius: 6px; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.grupo-input-produtos textarea { resize: none; height: 48px; }
 
-/* Engenharia de embutimento do texto R$ fixo dentro do input de preço */
-.prefixo-moeda-wrapper { position: relative; display: flex; align-items: center; width: 100%; }
-.prefixo-rs { position: absolute; left: 10px; font-size: 0.78rem; font-weight: 600; color: #6b7280; }
-.prefixo-moeda-wrapper input { padding-left: 32px !important; } /* Empurra o texto digitado 32px para a frente */
-
-/* ==========================================================================
-   PARTE 3: INTERRUPTOR SWITCH DESLIZANTE E GRADE DE BOTÕES DA BASE (ESQUERDA)
-   ========================================================================== */
-
-/* 1. CONFIGURAÇÃO DO INTERRUPTOR SLIDER (SWITCH ATIVO) */
-/* Alinha o interruptor oval e o texto descritivo lado a lado na horizontal */
-.alinhamento-switch-ativo { 
-    display: flex !important; 
-    align-items: center; 
-    gap: 8px; 
-    margin-top: 2px; 
-}
-
-/* Envelopa o switch definindo a largura e altura total do botão oval */
-.switch-container-item { 
+/* PREFIXO MOEDA: Envelatamento estrutural para injetar o símbolo "R$" dentro do campo de preço */
+.prefixo-moeda-wrapper { 
     position: relative; 
-    display: inline-block; 
-    width: 34px; 
-    height: 18px; 
+    display: flex; 
+    align-items: center; 
+    width: 100%; 
 }
 
-/* Esconde o quadradinho de marcação padrão (Checkbox) nativo e feio do HTML */
-.switch-container-item input { 
-    opacity: 0; 
-    width: 0; 
-    height: 0; 
-}
-
-/* Desenha o fundo oval cinza do interruptor desativado com transição macia */
-.slider-switch-bola { 
+.prefixo-rs { 
     position: absolute; 
-    cursor: pointer; 
-    top: 0; left: 0; right: 0; bottom: 0; 
-    background-color: #cbd5e1; /* Cinza claro fosco padrão de desligado */
-    transition: .3s; 
-    border-radius: 18px; 
+    left: 10px; 
+    font-size: 0.78rem; 
+    font-weight: 600; 
+    color: #6b7280; 
 }
 
-/* Desenha a bolinha branca interna que vai deslizar de um lado para o outro */
-.slider-switch-bola:before { 
-    position: absolute; 
-    content: ""; 
-    height: 12px; 
-    width: 12px; 
-    left: 3px; 
-    bottom: 3px; 
-    background-color: white; 
-    transition: .3s; 
-    border-radius: 50%; /* Força formato redondo perfeito */
+.prefixo-moeda-wrapper input { 
+    padding-left: 32px !important; /* Cria um recuo forçado de 32px na esquerda */
 }
 
-/* Quando marcado/ativo, altera a cor de fundo para o verde musgo oficial do MIRA */
-.switch-container-item input:checked + .slider-switch-bola { 
-    background-color: #172016; 
-}
+/* INTERRUPTOR ATIVO: Botão deslizante oval moderno */
+.alinhamento-switch-ativo { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+.switch-container-item { position: relative; display: inline-block; width: 34px; height: 18px; }
+.switch-container-item input { opacity: 0; width: 0; height: 0; }
+.slider-switch-bola { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 18px; }
+.slider-switch-bola:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+.switch-container-item input:checked + .slider-switch-bola { background-color: #172016; }
+.switch-container-item input:checked + .slider-switch-bola:before { transform: translateX(16px); }
+.texto-switch-label { font-size: 0.75rem; color: #374151; font-weight: 500; }
 
-/* Quando marcado/ativo, joga a bolinha branca 16 pixels para a direita horizontalmente */
-.switch-container-item input:checked + .slider-switch-bola:before { 
-    transform: translateX(16px); 
-}
-
-/* Formatação do texto de orientação do switch */
-.texto-switch-label { 
-    font-size: 0.75rem; 
-    color: #374151; 
-    font-weight: 500; 
-}
-
-/* 2. GRADE DE BOTÕES ADMINISTRATIVOS DA ESQUERDA (MESMO PADRÃO DE CLIENTES) */
-/* Divide a base do card flutuante em 4 colunas milimetricamente iguais (25% cada) */
-.botoes-acoes-formulario-prod {
+/* FILEIRA DE BOTÕES TRIPLOS: Agora desliza de forma contínua no final do scroll */
+.botoes-acoes-formulario-prod-triplo {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important; /* FORÇA SIMETRIA: Garante tamanhos idênticos */
+    grid-template-columns: repeat(3, 1fr) !important; /* Cria 3 colunas perfeitamente iguais */
     gap: 8px !important;
+    margin-top: 15px !important; /* Espaço confortável após o switch */
+    border-top: 1px solid #e5e7eb !important; /* Linha cinza fina elegante de separação */
+    padding-top: 12px !important; /* Espaço interno entre a linha e os botões */
     width: 100% !important;
+    box-sizing: border-box !important;
 }
 
-/* Estilo base unificado para tornar os 4 botões grandes, imponentes e profissionais */
+/* Customização robusta unificada para os 3 botões possuírem o mesmo tamanho */
 .btn-prod-base {
-    padding: 10px 4px !important; /* Aumentado o preenchimento interno para dar o respiro de Pedidos */
+    padding: 10px !important;
     border-radius: 6px !important;
-    font-size: 0.75rem !important;
+    font-size: 0.78rem !important;
     cursor: pointer !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 4px !important;
     font-weight: 600 !important;
-    border: 1px solid #d1d5db !important;
-    background-color: #ffffff !important;
-    color: #374151 !important;
+    border: none !important;
     transition: all 0.2s;
+    color: white !important;
 }
 
-/* Customização de cores individuais baseada nas regras de negócio MIRA */
-.salvar-btn { background-color: #172016 !important; color: white !important; border: none !important; }
-.limpar-btn { background-color: #ffffff !important; color: #374151 !important; }
-.excluir-btn { color: #ef4444 !important; border-color: #fca5a5 !important; background-color: #ffffff !important; }
-
-/* Efeitos visuais reativos de mouse hover premium */
+/* Tons escuros corporativos combinando com as regras do MIRA Confeitaria */
+.salvar-btn { background-color: #172016 !important; } 
+.limpar-btn { background-color: #2a3626 !important; } 
+.editar-btn { background-color: #172016 !important; } /* Mesmo verde escuro do Salvar no novo padrão */
 .btn-prod-base:hover { opacity: 0.9; transform: translateY(-1px); }
 .btn-prod-base:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+.m-t-8 { margin-top: 5px; }
 
 /* ==========================================================================
-   PARTE 4: CARD DIREITO, PAGINAÇÃO E BLINDAGEM SUPREMA DA TABELA DE PRODUTOS
+   PARTE 4: CARD DA LISTAGEM DIREITA, BADGES E CONTRASTE ALTO NAS LINHAS
    ========================================================================== */
 
-/* 3. CARD E ESTRUTURA DA LISTAGEM DIREITA (ESTILO DETALHES DE PEDIDOS) */
-/* Caixa estrutural que envelopa a tabela e a paginação da direita ocupando a altura total */
+/* 1. CARD DA LISTAGEM DIREITA */
 .card-tabela-produtos {
-    background-color: #ffffff !important;
-    border-radius: 8px !important;
-    padding: 15px !important;
-    border: 1px solid #e5e7eb !important;
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important; /* Garante a tabela no topo e a paginação colada na base */
-    overflow: hidden !important;
-    box-sizing: border-box !important;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-sizing: border-box;
 }
-.topo-tabela-acoes-prod { display: flex !important; justify-content: space-between !important; align-items: center !important; margin-bottom: 8px !important; }
-.svg-mini-topo-prod { width: 14px; height: 14px; stroke: #4b5563 !important; stroke-width: 2; }
 
-/* CONTROLE SUTIL DE SCROLL: Ativa a rolagem vertical e aniquila a horizontal */
-.wrapper-tabela-produtos-scroll {
-    flex: 1 !important;
-    overflow-y: auto !important; /* Cria rolagem vertical fina caso acumule muitos produtos */
-    overflow-x: hidden !important; /* REGRA DE OURO: Pulveriza e aniquila a rolagem de lado inferior */
-    border: 1px solid #edf2f7 !important;
-    border-radius: 6px !important;
+/* FILEIRA INTERNA: Une a busca por nomes e o botão atualizar dentro do card */
+.linha-pesquisa-interna-prod {
+    display: flex !important;
+    gap: 6px !important;
+    align-items: center !important;
+    width: 100% !important;
     margin-bottom: 8px !important;
+}
+
+.wrapper-busca-tabela-prod {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex: 1 !important;
+}
+
+.svg-busca-tabela-interna { width: 12px !important; height: 12px !important; stroke: #6b7280 !important; stroke-width: 2 !important; }
+.wrapper-busca-tabela-prod input { border: none !important; outline: none !important; font-size: 0.78rem !important; color: #1f2937 !important; width: 100% !important; background: none !important; }
+
+.btn-mini-tabela-topo {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    width: 31px !important;
+    height: 31px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.svg-mini-topo { width: 12px !important; height: 12px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
+
+/* 2. ÁREA DE SCROLL COM LINHA EXTERNA ESCURECIDA */
+.wrapper-tabela-produtos-scroll {
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: hidden !important; /* Destrói o scroll horizontal inferior do Windows */
+    border: 1px solid #b8bfc7; /* Borda cinza externa da tabela escurecida para alto contraste */
+    border-radius: 6px;
+    margin-bottom: 6px;
+    max-height: calc(100vh - 170px);
 }
 .wrapper-tabela-produtos-scroll::-webkit-scrollbar { width: 4px; }
 .wrapper-tabela-produtos-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
 
-/* 4. BLINDAGEM SUPREMA DA TABELA CONTRA O BUG DE COLUNAS HORIZONTAIS GIGANTES */
-/* Obriga o motor do navegador a tratar as tags como uma tabela clássica convencional */
-.tabela-dados-produtos {
-    width: 100% !important;
-    display: table !important; /* FORÇA COMPORTAMENTO: Desintegra o bug das colunas verticais */
-    border-collapse: collapse !important;
-    font-size: 0.75rem !important;
-    table-layout: fixed !important; /* Trava o tamanho das colunas baseado estritamente na porcentagem do PHP */
-}
+/* 3. BLINDAGEM DA TABELA COM CONTRASTE NITIDO NAS LINHAS */
+.tabela-dados-produtos { width: 100% !important; border-collapse: collapse; font-size: 0.75rem; table-layout: fixed !important; }
 
-.tabela-dados-produtos thead { display: table-header-group !important; }
-.tabela-dados-produtos tbody { display: table-row-group !important; }
-
-/* Garante que cada produto seja desenhado deitado horizontalmente, uma linha embaixo da outra */
-.tabela-dados-produtos tr {
-    display: table-row !important; /* FORÇA LINHA HORIZONTAL */
-    background: none !important;
-}
-
-/* Customização e respiro confortável das células internas da tabela */
+/* Injetado o cinza escuro (#b8bfc7) na linha inferior para marcar bem cada doce listado */
 .tabela-dados-produtos th, 
-.tabela-dados-produtos td {
-    display: table-cell !important; /* FORÇA CELULA CLÁSSICA */
-    padding: 10px 8px !important; /* Espaçamento interno confortável que desesmaga os nomes */
-    text-align: left !important;
-    border-bottom: 1px solid #edf2f7 !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important; /* Acrescenta reticências (...) se o texto for maior que a coluna */
-    white-space: nowrap !important; /* Proíbe quebras de linha feias no meio da frase */
-    box-sizing: border-box !important;
+.tabela-dados-produtos td { 
+    padding: 10px 12px !important; 
+    text-align: left; 
+    border-bottom: 1px solid #b8bfc7; /* Linhas horizontais escurecidas nítidas de alto contraste */
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
 }
 
 /* Trava a barra de títulos cinza claro congelada no topo da rolagem */
-.tabela-dados-produtos th {
-    background-color: #f9fafb !important;
-    color: #4b5563 !important;
-    font-weight: 600 !important;
-    position: sticky !important; /* CONGELADO NO TOPO */
-    top: 0;
-    z-index: 5;
-}
+.tabela-dados-produtos th { background-color: #f9fafb; color: #4b5563; font-weight: 600; position: sticky; top: 0; z-index: 5; }
 
-/* 5. BADGES CROMÁTICAS DE CATEGORIAS PASTÉIS CONFORME O MOCKUP */
-.badge-cat { padding: 4px 6px !important; border-radius: 4px !important; font-size: 0.65rem !important; font-weight: 600 !important; display: inline-block !important; text-align: center !important; width: 100% !important; }
-.b-bolos { background-color: #fef3c7 !important; color: #b45309 !important; } /* Amarelo sutil */
-.b-cheesecakes { background-color: #fee2e2 !important; color: #b91c1c !important; } /* Rosa suave */
-.b-tortas { background-color: #ffedd5 !important; color: #c2410c !important; } /* Laranja suave */
-.b-doces { background-color: #f3e8ff !important; color: #6b21a8 !important; } /* Lilás pastel */
+/* Badges Coloridas Pastéis Conforme o seu Mockup */
+.badge-cat { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
+.b-bolos { background-color: #fef3c7; color: #b45309; } /* Amarelo pastel */
+.b-cheesecakes { background-color: #fee2e2; color: #b91c1c; } /* Vermelho suave */
+.b-tortas { background-color: #ffedd5; color: #c2410c; } /* Laranja suave */
+.b-doces { background-color: #f3e8ff; color: #6b21a8; } /* Lilás pastel */
 
 /* Etiquetas ovais indicadoras de status ativo/inativo */
-.badge-status { padding: 2px 6px !important; border-radius: 12px !important; font-size: 0.65rem !important; font-weight: 600 !important; display: inline-block !important; }
-.badge-status.ativo { background-color: #e6f7ed !important; color: #16a34a !important; }
-.badge-status.inativo { background-color: #fef2f2 !important; color: #ef4444 !important; }
+.badge-status { padding: 2px 6px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; }
+.badge-status.ativo { background-color: #e6f7ed; color: #16a34a; }
+.badge-status.inativo { background-color: #fef2f2; color: #ef4444; }
 
-/* Alinhamento dos pequenos botões circulares de ação da linha */
-.celula-acoes-prod { text-align: center !important; display: flex !important; justify-content: center !important; gap: 4px !important; align-items: center !important; }
-.btn-linha-prod { width: 22px !important; height: 22px !important; border-radius: 50% !important; border: 1px solid #d1d5db !important; background-color: #ffffff !important; cursor: pointer; display: flex !important; align-items: center !important; justify-content: center !important; }
-.btn-linha-prod svg { width: 12px !important; height: 12px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
-.btn-linha-prod.edit:hover { background-color: #f3f4f6 !important; }
-.btn-linha-prod.del:hover { background-color: #fef2f2 !important; border-color: #fca5a5 !important; }
+/* Alinhamento dos mini botões circulares de ação da linha */
+.celula-acoes-prod { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
+.btn-linha-prod { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.btn-linha-prod svg { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
+.btn-linha-prod.edit:hover { background-color: #f3f4f6; }
+.btn-linha-prod.del:hover { background-color: #fef2f2; border-color: #fca5a5; }
 
-/* 6. BARRA DE PAGINAÇÃO INFERIOR DO CARD DIREITO */
-.rodape-paginacao-produtos { display: flex !important; justify-content: space-between !important; align-items: center !important; border-top: 1px solid #e5e7eb !important; padding-top: 6px !important; }
-.info-contagem-prod { font-size: 0.72rem; color: #6b7280; }
-.controles-paginacao-direita-prod { display: flex; gap: 12px; align-items: center; }
-.seletor-linhas-pagina-prod select { padding: 4px 8px !important; border: 1px solid #d1d5db !important; border-radius: 4px !important; font-size: 0.7rem !important; outline: none !important; color: #4b5563 !important; background-color: #ffffff !important; width: auto !important; }
-.botoes-passar-pagina-prod { display: flex; gap: 3px; }
-.btn-pagi-prod { background-color: #ffffff !important; border: 1px solid #d1d5db !important; min-width: 24px !important; height: 24px !important; padding: 0 4px !important; border-radius: 4px !important; font-size: 0.72rem !important; color: #4b5563 !important; cursor: pointer; display: flex !important; align-items: center !important; justify-content: center !important; }
-.btn-pagi-prod svg { width: 10px !important; height: 10px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
-.ativo-pagi-prod { background-color: #172016 !important; color: #ffffff !important; border-color: #172016 !important; font-weight: 600 !important; }
-.m-t-10 { margin-top: 5px; }
-/* FINAL DA COMPILAÇÃO MIRA PREMIUM DO PRODUTOS.CSS - COMENTADO LINHA POR LINHA */
+/* Rodapé simplificado contendo apenas a contagem total de itens em conformidade com o mockup */
+.rodape-paginacao-produtos { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 6px; font-size: 0.72rem; color: #6b7280; }
+.info-contagem-prod { font-weight: 500; }
