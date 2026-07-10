@@ -3,7 +3,6 @@
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
-    
     // Captura de componentes do Formulário
     const form = document.getElementById("formCadastroProduto");
     const inputNome = document.getElementById("nomeProduto");
@@ -17,89 +16,184 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const btnEditar = document.getElementById("btnEditarProd");
     const btnLimpar = document.getElementById("btnLimparProd");
-    const btnExcluir = document.getElementById("btnExcluirProd");
-
-    // Captura da Pesquisa Superior e Linhas da Tabela
+    
+    // Captura da Tabela e Pesquisa
     const inputPesquisaGlobal = document.getElementById("inputPesquisaGlobal");
     const corpoTabela = document.getElementById("corpoTabelaProdutos");
+    const btnRecarregar = document.getElementById("btnRecarregarProdutos");
+    
+    // Variável para controlar se estamos editando ou criando um novo
+    let produtoIdAtual = null;
 
-    // Array simulado em memória RAM contendo os 7 itens idênticos aos do mockup
-    let produtosEmMemoria = [
-        { id: 101, nome: "Bolo de Chocolate Premium", categoria: "Bolos", tamanho: "20 cm", preco: "89,90", sabores: "Chocolate", status: true },
-        { id: 102, nome: "Cheesecake de Frutas Vermelhas", categoria: "Cheesecakes", tamanho: "18 cm", preco: "74,90", sabores: "Frutas Vermelhas", status: true },
-        { id: 103, nome: "Torta de Limão Siciliano", categoria: "Tortas", tamanho: "22 cm", preco: "69,90", sabores: "Limão", status: true },
-        { id: 104, nome: "Brigadeiro Gourmet", categoria: "Doces", tamanho: "15 un", preco: "45,00", sabores: "Chocolate", status: true },
-        { id: 105, nome: "Macarons Sortidos", categoria: "Doces", tamanho: "10 un", preco: "55,00", sabores: "Variados", status: false },
-        { id: 106, nome: "Bolo Red Velvet", categoria: "Bolos", tamanho: "20 cm", preco: "99,90", sabores: "Red Velvet", status: true },
-        { id: 107, nome: "Brownie com Nozes", categoria: "Doces", tamanho: "12 un", preco: "42,00", sabores: "Chocolate, Nozes", status: true }
-    ];
-
-    // Atualiza o texto do switch dinamicamente ao clicar nele
+    // Atualiza o texto do switch dinamicamente
     inputStatus.addEventListener("change", function () {
         labelStatus.textContent = this.checked ? "Sim, produto ativo" : "Não, produto inativo";
     });
 
-    // Função para escutar cliques nas linhas manuais da tabela
-    function vincularCliquesLinhas() {
-        const linhas = corpoTabela.querySelectorAll(".linha-selecionavel-prod");
-        linhas.forEach(linha => {
-            linha.style.cursor = "pointer";
-            linha.addEventListener("click", function (e) {
-                // Impede disparar se o clique for direto nos mini botões de ação
-                if (e.target.closest('.btn-linha-prod')) return;
+    // ==========================================================================
+    // 1. CARREGAR PRODUTOS DO BANCO
+    // ==========================================================================
+    function carregarProdutosDoBanco() {
+        corpoTabela.innerHTML = `<tr><td colspan="7" style="text-align:center;">Carregando produtos...</td></tr>`;
 
-                const idAlvo = this.getAttribute("data-id");
-                const itemLocalizado = produtosEmMemoria.find(p => p.id == idAlvo);
-                if (itemLocalizado) {
-                    carregarFormulario(itemLocalizado);
-                }
-            });
+        fetch('../php/buscar_produtos.php')
+        .then(res => res.json())
+        .then(retorno => {
+            corpoTabela.innerHTML = ""; // Limpa a tabela
+
+            if (retorno.sucesso && retorno.produtos.length > 0) {
+                retorno.produtos.forEach(produto => {
+                    
+                    // Lógica para colorir a badge da categoria
+                    let classeCat = "b-doces"; // Padrão
+                    const catLower = produto.categoria.toLowerCase();
+                    if (catLower.includes('bolo')) classeCat = 'b-bolos';
+                    if (catLower.includes('cheese')) classeCat = 'b-cheesecakes';
+                    if (catLower.includes('torta')) classeCat = 'b-tortas';
+
+                    // Lógica do Status
+                    const statusBadge = produto.status == 1 
+                        ? `<span class="badge-status ativo">Ativo</span>` 
+                        : `<span class="badge-status inativo">Inativo</span>`;
+
+                    // Formata preço para exibição
+                    const precoFormatado = parseFloat(produto.preco).toFixed(2).replace('.', ',');
+
+                    // Cria a linha
+                    const tr = document.createElement("tr");
+                    tr.className = "linha-selecionavel-prod";
+                    tr.setAttribute("data-id", produto.id);
+                    tr.style.display = "table-row";
+                    tr.style.cursor = "pointer";
+
+                    tr.innerHTML = `
+                        <td>${produto.id}</td>
+                        <td><strong>${produto.nome}</strong></td>
+                        <td><span class="badge-cat ${classeCat}">${produto.categoria}</span></td>
+                        <td>${produto.tamanho || '-'}</td>
+                        <td>R$ ${precoFormatado}</td>
+                        <td>${produto.sabores || '-'}</td>
+                        <td>${statusBadge}</td>
+                        <td class="celula-acoes-prod">
+                            <button type="button" class="btn-linha-prod edit"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                        </td>
+                    `;
+                    
+                    // Adiciona evento de clique na linha para jogar os dados pro formulário
+                    tr.addEventListener("click", function (e) {
+                        if (e.target.closest('.btn-linha-prod')) return; // Ignora se clicou no botão de ação direto
+                        carregarFormulario(produto);
+                    });
+
+                    corpoTabela.appendChild(tr);
+                });
+            } else {
+                corpoTabela.innerHTML = `<tr><td colspan="7" style="text-align:center;">Nenhum produto cadastrado ainda.</td></tr>`;
+            }
+        })
+        .catch(erro => console.error("Erro ao puxar produtos:", erro));
+    }
+
+    // ==========================================================================
+    // 2. SALVAR OU ATUALIZAR PRODUTO
+    // ==========================================================================
+    form.addEventListener("submit", function (e) {
+        e.preventDefault(); // Impede a página de recarregar
+
+        const btnSalvar = document.querySelector(".salvar-btn");
+        const textoOriginal = btnSalvar.innerHTML;
+        btnSalvar.innerHTML = "⏳ Salvando...";
+        btnSalvar.disabled = true;
+
+        const pacoteDados = {
+            id: produtoIdAtual,
+            nome: inputNome.value,
+            categoria: inputCategoria.value,
+            tamanho: inputTamanho.value,
+            preco: inputPreco.value,
+            sabores: inputSabores.value,
+            descricao: inputDescricao.value,
+            status: inputStatus.checked
+        };
+
+        fetch('../php/salvar_produto.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(pacoteDados)
+        })
+        .then(res => res.json())
+        .then(retorno => {
+            if (retorno.sucesso) {
+                alert(retorno.mensagem);
+                btnLimpar.click(); // Limpa o formulário
+                carregarProdutosDoBanco(); // Atualiza a tabela imediatamente
+            } else {
+                alert("Erro ao salvar: " + retorno.erro);
+            }
+        })
+        .catch(erro => alert("Erro de comunicação com o servidor."))
+        .finally(() => {
+            btnSalvar.innerHTML = textoOriginal;
+            btnSalvar.disabled = false;
         });
-    }
-
-    // Carrega os dados do item clicado de volta no formulário
-    function carregarFormulario(dados) {
-        inputNome.value = dados.nome;
-        inputCategoria.value = dados.categoria;
-        inputTamanho.value = dados.tamanho;
-        inputPreco.value = dados.preco;
-        inputSabores.value = dados.sabores;
-        inputStatus.checked = dados.status;
-        labelStatus.textContent = dados.status ? "Sim, produto ativo" : "Não, produto inativo";
-
-        // Ativa botões administrativos auxiliares da esquerda
-        btnEditar.disabled = false;
-        btnExcluir.disabled = false;
-
-        // Rola o formulário de volta estável para o topo
-        document.querySelector(".wrapper-inputs-scroll-produtos").scrollTop = 0;
-    }
-
-    // Botão Limpar restaura o estado original neutro do formulário
-    btnLimpar.addEventListener("click", function () {
-        form.reset();
-        labelStatus.textContent = "Sim, produto ativo";
-        btnEditar.disabled = true;
-        btnExcluir.disabled = true;
     });
 
-    // Filtro superior por digitação em tempo real (Filtra por Nome ou Categoria)
+    // ==========================================================================
+    // 3. CARREGAR DADOS NO FORMULÁRIO PARA EDIÇÃO
+    // ==========================================================================
+    function carregarFormulario(produto) {
+        produtoIdAtual = produto.id; // Salva o ID para o sistema saber que é uma atualização
+        
+        inputNome.value = produto.nome;
+        inputCategoria.value = produto.categoria;
+        inputTamanho.value = produto.tamanho;
+        
+        // Retorna o preço formatado para o input
+        inputPreco.value = parseFloat(produto.preco).toFixed(2).replace('.', ',');
+        
+        inputSabores.value = produto.sabores;
+        inputDescricao.value = produto.descricao;
+        
+        inputStatus.checked = (produto.status == 1);
+        labelStatus.textContent = inputStatus.checked ? "Sim, produto ativo" : "Não, produto inativo";
+
+        btnEditar.disabled = false;
+
+        // Rola o formulário de volta para o topo suavemente
+        document.querySelector(".wrapper-inputs-scroll-cadastro").scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================================================
+    // 4. INTERAÇÕES DE LIMPEZA E FILTRO
+    // ==========================================================================
+    btnLimpar.addEventListener("click", function () {
+        form.reset();
+        produtoIdAtual = null; // Zera o ID (o próximo salvamento será um INSERT novo)
+        labelStatus.textContent = "Sim, produto ativo";
+        btnEditar.disabled = true;
+    });
+
+    // Filtro superior em tempo real
     inputPesquisaGlobal.addEventListener("keyup", function () {
         const busca = this.value.toLowerCase().trim();
         const linhas = corpoTabela.querySelectorAll("tr");
 
         linhas.forEach(linha => {
-            const textoNome = linha.cells[1].textContent.toLowerCase();
-            const textoCat = linha.cells[2].textContent.toLowerCase();
+            if (linha.cells.length > 1) { // Garante que não é a linha de "Carregando"
+                const textoNome = linha.cells[1].textContent.toLowerCase();
+                const textoCat = linha.cells[2].textContent.toLowerCase();
 
-            if (textoNome.includes(busca) || textoCat.includes(busca)) {
-                linha.style.display = "";
-            } else {
-                linha.style.display = "none";
+                if (textoNome.includes(busca) || textoCat.includes(busca)) {
+                    linha.style.display = "table-row";
+                } else {
+                    linha.style.display = "none";
+                }
             }
         });
     });
 
-    // Executa o vínculo inicial na carga do DOM
-    vincularCliquesLinhas();
+    btnRecarregar.addEventListener("click", carregarProdutosDoBanco);
+
+    // Inicializa a tabela ao carregar a página
+    carregarProdutosDoBanco();
 });
