@@ -1,586 +1,308 @@
 /* ==========================================================================
-   PARTE 1: RESET DE CORREÇÃO CIRÚRGICA DE VETORES E CABEÇALHO SUPERIOR
+   MIRA CONFEITARIA - ESTILO RECEITAS RESPONSIVO (PADRÃO FLUXO LIMPO)
    ========================================================================== */
 
-/* Trava todo o painel de receitas na tela eliminando barras de rolagem globais */
+/* 1. RESET DE ESTILOS VETORIAIS */
+svg, path, rect, circle, polyline, line, polygon {
+    fill: none !important;
+}
+
+/* 2. CONTÊINER VISUAL DO PAINEL MESTRE */
 .painel-conteudo-receitas {
-    padding: 12px 25px 12px 90px !important; /* Espaço para a barra lateral */
-    background-color: #dcdddf; /* Fundo cinza claro oficial */
-    height: 100vh; /* Altura máxima da janela */
+    padding: 12px 25px 12px 90px !important; /* Margem de fuga para a barra lateral */
+    background-color: #f3f4f6; /* Cinza oficial do sistema MIRA */
+    height: 100vh; /* Crava na altura exata do monitor */
     width: 100%; 
     display: flex; 
     flex-direction: column; 
-    overflow: hidden; 
+    overflow: hidden; /* Corta rolagens na tela inteira */
+    box-sizing: border-box;
 }
 
-/* Espaçamento sutil do cabeçalho da página */
+/* 3. CABEÇALHO SUPERIOR */
 .topo-receitas {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: flex-start; 
-    margin-bottom: 8px; 
-}
-
-/* Alinhamento do ícone e textos principais do topo esquerdo */
-.titulo-pagina-receitas {
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
-}
-
-/* Caixinha branca que envolve o ícone de receita do topo */
-.icone-titulo-rec {
-    background-color: #ffffff; 
-    width: 38px; 
-    height: 38px; 
-    border-radius: 8px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    border: 1px solid #e5e7eb; 
-}
-
-/* Força os SVGs a não herdarem nenhuma cor preta de preenchimento do navegador */
-.svg-topo-rec, .svg-card-titulo, .svg-mini-topo, .svg-btn-inline, .svg-busca-topo, .svg-busca-tabela-interna, .svg-linha-acao, .svg-pag {
-    fill: none !important; /* BLINDA O INTERIOR: Proíbe qualquer preenchimento preto automático */
-    display: inline-block;
-    vertical-align: middle;
-}
-
-/* Estilo do ícone do livro no cabeçalho */
-.svg-topo-rec {
-    width: 18px; 
-    height: 18px; 
-    stroke: #171d14; /* Verde musgo do MIRA */
-    stroke-width: 2; 
-}
-
-/* Formatação de fontes do topo */
-.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; } 
-.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; } 
-
-.wrapper-busca-topo input {
-    border: none;
-    outline: none;
-    font-size: 0.78rem;
-    color: #1f2937;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
     width: 100%;
 }
 
-/* Botões do topo direito */
-.btn-filtro-topo, .btn-nova-receita-topo {
-    padding: 6px 10px; 
-    border-radius: 6px; 
-    font-size: 0.75rem; 
-    cursor: pointer; 
-    display: flex; 
+.titulo-pagina-receitas { display: flex; align-items: center; gap: 12px; }
+
+.icone-titulo-rece {
+    background-color: #ffffff;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
     align-items: center;
     justify-content: center;
+    border: 1px solid #e5e7eb;
 }
 
-.btn-filtro-topo {
-    background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    color: #374151; 
+.svg-topo-rece {
+    width: 18px;
+    height: 18px;
+    stroke: #171d14 !important;
+    stroke-width: 2;
 }
 
-.btn-nova-receita-topo {
-    background-color: #1f2937; 
-    border: none; 
-    color: #ffffff; 
-    font-weight: 500; 
-}
+.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; }
+.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; }
 
-/* ==========================================================================
-   PARTE 2: DISTRIBUIÇÃO DAS DUAS COLUNAS E FORMULÁRIO DE CADASTRO (ESQUERDA)
-   ========================================================================== */
-
-/* Container que divide a tela ao meio em duas colunas simétricas */
+/* 4. GRADE RESPONSIVA ELÁSTICA (50% / 50%) */
 .grid-receitas-container {
-    display: flex; /* Alinha a coluna da esquerda e direita lado a lado */
-    gap: 15px; /* Espaço de separação entre as duas colunas */
-    flex: 1; /* Faz o bloco ocupar todo o espaço central restante da tela */
-    height: calc(100vh - 75px); /* Desconta a altura do cabeçalho superior */
-    overflow: hidden; /* Evita que o grid vaze para fora da viewport */
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 15px;
+    flex: 1;
+    height: calc(100vh - 75px);
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Divisão padrão: cada coluna assume exatamente a mesma largura (50% cada) */
+/* Garante que os cards se moldem perfeitamente a telas menores sem transbordar */
 .coluna-esquerda-cadastro, 
 .coluna-direita-listagem {
-    flex: 1; /* Ocupa metade da largura da tela de forma justa */
-    display: flex; /* Ativa flexbox interno para os cards */
-    flex-direction: column; /* Alinha os blocos de cima para baixo */
-    height: 100%; /* Força o preenchimento total da altura do grid */
-    overflow: hidden; /* Previne barras de rolagem indesejadas por fora */
+    flex: 1 !important;
+    width: 50% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    box-sizing: border-box;
 }
 
-/* Card que envolve o formulário de cadastro na esquerda */
+/* Envelopamento branco do formulário esquerdo */
 .card-formulario-receitas {
-    background-color: #ffffff; /* Fundo branco limpo */
-    border-radius: 8px; /* Cantos arredondados sutis */
-    padding: 10px 15px; /* Preenchimento confortável idêntico ao de pedidos */
-    border: 1px solid #e5e7eb; /* Linha de contorno cinza clara */
-    height: 100%; /* Ocupa toda a altura da coluna esquerda */
-    display: flex; /* Ativa flexbox no container */
-    flex-direction: column; /* Alinha as caixas de digitação verticalmente */
-}
-
-/* Títulos internos dos blocos */
-.card-formulario-receitas h3, 
-.card-lista-producao-status h3 {
-    font-size: 0.8rem; 
-    color: #374151; 
-    font-weight: 600; 
-    margin-bottom: 8px; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-}
-
-/* Força o reset de cor nas linhas de contorno do ícone de título */
-.svg-card-titulo { 
-    width: 14px; 
-    height: 14px; 
-    stroke: #171d14 !important; /* Contorno verde escuro do MIRA */
-    stroke-width: 2; 
-    fill: none !important; /* Garante que o interior permaneça transparente */
-}
-
-/* Estruturação vertical para colocar a etiqueta de orientação acima do campo */
-.grupo-input-receitas {
-    display: flex; 
-    flex-direction: column; 
-}
-
-/* Estilização das etiquetas superiores */
-.grupo-input-receitas label {
-    font-size: 0.7rem; 
-    color: #4b5563; 
-    font-weight: 600; 
-    margin-bottom: 3px; 
-}
-
-/* Asterisco vermelho identificador de campos obrigatórios */
-.obrigatorio {
-    color: #ef4444; 
-    margin-left: 2px; 
-}
-
-/* Caixa de suporte com ícone interno para o nome da receita */
-.input-com-icone-interno {
-    background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    padding: 6px 10px; 
-    display: flex; 
-    align-items: center; 
-    gap: 8px; 
-}
-
-/* Ícone de folha de papel interno */
-.svg-interno-input {
-    width: 14px; 
-    height: 14px; 
-    stroke: #6b7280; 
-    stroke-width: 2; 
-    fill: none !important;
-}
-
-/* Remove estilos padrões da caixa de digitação embutida */
-.input-com-icone-interno input {
-    border: none; 
-    outline: none; 
-    font-size: 0.78rem; 
-    color: #1f2937; 
-    width: 100%; 
-}
-
-/* 1. Garanta que o container principal ocupe toda a altura disponível da tela */
-.seu-container-formulario {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: calc(100vh - 120px); /* Ajuste os 120px com base na altura do seu cabeçalho superior */
+    overflow: hidden;
     box-sizing: border-box;
 }
 
-/* ==========================================================================
-   CONFIGURAÇÃO DOS CAMPOS DE TEXTO COM ACESSO AO SCROLL MILITAR
-   ========================================================================== */
-
-/* 1. Área de Rolagem Otimizada na Esquerda (Padrão Pedidos e Fornecedores) */
-.wrapper-inputs-scroll-cadastro {
-    flex: 1;
-    overflow-y: auto !important; /* Ativa a rolagem vertical macia */
-    overflow-x: hidden !important; /* Mata o scroll horizontal indesejado do Windows */
-    padding-right: 8px; /* Folga na direita para a barra gordinha não cobrir o texto */
-    margin-bottom: 5px;
-    max-height: calc(100vh - 180px); /* Trava o tamanho máximo proporcional à tela do monitor */
-    box-sizing: border-box;
-}
-
-/* 2. Customização da esteira e da barra gordinha cinza-militar de Pedidos */
-.wrapper-inputs-scroll-cadastro::-webkit-scrollbar {
-    width: 6px !important; /* Fixa a largura gordinha idêntica à de pedidos */
-}
-.wrapper-inputs-scroll-cadastro::-webkit-scrollbar-thumb {
-    background: #5c6655 !important; /* Cor cinza escuro militar oficial da marca */
-    border-radius: 4px !important;
-}
-
-/* 3. Customização estética geral e unificada das caixas de texto */
-.grupo-input-receitas textarea {
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    font-size: 0.82rem; /* Tamanho confortável para leitura */
-    outline: none;
-    background-color: #ffffff;
-    color: #1f2937;
-    resize: none; /* Proíbe o usuário de puxar o canto do campo e quebrar a tela */
-    box-sizing: border-box;
-    width: 100%;
-}
-
-/* 4. Alturas físicas fixas e equilibradas para as caixas de texto */
-#ingredientesReceita {
-    height: 140px !important; /* Altura ideal para listar insumos sem ocupar a tela inteira */
-}
-
-#preparoReceita {
-    height: 220px !important; /* Altura maior e dedicada para detalhar o passo a passo */
-}
-
-
-/* Legenda explicativa cinza em itálico */
-.dica-campo {
-    font-size: 0.68rem; 
-    color: #6b7280; 
-    margin-top: 3px; 
-    font-style: italic; 
-}
-
-/* Fileira que organiza a grade dos 4 botões na base */
-.botoes-acoes-formulario {
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 8px; 
-    margin-top: 10px; 
-    border-top: 1px solid #e5e7eb; 
-    padding-top: 8px; 
-}
-
-/* Estilo unificado das ações do formulário */
-.btn-form-rec {
-    padding: 6px 8px; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    font-size: 0.75rem; 
-    cursor: pointer; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-    gap: 4px; 
-    font-weight: 500; 
-    background-color: #ffffff; 
-    color: #374151; 
-    transition: all 0.2s; 
-}
-
-.svg-btn-inline {
-    width: 14px;
-    height: 14px;
-    stroke: currentColor; /* Faz a linha do ícone herdar a mesma cor do texto do botão automaticamente */
-    stroke-width: 2;
-    fill: none !important;
-}
-
-/* Configurações de cores individuais de botões */
-.salvar-btn { background-color: #172016 !important; color: white !important; border: none; } 
-.limpar-btn { background-color: #ffffff; color: #374151; } 
-.excluir-btn { color: #ef4444 !important; border-color: #fca5a5 !important; } 
-
-.btn-form-rec:disabled {
-    opacity: 0.4; 
-    cursor: not-allowed; 
-}
-
-.m-t-12 { margin-top: 6px; }
-
-/* ==========================================================================
-   PARTE 3A: LISTAGEM, TOPOGRAFIA DA TABELA E ESTRUTURA DOS BOTÕES SUPERIORES
-   ========================================================================== */
-
-/* Card principal que serve de base para toda a área da listagem à direita */
-.card-tabela-receitas {
-    background-color: #ffffff; /* Fundo branco puro */
-    border-radius: 8px; /* Cantos arredondados macios */
-    padding: 10px 15px; /* Preenchimento interno sutil */
-    border: 1px solid #e5e7eb; /* Linha de contorno fina cinza */
-    height: 100%; /* Força o card a preencher 100% da altura da coluna */
-    display: flex; /* Ativa o modo flexbox interno */
-    flex-direction: column; /* Organiza os elementos de cima para baixo */
-    justify-content: space-between; /* Empurra o painel de paginação para a base */
-    overflow: hidden; /* Bloqueia vazamentos e zera barras de rolagem externas */
-}
-
-/* Alinhamento horizontal para o título da tabela e os mini botões do canto superior */
-.topo-tabela-acoes {
-    display: flex; /* Coloca o título na esquerda e os ícones na direita */
-    justify-content: space-between; /* Empurra os blocos para as extremidades */
-    align-items: center; /* Centraliza ambos horizontalmente */
-    margin-bottom: 6px; /* Folga sutil inferior */
-}
-
-.topo-tabela-acoes h3 {
+.card-formulario-receitas h3 {
     font-size: 0.8rem;
     color: #374151;
     font-weight: 600;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
     gap: 8px;
+    text-transform: uppercase;
+    margin-top: 0;
 }
 
-/* Força as linhas do ícone de livro a ficarem verdes e com o miolo transparente */
-.topo-tabela-acoes h3 .svg-card-titulo {
-    width: 14px;
-    height: 14px;
-    stroke: #171d14 !important; /* Verde padrão do MIRA */
-    stroke-width: 2;
-    fill: none !important; /* ZERA O PREENCHIMENTO PRETO DE VEZ */
+.svg-card-titulo { width: 14px; height: 14px; stroke: #171d14 !important; stroke-width: 2; }
+
+/* 🔓 MOTOR DE SCROLL ATIVADO: Configuração mestre de rolagem elástica e responsiva */
+.wrapper-inputs-scroll-cadastro {
+    flex: 1 !important;
+    overflow-y: auto !important; /* LIBERA A ROLAGEM VERTICAL */
+    overflow-x: hidden !important; /* Mata o scroll horizontal indesejado do Windows */
+    padding-right: 8px; /* Folga confortável para a esteira não esmagar os campos */
+    margin-bottom: 5px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Agrupamento horizontal dos pequenos botões de recarregar e adicionar do topo */
-.icones-topo-tabela {
-    display: flex; /* Alinha os dois botões lado a lado */
-    gap: 4px; /* Folga milimétrica entre eles */
+/* Customização estética do scroll gordinho militar igual a Pedidos e Fornecedores */
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar {
+    width: 6px !important;
+}
+.wrapper-inputs-scroll-cadastro::-webkit-scrollbar-thumb {
+    background: #5c6655 !important; /* Tom cinza escuro militar */
+    border-radius: 4px !important;
 }
 
-/* Customização dos mini botões brancos quadrados do topo da tabela */
-.btn-mini-tabela-topo {
-    background-color: #ffffff; /* Fundo branco limpo */
-    border: 1px solid #d1d5db; /* Linha cinza padrão de contorno */
-    width: 24px; /* Largura compacta quadrada */
-    height: 24px; /* Altura compacta quadrada */
-    border-radius: 4px; /* Cantos levemente suavizados */
-    cursor: pointer; /* Mãozinha de clique ativa */
-    display: flex; /* Ativa flexbox interno para centralizar o vetor */
-    align-items: center; 
-    justify-content: center;
+/* Alinhamento vertical padrão */
+.grupo-input-receitas {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+    width: 100%;
+    box-shrink: 0; /* IMPEDE OS INPUTS DE ESMAGAREM: Obriga o scroll a funcionar se faltar tela */
+    box-sizing: border-box;
 }
 
-/* Configuração dos mini ícones SVG inseridos nos botões quadrados do topo */
-.svg-mini-topo {
-    width: 12px; /* Ícone vetorizado ultra compacto */
-    height: 12px; 
-    stroke: #4b5563 !important; /* Cor cinza escuro sutil */
-    stroke-width: 2; 
-    fill: none !important; /* Remove preenchimento preto */
+.grupo-input-receitas label {
+    font-size: 0.7rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 3px;
+    text-align: left;
 }
 
-/* Barra cinza horizontal de pesquisa interna localizada acima da tabela */
-.linha-pesquisa-tabela {
-    display: flex; /* Coloca a caixa branca de busca e o botão cinza lado a lado */
-    gap: 6px; /* Folga sutil entre os dois elementos */
-    margin-bottom: 6px; /* Emprega espaço sutil antes de começar as linhas */
-}
+.obrigatorio { color: #ef4444; margin-left: 2px; }
 
-/* Caixa branca decorativa que envolve o campo de pesquisa interna */
-.wrapper-busca-tabela {
-    background-color: #ffffff; /* Fundo branco */
-    border: 1px solid #d1d5db; /* Linha sutil de contorno cinza */
-    border-radius: 6px; /* Cantos arredondados */
-    padding: 5px 8px; /* Preenchimento interno sutil */
-    display: flex; /* Alinha a minilupa vetorizada e o texto */
-    align-items: center; 
-    gap: 6px; 
-    flex: 1; /* Faz a barra branca se esticar por toda a largura livre */
-}
-
-/* Estilização da minilupa vetorial de dentro da barra de busca da tabela */
-.svg-busca-tabela-interna {
-    width: 12px;
-    height: 12px;
-    stroke: #6b7280 !important; /* Tom cinza opaco sutil */
-    stroke-width: 2;
-    fill: none !important;
-}
-
-/* Remove contornos e fundos padrões do campo de texto da pesquisa interna */
-.wrapper-busca-tabela input {
-    border: none;
+/* Customização e respiro de todas as caixas de digitação textuais */
+.grupo-input-receitas input,
+.grupo-input-receitas textarea {
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.82rem;
     outline: none;
-    font-size: 0.75rem;
+    background-color: #ffffff;
     color: #1f2937;
     width: 100%;
+    box-sizing: border-box;
 }
 
-/* Botão cinza escuro de ação que dispara a pesquisa filtrada */
-.btn-pesquisar-tabela {
-    background-color: #1f2937; /* Cinza corporativo escuro */
-    color: white; /* Letras brancas */
-    border: none; 
-    padding: 5px 12px; /* Preenchimento idêntico ao do campo ao lado */
-    border-radius: 6px; 
-    font-size: 0.75rem; 
-    font-weight: 500; 
-    cursor: pointer; 
+/* 📐 RESPONSIVIDADE CALIBRADA: Limita as alturas para caber com folga em telas pequenas */
+.grupo-input-receitas .textarea-alta { 
+    resize: none; 
+    height: 200px !important; /* Altura confortável para ingredientes */
 }
+
+.grupo-input-receitas .textarea-extra-alta { 
+    resize: none; 
+    height: 500px !important; /* Altura ideal para detalhar o passo a passo */
+}
+
+.m-t-8 { margin-top: 5px; }
 
 /* ==========================================================================
-   PARTE 3B: ROLAGEM DA TABELA, REGRAS DE RETICÊNCIAS E PAGINAÇÃO DE RODAPÉ
+   PARTE 3: BOTÕES HORIZONTAIS DUPLOS E LINHAS ESCURECIDAS DA TABELA
    ========================================================================== */
 
-/* Caixa contendo a rolagem interna que vai listar as receitas cadastradas */
+/* FILEIRA DE BOTÕES DUPLOS: Ajustado para dividir o espaço perfeitamente em 2 colunas */
+.botoes-acoes-formulario-rece-duplo {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* Cria 2 colunas 50% / 50% simétricas */
+    gap: 10px !important;
+    margin-top: 15px !important; /* Respiro confortável após o campo Modo de Preparo */
+    border-top: 1px solid #e5e7eb !important; /* Divisor cinza fino padrão */
+    padding-top: 12px !important; /* Distância interna entre a linha e os botões */
+    width: 100% !important;
+    box-shrink: 0 !important; /* Impede o esmagamento estrutural */
+    box-sizing: border-box !important;
+}
+
+/* Customização padrão dos botões corporativos da confeitaria */
+.btn-rece-base {
+    padding: 10px !important;
+    border-radius: 6px !important;
+    font-size: 0.78rem !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    transition: all 0.2s;
+    color: white !important;
+}
+
+/* Paleta verde-escura militar oficial da marca MIRA */
+.salvar-btn { background-color: #172016 !important; } 
+.limpar-btn { background-color: #2a3626 !important; } 
+.btn-rece-base:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* 5. CARD DA LISTAGEM DIREITA (RECEITAS CADASTRADAS) */
+.card-tabela-receitas {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* FILEIRA INTERNA: Une a busca por nomes e o botão de recarregar */
+.linha-pesquisa-interna-rece {
+    display: flex !important;
+    gap: 6px !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+}
+
+.wrapper-busca-tabela-rece {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex: 1 !important;
+}
+
+.svg-busca-tabela-interna { width: 12px !important; height: 12px !important; stroke: #6b7280 !important; stroke-width: 2 !important; }
+.wrapper-busca-tabela-rece input { border: none !important; outline: none !important; font-size: 0.78rem; color: #1f2937 !important; width: 100% !important; background: none !important; }
+
+.btn-mini-tabela-topo {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    width: 31px !important;
+    height: 31px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.svg-mini-topo { width: 12px !important; height: 12px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
+
+/* 6. ÁREA DE SCROLL COM LINHA EXTERNA ESCURECIDA */
 .wrapper-tabela-receitas-scroll {
-    flex: 1; /* Ocupa de forma automática toda a área livre central do bloco */
-    overflow-y: auto; /* Cria uma barra de rolagem vertical sutil apenas na tabela se acumular itens */
-    border: 1px solid #edf2f7; /* Desenha um contorno sutil cinza ao redor da tabela */
-    border-radius: 6px; 
-    margin-bottom: 6px; /* Folga sutil antes do rodapé de paginação */
-    max-height: calc(100vh - 200px); /* REGRA DE OURO: Limita a altura para travar e caber tudo no monitor */
+    flex: 1;
+    overflow-y: auto !important;
+    overflow-x: hidden !important; /* Trava rolagens de lado indesejadas */
+    border: 1px solid #b8bfc7; /* Borda externa da tabela escurecida para alto contraste */
+    border-radius: 6px;
+    margin-bottom: 6px;
+    max-height: calc(100vh - 170px);
 }
+.wrapper-tabela-receitas-scroll::-webkit-scrollbar { width: 4px; }
+.wrapper-tabela-receitas-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
 
-/* Formatação geral das linhas e fontes da tabela de receitas */
-.tabela-dados-receitas {
-    width: 100%; /* Preenche 100% da largura interna da caixa de rolagem */
-    border-collapse: collapse; /* Une os contornos removendo linhas duplas */
-    font-size: 0.75rem; /* Letras compactas e elegantes de excelente legibilidade */
-}
+/* 7. BLINDAGEM DA TABELA COM CONTRASTE NÍTIDO NAS LINHAS */
+.tabela-dados-receitas { width: 100% !important; border-collapse: collapse; font-size: 0.75rem; table-layout: fixed !important; }
 
-/* Configuração de preenchimento e bordas para as células da tabela */
+/* Injetado o cinza escuro (#b8bfc7) na linha inferior para marcar bem cada receita listada */
 .tabela-dados-receitas th, 
-.tabela-dados-receitas td {
-    padding: 8px 10px; /* Preenchimento interno sutil para espremer as linhas e caber na janela */
-    text-align: left; /* Alinha os textos à esquerda */
-    border-bottom: 1px solid #edf2f7; /* Linha sutil divisória horizontal entre os registros */
+.tabela-dados-receitas td { 
+    padding: 10px 12px !important; 
+    text-align: left; 
+    border-bottom: 1px solid #b8bfc7; /* Linhas horizontais escurecidas nítidas de alto contraste */
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    white-space: nowrap; 
 }
 
-/* Customização visual sutil para a linha de títulos (Cabeçalho) da tabela */
-.tabela-dados-receitas th {
-    background-color: #f9fafb; /* Fundo cinza bem clarinho de destaque */
-    color: #4b5563; /* Letras em cinza opaco */
-    font-weight: 600; /* Deixa as palavras em negrito */
-    position: sticky; /* Mantém o cabeçalho fixo no topo ao rolar a lista para baixo */
-    top: 0; 
-    z-index: 5; 
+/* Fixa os títulos no topo do scroll */
+.tabela-dados-receitas th { background-color: #f9fafb; color: #4b5563; font-weight: 600; position: sticky; top: 0; z-index: 5; }
+
+/* Centralização do mini botão circular de ação */
+.celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
+.btn-acao-linha { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+.btn-acao-linha svg { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
+.btn-acao-linha.edit:hover { background-color: #f3f4f6; }
+
+/* Rodapé limpo padrão MIRA */
+.rodape-paginacao-receitas { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 6px; font-size: 0.72rem; color: #6b7280; }
+.info-contagem-itens { font-weight: 500; }
+
+
+/* Efeito Hover vermelho suave para o botão de Excluir da tabela */
+.btn-acao-linha.del:hover { 
+    background-color: #fef2f2 !important; 
+    border-color: #fca5a5 !important; 
 }
-
-/* Classe utilitária para encurtar e cortar textos de ingredientes longos adicionando reticências (...) */
-.txt-truncado {
-    max-width: 250px; /* Fixa um tamanho horizontal sutil para a coluna */
-    white-space: nowrap; /* Proíbe o texto de quebrar linha e estufar a tabela na vertical */
-    overflow: hidden; /* Esconde o texto que ultrapassar o limite fixado */
-    text-overflow: ellipsis; /* Injeta automaticamente os três pontinhos (...) no final da frase */
-    color: #4b5563; 
-}
-
-/* Alinhamento central para a coluna de ações rápidas (Editar e Excluir) */
-.celula-acoes-tabela {
-    text-align: center !important; /* Força a centralização na horizontal */
-    display: flex; /* Alinha os dois botões redondos lado a lado */
-    justify-content: center; 
-    gap: 6px; /* Folga sutil entre os botões */
-    align-items: center;
-}
-
-/* Estilização dos pequenos botões circulares de ação rápida de cada linha */
-.btn-acao-linha {
-    width: 24px; /* Tamanho redondo fixo muito sutil */
-    height: 24px; 
-    border-radius: 50%; /* Torna o botão perfeitamente circular */
-    border: 1px solid #d1d5db; /* Linha sutil de contorno */
-    background-color: #ffffff; /* Fundo branco limpo */
-    cursor: pointer; 
-    display: flex; /* Centraliza o ícone SVG interno */
-    align-items: center; 
-    justify-content: center;
-    transition: all 0.2s; 
-}
-
-/* Cores específicas dos ícones ao passar o mouse conforme o modelo da imagem */
-.btn-acao-linha.edit:hover { background-color: #f3f4f6; border-color: #9ca3af; } /* Cinza ao focar editar */
-.btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }   /* Vermelho ao focar excluir */
-
-/* Estilização dos mini ícones SVG inseridos dentro das células de ação */
-.svg-linha-acao {
-    width: 12px; /* Vetor ultra compacto */
-    height: 12px; 
-    stroke: #4b5563 !important; /* Tom padrão cinza escuro */
-    stroke-width: 2; 
-    fill: none !important; 
-}
-
-/* Altera o vetor do botão de lixeira para vermelho ao passar o mouse */
-.btn-acao-linha.del:hover .svg-linha-acao { stroke: #ef4444 !important; }
-
-/* Barra horizontal de rodapé localizada na base do card da direita */
-.rodape-paginacao-receitas {
-    display: flex; /* Coloca a contagem na esquerda e os seletores na direita */
-    justify-content: space-between; /* Empurra as informações para as extremidades */
-    align-items: center; /* Centraliza tudo horizontalmente na vertical */
-    border-top: 1px solid #e5e7eb; /* Desenha uma linha fina divisória cinza superior */
-    padding-top: 6px; /* Espaço sutil superior interno */
-}
-
-/* Texto informativo da contagem sutil de registros ativos */
-.info-contagem-itens {
-    font-size: 0.72rem; 
-    color: #6b7280; /* Tom cinza sutil */
-}
-
-/* Alinhamento horizontal para agrupar o "por página" com a fileira de botões */
-.controles-paginacao-direita {
-    display: flex; /* Alinha o select e as páginas lado a lado */
-    gap: 12px; /* Folga sutil entre os blocs */
-    align-items: center; 
-}
-
-/* Caixa compacta do seletor de quantidade de linhas exibidas por página */
-.seletor-linhas-pagina select {
-    padding: 3px 6px; /* Preenchimento ultra enxuto para economizar espaço */
-    border: 1px solid #d1d5db; 
-    border-radius: 4px; 
-    font-size: 0.7rem; 
-    outline: none; 
-    color: #4b5563; 
-    background-color: #ffffff; 
-}
-
-/* Fileira que empilha horizontalmente as caixinhas de numeração de páginas */
-.botoes-passar-pagina {
-    display: flex; /* Alinha os botões em linha horizontal */
-    gap: 3px; /* Folga de 3 pixels entre os números */
-}
-
-/* Estilização padrão para cada quadradinho numérico de página */
-.btn-pagi {
-    background-color: #ffffff; /* Fundo branco padrão */
-    border: 1px solid #d1d5db; /* Linha de contorno fina cinza */
-    min-width: 22px; /* Largura mínima compacta combinando com o print */
-    height: 22px; /* Altura fixa sutil */
-    padding: 0 4px; 
-    border-radius: 4px; /* Cantos arredondados sutis */
-    font-size: 0.72rem; /* Fonte compacta */
-    color: #4b5563; /* Letra cinza escuro */
-    cursor: pointer; 
-    display: flex; /* Centraliza o texto ou vetor na vertical e horizontal */
-    align-items: center; 
-    justify-content: center;
-}
-
-/* Customização de destaque para o botão do número da página atual activa (Número 1) */
-.ativo-pagi {
-    background-color: #273324 !important; /* Tom verde militar destacado do MIRA */
-    color: #ffffff !important; /* Inverte a letra para branco puro */
-    border-color: #273324 !important; 
-    font-weight: 600; 
-}
-
-/* Estilização dos pequenos vetores de setas duplas e simples de paginação */
-.svg-pag {
-    width: 10px; /* Vetor em miniatura sutil */
-    height: 10px; 
-    stroke: #4b5563 !important; 
-    stroke-width: 2; 
-    fill: none !important; 
+.btn-acao-linha.del:hover svg {
+    stroke: #ef4444 !important;
 }

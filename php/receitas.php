@@ -8,26 +8,26 @@ require_once "logica_php/home.php";
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Receitas</title>
-    <!-- Inclusão das folhas de estilo voltando uma pasta para achar o diretório css/ -->
+    <!-- Folhas de estilo locais e integradas -->
     <link rel="stylesheet" href="../css/barra_lateral.css">
-    <link rel="stylesheet" href="../css/receitas.css?v=80.0">
-
+    <!-- Força o navegador a ler o layout novo imediatamente sem reter lixo na memória -->
+    <link rel="stylesheet" href="../css/receitas.css?v=200.0">
 </head>
 <body>
 
     <div class="container-dashboard">
         
-        <!-- Injeção da barra lateral localizada na mesma pasta corrente -->
+        <!-- Injeção da barra lateral componentizada -->
         <?php require_once "barra_lateral.php"; ?>
 
         <!-- ÁREA PRINCIPAL DA GESTÃO DE RECEITAS -->
         <main class="painel-conteudo-receitas">
             
-            <!-- Cabeçalho Superior da Tela padronizado com os SVGs das outras telas -->
+            <!-- Cabeçalho Superior Limpo padrão MIRA -->
             <header class="topo-receitas">
                 <div class="titulo-pagina-receitas">
-                    <div class="icone-titulo-rec">
-                        <svg class="svg-topo-rec" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    <div class="icone-titulo-rece">
+                        <svg class="svg-topo-rece" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
                     </div>
                     <div class="alinhamento-texto-topo">
                         <h1>Receitas</h1>
@@ -35,141 +35,113 @@ require_once "logica_php/home.php";
                     </div>
                 </div>
             </header>
-            <!-- Bloco Geral Dividido em Duas Colunas (Cadastro e Listagem) -->
+
+            <!-- Grid de Trabalho Repartido (50% / 50%) -->
             <div class="grid-receitas-container">
                 
-                <!-- COLUNA DA ESQUERDA: Formulário de Cadastro de Receitas -->
+                <!-- COLUNA DA ESQUERDA: Cadastro com o Scroll Grosso e Militar de Pedidos -->
                 <div class="coluna-esquerda-cadastro">
                     <div class="card-formulario-receitas">
-                        <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Cadastro de Receita</h3>
+                        <h3><svg class="svg-card-titulo" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Cadastro de Receita</h3>
                         
-                        <form id="formCadastroReceita">
-                            <!-- Campo 1: Nome da Receita -->
-                            <div class="grupo-input-receitas">
-                                <label>Nome da Receita <span class="obrigatorio">*</span></label>
-                                <div class="input-com-icone-interno">
-                                    <svg class="svg-interno-input" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <!-- Formulário limpo sem textos soltos flutuando para não empurrar os cards -->
+                        <form id="formCadastroReceita" style="display: flex; flex-direction: column; flex: 1; overflow: hidden;">
+                            <!-- wrapper-inputs-scroll-cadastro: Ativa de verdade a esteira de rolagem cinza lateral -->
+                            <div class="wrapper-inputs-scroll-cadastro">
+                                
+                                <!-- Campo: Nome da Receita -->
+                                <div class="grupo-input-receitas">
+                                    <label>Nome da Receita <span class="obrigatorio">*</span></label>
                                     <input type="text" id="nomeReceita" placeholder="Digite o nome da receita" required>
                                 </div>
-                            </div>
 
-                            <!-- Campo 2: Ingredientes -->
-                            <div class="grupo-input-receitas m-t-12">
-                                <label>Ingredientes <span class="obrigatorio">*</span></label>
-                                <textarea id="ingredientesReceita" placeholder="Liste todos os ingredientes utilizados na receita..." required></textarea>
-                                <small class="dica-campo">Dica: Separe cada ingrediente em uma nova linha.</small>
-                            </div>
+                                <!-- Campo: Ingredients (Textarea Alta) -->
+                                <div class="grupo-input-receitas m-t-8">
+                                    <label>Ingredientes <span class="obrigatorio">*</span></label>
+                                    <textarea id="ingredientesReceita" class="textarea-alta" placeholder="Liste todos os ingredientes da receita..." required></textarea>
+                                </div>
 
-                            <!-- Campo 3: Modo de Preparo -->
-                            <div class="grupo-input-receitas m-t-12">
-                                <label>Modo de Preparo <span class="obrigatorio">*</span></label>
-                                <textarea id="preparoReceita" placeholder="Descreva o passo a passo do modo de preparo..." required></textarea>
-                            </div>
+                                <!-- Campo: Modo de Preparo (Textarea Extra Alta) -->
+                                <div class="grupo-input-receitas m-t-8">
+                                    <label>Modo de Preparo <span class="obrigatorio">*</span></label>
+                                    <textarea id="preparoReceita" class="textarea-extra-alta" placeholder="Descreva o passo a passo do modo de preparo..." required></textarea>
+                                </div>
 
-                            <!-- Fileira de Ações Inferiores do Formulário -->
-                            <div class="botoes-acoes-formulario">
-                                <button type="submit" class="btn-form-rec salvar-btn">
-                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar
-                                </button>
-                                <button type="button" class="btn-form-rec editar-btn" disabled>
-                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Editar
-                                </button>
-                                <button type="button" class="btn-form-rec limpar-btn" id="btnLimparForm">
-                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><path d="M12 22c5.523 0 9-4.477 9-10S17.523 2 12 2 3 6.477 3 12s3.477 10 9 10z"/><path d="M8 12h8"/></svg> Limpar
-                                </button>
-                                <button type="button" class="btn-form-rec excluir-btn" disabled>
-                                    <svg class="svg-btn-inline" viewBox="0 0 24 24"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> Excluir
-                                </button>
-                            </div>
+                                <!-- 🛒 APENAS 2 BOTÕES NA BASE: Simétricos, idênticos e embutidos na rolagem contínua -->
+                                <div class="botoes-acoes-formulario-rece-duplo">
+                                    <button type="submit" class="btn-rece-base salvar-btn">💾 Salvar</button>
+                                    <button type="button" class="btn-rece-base limpar-btn" id="btnLimparRece">🧹 Limpar</button>
+                                </div>
+
+                            </div> <!-- Fecha a div wrapper-inputs-scroll-cadastro -->
                         </form>
                     </div>
                 </div>
-                <!-- COLUNA DA DIREITA: Listagem e Tabela das Receitas Cadastradas -->
+                <!-- COLUNA DA DIREITA: Listagem e Tabela de Receitas Cadastradas -->
                 <div class="coluna-direita-listagem">
                     <div class="card-tabela-receitas">
-                        <div class="topo-tabela-acoes">
-                            <!-- ÍCONE CORRIGIDO: Agora usando o desenho correto de livro sem blocos pretos -->
-                            <h3>
-                                <svg class="svg-card-titulo" viewBox="0 0 24 24">
-                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
-                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-                                </svg> 
-                                Receitas Cadastradas
-                            </h3>
+                        <div class="topo-tabela-acoes-prod">
+                            <h3><svg class="svg-card-title-prod" viewBox="0 0 24 24" width="14" height="14" stroke="#171d14" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Receitas Cadastradas</h3>
                         </div>
 
-                        <!-- Barra de Pesquisa Interna da Tabela -->
-                        <div class="linha-pesquisa-tabela">
-                            <div class="wrapper-busca-tabela">
-                                <svg class="svg-busca-tabela-interna" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                <input type="text" id="inputPesquisaTabela" placeholder="Pesquisar receita...">
+                        <!-- Barra de pesquisa interna e recarregar embutidos dentro do card -->
+                        <div class="linha-pesquisa-interna-rece">
+                            <div class="wrapper-busca-tabela-rece">
+                                <svg class="svg-busca-tabela-interna" viewBox="0 0 24 24" width="12" height="12"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                                <input type="text" id="inputPesquisaGlobal" placeholder="Pesquisar receita...">
                             </div>
-                            <button type="button" class="btn-pesquisar-tabela">Pesquisar</button>
+                            <button type="button" class="btn-mini-tabela-topo" id="btnRecarregarReceitas" title="Recarregar Tabela">
+                                <svg class="svg-mini-topo" viewBox="0 0 24 24" width="12" height="12"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                            </button>
                         </div>
 
-                        <!-- Área Ocupada pela Tabela com Rolagem Interna Travada -->
+                        <!-- Área de Rolagem Otimizada com Blindagem Inline Direta -->
                         <div class="wrapper-tabela-receitas-scroll">
-                            <table class="tabela-dados-receitas">
+                            <table class="tabela-dados-receitas" style="display: table !important; width: 100% !important; table-layout: fixed !important; border-collapse: collapse !important;">
                                 <thead>
-                                    <tr>
+                                    <tr style="display: table-row !important;">
                                         <th style="width: 10%;">ID</th>
-                                        <th style="width: 25%;">Nome da Receita</th>
+                                        <th style="width: 30%;">Nome da Receita</th>
                                         <th style="width: 50%;">Ingredientes</th>
-                                        <th style="width: 15%; text-align: center;">Ações</th>
+                                        <th style="width: 10%; text-align: center;">Ações</th>
                                     </tr>
                                 </thead>
                                 <tbody id="corpoTabelaReceitas">
-                                    <tr>
+                                    <!-- Registro 1: Brigadeiro Gourmet com botão Excluir -->
+                                    <tr class="linha-selecionavel-rece" data-id="101" style="display: table-row !important;">
                                         <td>101</td>
                                         <td><strong>Brigadeiro Gourmet</strong></td>
-                                        <td class="txt-truncado">Leite condensado, chocolate em pó, creme de leite, manteiga, granulado</td>
+                                        <td>Leite condensado, chocolate em pó, creme de leite, manteiga...</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg class="svg-linha-acao" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                            <button type="button" class="btn-acao-linha del"><svg class="svg-linha-acao" viewBox="0 0 24 24"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                            <button type="button" class="btn-acao-linha del" title="Excluir"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <!-- Registro 2: Bolo de Chocolate com botão Excluir -->
+                                    <tr class="linha-selecionavel-rece" data-id="102" style="display: table-row !important;">
                                         <td>102</td>
                                         <td><strong>Bolo de Chocolate</strong></td>
-                                        <td class="txt-truncado">Farinha de trigo, açúcar, chocolate em pó, ovos, leite, óleo, fermento</td>
+                                        <td>Farinha de trigo, açúcar, chocolate em pó, ovos, leite...</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg class="svg-linha-acao" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
-                                            <button type="button" class="btn-acao-linha del"><svg class="svg-linha-acao" viewBox="0 0 24 24"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                                            <button type="button" class="btn-acao-linha del" title="Excluir"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div> <!-- Fecha o wrapper-tabela-receitas-scroll -->
 
-                        <!-- Barra Inferior de Paginação e Métricas -->
+                        <!-- Rodapé limpo contendo apenas a contagem total de itens -->
                         <div class="rodape-paginacao-receitas">
-                            <span class="info-contagem-itens">Mostrando 1 a 7 de 7 receitas</span>
-                            
-                            <div class="controles-paginacao-direita">
-                                <div class="seletor-linhas-pagina">
-                                    <select>
-                                        <option value="10">10 por página</option>
-                                        <option value="20">20 por página</option>
-                                    </select>
-                                </div>
-                                <div class="botoes-passar-pagina">
-                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="11 17 6 12 11 7"/><polyline points="18 17 13 12 18 7"/></svg></button>
-                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
-                                    <button type="button" class="btn-pagi ativo-pagi">1</button>
-                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                    <button type="button" class="btn-pagi"><svg class="svg-pag" viewBox="0 0 24 24"><polyline points="13 17 18 12 13 7"/><polyline points="6 17 11 12 6 7"/></svg></button>
-                                </div>
-                            </div>
+                            <span class="info-contagem-itens">Mostrando 1 a 2 de 2 receitas cadastradas</span>
                         </div>
 
-                    </div>
-                </div>
+                    </div> <!-- Fecha o card-tabela-receitas -->
+                </div> <!-- Fecha a coluna-direita-listagem -->
 
-            </div>
+            </div> <!-- Fecha o grid-receitas-container -->
         </main>
-    </div>
+    </div> <!-- Fecha o container-dashboard -->
 
-    <!-- Script de controle dinâmico -->
+    <!-- Motor JavaScript nativo original do seu colega -->
     <script src="../js/receitas.js"></script>
 </body>
 </html>
