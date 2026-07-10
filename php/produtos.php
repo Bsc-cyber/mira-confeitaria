@@ -110,7 +110,6 @@ require_once "logica_php/home.php";
                                 <div class="botoes-acoes-formulario-prod-triplo">
                                     <button type="submit" class="btn-prod-base salvar-btn">💾 Salvar</button>
                                     <button type="button" class="btn-prod-base limpar-btn" id="btnLimparProd">🧹 Limpar</button>
-                                    <button type="button" class="btn-prod-base editar-btn" id="btnEditarProd">📝 Editar</button>
                                 </div>
 
                             </div> <!-- Fecha a div wrapper-inputs-scroll-cadastro DEPOIS dos botões -->

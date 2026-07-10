@@ -158,7 +158,7 @@ svg, path, rect, circle, polyline, line, polygon {
     box-sizing: border-box;
 }
 
-.grupo-input-produtos textarea { resize: none; height: 48px; }
+.grupo-input-produtos textarea { resize: none; height: 250px; }
 
 /* PREFIXO MOEDA: Envelatamento estrutural para injetar o símbolo "R$" dentro do campo de preço */
 .prefixo-moeda-wrapper { 
@@ -191,37 +191,40 @@ svg, path, rect, circle, polyline, line, polygon {
 .texto-switch-label { font-size: 0.75rem; color: #374151; font-weight: 500; }
 
 /* FILEIRA DE BOTÕES TRIPLOS: Agora desliza de forma contínua no final do scroll */
+/* Substitua ou adicione este bloco no seu css/produtos.css para alinhar os dois botões */
 .botoes-acoes-formulario-prod-triplo {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; /* Cria 3 colunas perfeitamente iguais */
-    gap: 8px !important;
-    margin-top: 15px !important; /* Espaço confortável após o switch */
-    border-top: 1px solid #e5e7eb !important; /* Linha cinza fina elegante de separação */
-    padding-top: 12px !important; /* Espaço interno entre a linha e os botões */
+    grid-template-columns: repeat(2, 1fr) !important; /* Força 2 colunas simétricas idênticas */
+    gap: 10px !important; /* Espaço confortável entre o Salvar e o Limpar */
+    margin-top: 15px !important; /* Distância do switch de Ativo */
+    border-top: 1px solid #e5e7eb !important; /* Linha fina cinza superior */
+    padding-top: 12px !important;
     width: 100% !important;
+    box-shrink: 0 !important;
     box-sizing: border-box !important;
 }
 
-/* Customização robusta unificada para os 3 botões possuírem o mesmo tamanho */
+/* Garante o preenchimento e altura ideal para os botões de produtos */
 .btn-prod-base {
-    padding: 10px !important;
+    padding: 10px 15px !important; /* Dá altura e largura confortável para o clique */
     border-radius: 6px !important;
     font-size: 0.78rem !important;
     cursor: pointer !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
+    gap: 6px !important;
     font-weight: 600 !important;
     border: none !important;
     transition: all 0.2s;
     color: white !important;
+    width: 100% !important; /* Faz o botão ocupar toda a sua respectiva metade */
 }
+
 
 /* Tons escuros corporativos combinando com as regras do MIRA Confeitaria */
 .salvar-btn { background-color: #172016 !important; } 
 .limpar-btn { background-color: #2a3626 !important; } 
-.editar-btn { background-color: #172016 !important; } /* Mesmo verde escuro do Salvar no novo padrão */
 .btn-prod-base:hover { opacity: 0.9; transform: translateY(-1px); }
 .btn-prod-base:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
 .m-t-8 { margin-top: 5px; }
