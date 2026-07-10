@@ -117,7 +117,6 @@ require_once "logica_php/home.php";
                                 <div class="botoes-acoes-formulario-forn-triplo">
                                     <button type="submit" class="btn-forn-base salvar-btn">💾 Salvar</button>
                                     <button type="button" class="btn-forn-base limpar-btn" id="btnLimparForn">🧹 Limpar</button>
-                                    <button type="button" class="btn-forn-base editar-btn" id="btnEditarForn">📝 Editar</button>
                                 </div>
 
                             </div> <!-- Fecha a div wrapper-inputs-scroll-cadastro DEPOIS dos botões -->
@@ -164,7 +163,6 @@ require_once "logica_php/home.php";
                                         <td>12.345.678/0001-90</td>
                                         <td>(11) 98765-4321</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -176,7 +174,6 @@ require_once "logica_php/home.php";
                                         <td>23.456.789/0001-01</td>
                                         <td>(11) 97654-3210</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -188,7 +185,6 @@ require_once "logica_php/home.php";
                                         <td>34.567.890/0001-23</td>
                                         <td>(11) 96543-2109</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -200,7 +196,6 @@ require_once "logica_php/home.php";
                                         <td>45.678.901/0001-34</td>
                                         <td>(11) 95432-1098</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -212,7 +207,6 @@ require_once "logica_php/home.php";
                                         <td>56.789.012/0001-45</td>
                                         <td>(11) 94321-0987</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -224,7 +218,6 @@ require_once "logica_php/home.php";
                                         <td>67.890.123/0001-56</td>
                                         <td>(11) 93210-9876</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -236,7 +229,6 @@ require_once "logica_php/home.php";
                                         <td>78.901.234/0001-67</td>
                                         <td>(11) 92109-8765</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>
@@ -248,7 +240,6 @@ require_once "logica_php/home.php";
                                         <td>89.012.345/0001-78</td>
                                         <td>(11) 91098-7654</td>
                                         <td class="celula-acoes-tabela">
-                                            <button type="button" class="btn-acao-linha edit"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
                                             <button type="button" class="btn-acao-linha del"><svg viewBox="0 0 24 24" width="12" height="12"><polyline points="3 6 5 3 21 3 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
                                         </td>
                                     </tr>

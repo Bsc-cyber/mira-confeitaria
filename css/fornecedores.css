@@ -158,7 +158,7 @@ svg, path, rect, circle, polyline, line, polygon {
     box-sizing: border-box;
 }
 
-.grupo-input-fornecedores textarea { resize: none; height: 48px; }
+.grupo-input-fornecedores textarea { resize: none; height: 250px; }
 
 /* Organização de fileiras com campos duplos na horizontal */
 .linha-inputs-dupla { display: flex; gap: 10px; width: 100%; box-sizing: border-box; }
@@ -171,41 +171,68 @@ svg, path, rect, circle, polyline, line, polygon {
    PARTE 3: BOTÕES TRIPLOS SLIDERS E BLINDAGEM DA LISTAGEM DIREITA
    ========================================================================== */
 
-/* FILEIRA DE BOTÕES TRIPLOS: Agora desliza de forma contínua no final do scroll */
+/* ==========================================================================
+   CORREÇÃO PREMIUM DOS BOTÕES DE AÇÃO DO FORMULÁRIO (SALVAR / LIMPAR)
+   ========================================================================== */
+
+/* Ajusta o container para dividir o espaço perfeitamente em 2 colunas (50% / 50%) */
 .botoes-acoes-formulario-forn-triplo {
     display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; /* Cria 3 colunas perfeitamente iguais */
-    gap: 8px !important;
-    margin-top: 15px !important; /* Espaço confortável após a caixa de Informações Adicionais */
-    border-top: 1px solid #e5e7eb !important; /* Linha cinza fina e elegante de separação */
-    padding-top: 12px !important; /* Espaço interno entre a linha e os botões */
+    grid-template-columns: repeat(2, 1fr) !important; /* Mudado de 3 para 2 colunas perfeitas */
+    gap: 10px !important; /* Espaçamento sutil entre os dois botões */
+    margin-top: 15px !important; 
+    border-top: 1px solid #e5e7eb !important; 
+    padding-top: 12px !important; 
     width: 100% !important;
     box-sizing: border-box !important;
 }
 
-/* Customização robusta unificada para os 3 botões possuírem o mesmo tamanho */
+/* Base unificada e robusta para os botões preencherem a largura e alinharem os ícones */
 .btn-forn-base {
-    padding: 10px !important; /* Altura confortável para o clique */
+    width: 100% !important; /* Garante que o botão ocupe toda a sua metade da coluna */
+    padding: 10px 14px !important; /* Altura confortável e idêntica para o clique */
     border-radius: 6px !important;
     font-size: 0.78rem !important;
     cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 4px !important;
+    display: inline-flex !important; /* Permite o alinhamento correto com o ícone */
+    align-items: center !important; /* Centraliza o ícone e o texto verticalmente */
+    justify-content: center !important; /* Centraliza o conteúdo horizontalmente no botão */
+    gap: 8px !important; /* Espaço perfeito entre o ícone e o texto */
     font-weight: 600 !important;
     border: none !important;
-    transition: all 0.2s;
-    color: white !important;
+    transition: all 0.2s ease-in-out;
+    color: #ffffff !important; /* Texto sempre branco puro */
+    box-sizing: border-box !important;
 }
 
-/* Tons escuros corporativos combinando com as regras do MIRA Confeitaria */
-/* Altere este bloco de cores no seu css/fornecedores.css: */
-.salvar-btn { background-color: #172016 !important; } 
-.limpar-btn { background-color: #2a3626 !important; } 
-.editar-btn { background-color: #172016 !important; } /* Deixa o mesmo verde escuro do Salvar */
+/* Correção de cores oficial MIRA Confeitaria */
+.salvar-btn { 
+    background-color: #172016 !important; /* Tom verde escuro corporativo */
+} 
 
-.btn-forn-base:hover { opacity: 0.9; transform: translateY(-1px); }
+.limpar-btn { 
+    background-color: #2a3626 !important; /* Tom verde militar complementar */
+} 
+
+/* Força os ícones internos (SVG ou Imagem) a terem um tamanho fixo e simétrico */
+.btn-forn-base svg,
+.btn-forn-base img {
+    width: 14px !important;
+    height: 14px !important;
+    display: block !important;
+}
+
+/* Efeito Hover moderno e suave ao passar o mouse */
+.btn-forn-base:hover { 
+    opacity: 0.88 !important; 
+    transform: translateY(-1px) !important; /* Leve flutuação premium */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Efeito ao clicar (Active) */
+.btn-forn-base:active {
+    transform: translateY(0px) !important;
+}
 
 /* 2. CARD DA LISTAGEM DIREITA */
 .card-tabela-fornecedores {
@@ -286,7 +313,6 @@ svg, path, rect, circle, polyline, line, polygon {
 .celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
 .btn-acao-linha { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .btn-acao-linha svg { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
-.btn-acao-linha.edit:hover { background-color: #f3f4f6; }
 .btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }
 
 .rodape-paginacao-fornecedores { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 6px; font-size: 0.72rem; color: #6b7280; }
