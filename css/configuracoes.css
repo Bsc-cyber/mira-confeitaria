@@ -1,12 +1,14 @@
 /* ==========================================================================
-   MIRA CONFEITARIA - FOLHA DE ESTILO PREMIUM DE CONFIGURAÇÕES
+   MIRA CONFEITARIA - FOLHA DE ESTILO PREMIUM DE CONFIGURAÇÕES (CORRIGIDO)
    ========================================================================== */
 
+/* 1. RESET E TRATAMENTO VETORIAL */
 /* Garante miolo transparente em todos os ícones vetoriais por segurança visual */
 svg, path, rect, circle, polyline, line, polygon {
     fill: none !important;
 }
 
+/* 2. PAINEL DE CONTEÚDO MESTRE */
 /* Painel mestre travado na viewport do monitor, seguindo o padrão MIRA */
 .painel-conteudo-config {
     padding: 12px 25px 12px 90px !important; /* Espaço para a barra lateral */
@@ -19,7 +21,7 @@ svg, path, rect, circle, polyline, line, polygon {
     box-sizing: border-box;
 }
 
-/* Cabeçalho Superior */
+/* 3. CABEÇALHO SUPERIOR */
 .topo-config {
     display: flex;
     justify-content: space-between;
@@ -28,7 +30,11 @@ svg, path, rect, circle, polyline, line, polygon {
     width: 100%;
 }
 
-.titulo-pagina-config { display: flex; align-items: center; gap: 12px; }
+.titulo-pagina-config { 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+}
 
 /* Caixinha branca flutuante do ícone da engrenagem */
 .icone-titulo-conf {
@@ -52,31 +58,33 @@ svg, path, rect, circle, polyline, line, polygon {
 .alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; }
 .alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; }
 
-/* Grid de Configurações: Divide a tela na barra de abas e nos formulários */
+/* 4. GRID PRINCIPAL DE CONFIGURAÇÕES */
+/* Divide a tela entre o menu de abas e os painéis de formulários */
 .grid-config-container {
-    display: flex;
-    gap: 15px;
+    display: flex !important;
+    gap: 20px !important;
     flex: 1;
-    height: calc(100vh - 75px);
+    height: calc(100vh - 85px) !important;
     overflow: hidden;
     width: 100%;
+    align-items: flex-start !important; /* CORREÇÃO: Impede o menu da esquerda de esticar até o chão */
 }
 
-/* Coluna da Esquerda (Menu de Abas) */
+/* 5. COLUNA DA ESQUERDA (MENU DE ABAS VERTICAIS) */
 .coluna-esquerda-abas {
-    width: 250px !important; /* Largura lateral elegante e fixa para o menu de abas */
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    width: 240px !important; /* Largura lateral elegante e fixa */
+    display: flex !important;
+    flex-direction: column !important;
+    height: auto !important; /* CORREÇÃO: Respeita apenas o tamanho real dos botões */
 }
 
 /* Card contínuo flutuante que abriga as abas verticais */
 .card-menu-abas-internas {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 10px;
+    padding: 12px !important;
     border: 1px solid #e5e7eb;
-    height: 100%;
+    height: auto !important;
     display: flex;
     flex-direction: column;
     gap: 6px;
@@ -85,7 +93,8 @@ svg, path, rect, circle, polyline, line, polygon {
 
 /* Estilização dos botões de troca de aba */
 .btn-aba-item {
-    padding: 12px 15px;
+    width: 100% !important;
+    padding: 12px 15px !important;
     border-radius: 6px;
     font-size: 0.8rem;
     font-weight: 600;
@@ -95,14 +104,29 @@ svg, path, rect, circle, polyline, line, polygon {
     text-align: left;
     cursor: pointer;
     transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: flex !important;
+    align-items: center !important; /* Centraliza verticalmente o texto e ícone */
+    gap: 10px !important;
+    box-sizing: border-box !important;
 }
 
 .btn-aba-item:hover {
     background-color: #f3f4f6;
     color: #111827;
+}
+
+/* Ajuste dos ícones SVG das abas para garantir que fiquem visíveis e simétricos */
+.btn-aba-item svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important; /* Impede o texto de amassar o ícone */
+    stroke: #4b5563 !important;
+    stroke-width: 2 !important;
+    transition: stroke 0.2s;
+}
+
+.btn-aba-item:hover svg {
+    stroke: #111827 !important;
 }
 
 /* Estado Ativo: Quando a aba está selecionada, ganha a cor verde escura militar */
@@ -112,13 +136,19 @@ svg, path, rect, circle, polyline, line, polygon {
     border-color: #172016 !important;
 }
 
-/* Coluna da Direita (Painéis de Conteúdo) */
+.btn-aba-item.ativa svg {
+    stroke: #ffffff !important; /* Ícone acende em branco na aba ativa */
+    stroke-width: 2.5 !important;
+}
+
+/* 6. COLUNA DA DIREITA (PAINÉIS DE CONTEÚDO) */
 .coluna-direita-paineis {
     flex: 1;
     display: flex;
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+    max-width: 900px !important; /* CORREÇÃO: Evita que o formulário estique demais em telas ultra-wide */
 }
 
 /* Área de rolagem vertical interna que segura as seções de formulários */
@@ -150,9 +180,10 @@ svg, path, rect, circle, polyline, line, polygon {
 .card-config-bloco {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 15px;
+    padding: 20px !important; /* Aumentado o respiro interno para um visual mais premium */
     border: 1px solid #e5e7eb;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    box-sizing: border-box;
 }
 
 .card-config-bloco h3 {
@@ -189,6 +220,7 @@ svg, path, rect, circle, polyline, line, polygon {
     background-color: #ffffff;
     color: #1f2937;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .linha-inputs-dupla-conf {
@@ -214,35 +246,48 @@ svg, path, rect, circle, polyline, line, polygon {
 .btn-acao-seguranca.limpar-cache { color: #ef4444; border-color: #fca5a5; }
 .btn-acao-seguranca.limpar-cache:hover { background-color: #fef2f2; color: #ef4444; }
 
-/* Card inferior fixo para o botão de ação mestre */
+/* 7. CARD INFERIOR DO BOTÃO DE SALVAR MESTRE */
 .card-formulario-config-acoes {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 12px 15px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    background-color: transparent !important; /* CORREÇÃO: Remove o fundo branco extra */
+    border: none !important;                  /* CORREÇÃO: Remove a borda isolada */
+    box-shadow: none !important;              /* CORREÇÃO: Remove a sombra solta */
+    padding: 0 !important;                    /* Alinha perfeitamente com a margem do card de cima */
+    margin-top: 5px !important;
+    width: 100%;
 }
 
 .botoes-acoes-formulario-conf {
-    display: flex;
+    display: flex !important;
+    justify-content: flex-end !important; /* CORREÇÃO: Alinha o botão à direita (padrão de usabilidade) */
     width: 100%;
 }
 
 .btn-conf-base {
-    width: 100% !important; /* Botão ocupa 100% da base igual ao estilo Fornecedores */
-    padding: 10px !important;
+    width: auto !important;            /* CORREÇÃO: Remove a barra preta que cortava a tela inteira */
+    min-width: 220px !important;       /* Tamanho ideal e robusto para o clique */
+    padding: 11px 24px !important;     /* Espaçamento interno confortável */
     border-radius: 6px !important;
     font-size: 0.8rem !important;
     cursor: pointer !important;
-    display: flex !important;
+    display: inline-flex !important;   /* Alinha o ícone do disquete perfeitamente com o texto */
     align-items: center !important;
     justify-content: center !important;
-    gap: 6px !important;
+    gap: 8px !important;
     font-weight: 600 !important;
     border: none !important;
     transition: all 0.2s !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important;
 }
 
-.salvar-btn { background-color: #172016 !important; color: white !important; }
-.btn-conf-base:hover { opacity: 0.9; transform: translateY(-1px); }
+.salvar-btn { 
+    background-color: #172016 !important; 
+    color: white !important; 
+}
+
+.btn-conf-base:hover { 
+    opacity: 0.92 !important; 
+    transform: translateY(-1px) !important; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.12) !important;
+}
+
 .m-t-8 { margin-top: 5px; }

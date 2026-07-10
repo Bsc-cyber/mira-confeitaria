@@ -313,6 +313,7 @@ svg, path, rect, circle, polyline, line, polygon {
 .celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
 .btn-acao-linha { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
 .btn-acao-linha svg { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
+
 .btn-acao-linha.del:hover { background-color: #fef2f2; border-color: #fca5a5; }
 
 .rodape-paginacao-fornecedores { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 6px; font-size: 0.72rem; color: #6b7280; }
