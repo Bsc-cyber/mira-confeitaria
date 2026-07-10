@@ -59,32 +59,6 @@
 .alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; } 
 .alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; } 
 
-/* Controles de pesquisa e botões do topo direito */
-.controles-topo-receitas {
-    display: flex; 
-    gap: 8px; 
-    align-items: center; 
-}
-
-/* Caixinha de busca superior */
-.wrapper-busca-topo {
-    background-color: #ffffff; 
-    border: 1px solid #d1d5db; 
-    border-radius: 6px; 
-    padding: 6px 10px; 
-    display: flex; 
-    align-items: center; 
-    gap: 6px; 
-    width: 180px; 
-}
-
-.svg-busca-topo {
-    width: 14px;
-    height: 14px;
-    stroke: #6b7280; 
-    stroke-width: 2;
-}
-
 .wrapper-busca-topo input {
     border: none;
     outline: none;

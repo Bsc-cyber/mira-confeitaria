@@ -10,7 +10,8 @@ require_once "logica_php/home.php";
     <title>MIRA Confeitaria - Receitas</title>
     <!-- Inclusão das folhas de estilo voltando uma pasta para achar o diretório css/ -->
     <link rel="stylesheet" href="../css/barra_lateral.css">
-    <link rel="stylesheet" href="../css/receitas.css">
+    <link rel="stylesheet" href="../css/receitas.css?v=80.0">
+
 </head>
 <body>
 
@@ -32,20 +33,6 @@ require_once "logica_php/home.php";
                         <h1>Receitas</h1>
                         <p>Cadastre e gerencie as receitas da sua confeitaria.</p>
                     </div>
-                </div>
-                
-                <!-- Controles de Pesquisa Rápidos do Topo Direito -->
-                <div class="controles-topo-receitas">
-                    <div class="wrapper-busca-topo">
-                        <svg class="svg-busca-topo" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <input type="text" placeholder="Pesquisar receita...">
-                    </div>
-                    <button class="btn-filtro-topo">
-                        <svg class="svg-btn-inline" viewBox="0 0 24 24"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-                    </button>
-                    <button class="btn-nova-receita-topo">
-                        <svg class="svg-btn-inline" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nova Receita
-                    </button>
                 </div>
             </header>
             <!-- Bloco Geral Dividido em Duas Colunas (Cadastro e Listagem) -->
@@ -109,14 +96,6 @@ require_once "logica_php/home.php";
                                 </svg> 
                                 Receitas Cadastradas
                             </h3>
-                            <div class="icones-topo-tabela">
-                                <button type="button" class="btn-mini-tabela-topo" id="btnRecarregarTabela" title="Recarregar">
-                                    <svg class="svg-mini-topo" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
-                                </button>
-                                <button type="button" class="btn-mini-tabela-topo" title="Adicionar Linha">
-                                    <svg class="svg-mini-topo" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                                </button>
-                            </div>
                         </div>
 
                         <!-- Barra de Pesquisa Interna da Tabela -->
