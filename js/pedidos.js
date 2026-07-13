@@ -26,6 +26,43 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalGeral = 0;
 
     // ==========================================================================
+    // PUXAR PRODUTOS DO BANCO PARA O AUTOCOMPLETAR
+    // ==========================================================================
+    function carregarProdutosParaSugestoes() {
+        fetch('../php/buscar_produtos.php') 
+        .then(res => res.json())
+        .then(retorno => {
+            if (retorno.sucesso) {
+                const datalist = document.getElementById('listaProdutosSugestoes');
+                datalist.innerHTML = ''; 
+                
+                retorno.produtos.forEach(prod => {
+                    if (prod.status == 1) { 
+                        const opcao = document.createElement('option');
+                        
+                        // MÁGICA 1: Cria um nome visual único para você diferenciar os repetidos!
+                        let nomeVisivel = prod.nome;
+                        if (prod.tamanho) nomeVisivel += ` - ${prod.tamanho}`;
+                        if (prod.sabores) nomeVisivel += ` (${prod.sabores})`;
+                        
+                        opcao.value = nomeVisivel; // O que aparece na barrinha para você
+                        opcao.setAttribute('data-nome-real', prod.nome); // O nome limpo escondido
+                        opcao.setAttribute('data-preco', prod.preco);
+                        opcao.setAttribute('data-tamanho', prod.tamanho || '');
+                        opcao.setAttribute('data-sabor', prod.sabores || '');
+                        
+                        datalist.appendChild(opcao);
+                    }
+                });
+            }
+        })
+        .catch(erro => console.error("Erro ao puxar produtos para sugestão:", erro));
+    }
+    
+    // Dispara a busca assim que a tela abre
+    carregarProdutosParaSugestoes();
+
+    // ==========================================================================
     // AUTO-PREENCHER A DATA DO PEDIDO COM O DIA DE HOJE
     // ==========================================================================
     const campoDataPedido = document.getElementById("dataPedido");
@@ -146,26 +183,55 @@ document.addEventListener("DOMContentLoaded", function () {
             carregarPedidosDoBanco(dataVal, statusVal, buscaVal);
         });
     }
-    // ==========================================================================
-    
     /* ==========================================================================
-       PARTE 1: CÁLCULO DE PREÇO EM TEMPO REAL (CORRIGIDO PARA DATALIST)
+       PARTE 1: CÁLCULO DE PREÇO EM TEMPO REAL E AUTO-PREENCHIMENTO
        ========================================================================== */
     function atualizarPrecoDisplay() {
         const valProduto = selectProduto.value;
+        const valSabor = document.getElementById("selectSabor").value.trim().toLowerCase();
+        const valTamanho = document.getElementById("selectTamanho").value.trim().toLowerCase();
         const datalist = document.getElementById("listaProdutosSugestoes");
         
-        if (!datalist) return; // Evita erro se a lista não existir
+        if (!datalist || !valProduto) {
+            precoDisplay.textContent = "R$ 0,00";
+            return;
+        }
 
-        // Procura na datalist ignorando letras maiúsculas/minúsculas
-        const opcaoSelecionada = Array.from(datalist.options).find(
-            opt => opt.value.trim().toLowerCase() === valProduto.trim().toLowerCase()
-        );
-        
-        const precoUnitario = opcaoSelecionada ? parseFloat(opcaoSelecionada.getAttribute("data-preco")) : 0;
-        const qtd = parseInt(inputQuantidade.value) || 1;
-        
-        if (precoUnitario > 0) {
+        const digitadoNome = valProduto.trim().toLowerCase();
+        const arrayOpcoes = Array.from(datalist.options);
+
+        // 1. Tenta achar a combinação PERFEITA (Nome + Sabor + Tamanho exatos)
+        let opcaoSelecionada = arrayOpcoes.find(opt => {
+            const nomeLongo = opt.value.trim().toLowerCase();
+            const nomeCurto = opt.getAttribute("data-nome-real").trim().toLowerCase();
+            const saborOpt = (opt.getAttribute("data-sabor") || "").trim().toLowerCase();
+            const tamanhoOpt = (opt.getAttribute("data-tamanho") || "").trim().toLowerCase();
+            
+            const nomeBate = (nomeCurto === digitadoNome || nomeLongo === digitadoNome);
+            return nomeBate && (saborOpt === valSabor) && (tamanhoOpt === valTamanho);
+        });
+
+        // 2. Se não achou a perfeita, acha só pelo Nome (para ajudar a preencher as caixas pra você)
+        if (!opcaoSelecionada) {
+            opcaoSelecionada = arrayOpcoes.find(opt => {
+                const nomeLongo = opt.value.trim().toLowerCase();
+                const nomeCurto = opt.getAttribute("data-nome-real").trim().toLowerCase();
+                return (nomeCurto === digitadoNome || nomeLongo === digitadoNome);
+            });
+            
+            // Auto-preenche as caixas de Sabor e Tamanho (apenas se elas estiverem vazias)
+            if (opcaoSelecionada) {
+                const inputSabor = document.getElementById("selectSabor");
+                const inputTamanho = document.getElementById("selectTamanho");
+                if (inputSabor.value === "") inputSabor.value = opcaoSelecionada.getAttribute("data-sabor");
+                if (inputTamanho.value === "") inputTamanho.value = opcaoSelecionada.getAttribute("data-tamanho");
+            }
+        }
+
+        // Calcula e exibe o preço se encontrou algo
+        if (opcaoSelecionada) {
+            const precoUnitario = parseFloat(opcaoSelecionada.getAttribute("data-preco")) || 0;
+            const qtd = parseInt(inputQuantidade.value) || 1;
             const subtotal = precoUnitario * qtd;
             precoDisplay.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
         } else {
@@ -173,8 +239,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
     
-    // Dispara a função sempre que o usuário digitar uma letra ou mudar a quantidade
+    // Dispara o cálculo sempre que você digitar EM QUALQUER UMA das caixas (Produto, Sabor, Tamanho ou Qtd)
     selectProduto.addEventListener("input", atualizarPrecoDisplay);
+    document.getElementById("selectSabor").addEventListener("input", atualizarPrecoDisplay);
+    document.getElementById("selectTamanho").addEventListener("input", atualizarPrecoDisplay);
     inputQuantidade.addEventListener("input", atualizarPrecoDisplay);
 
     /* ==========================================================================
@@ -205,29 +273,62 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // EVENTO: Clicar no botão verde "Adicionar ao Carrinho"
     btnAdicionar.addEventListener("click", function () {
-        const produtoNome = selectProduto.value; 
+        const valorDigitado = selectProduto.value; 
         const sabor = document.getElementById("selectSabor").value; 
         const tamanho = document.getElementById("selectTamanho").value; 
         const qtd = parseInt(inputQuantidade.value) || 1; 
         const cliente = document.getElementById("selectCliente").value; 
         
         if (!cliente) { return alert("Por favor, selecione um Cliente primeiro!"); }
-        if (!produtoNome || !sabor || !tamanho) { return alert("Preencha Produto, Sabor e Tamanho!"); }
+        if (!valorDigitado || !sabor || !tamanho) { return alert("Preencha Produto, Sabor e Tamanho!"); }
         
         const datalist = document.getElementById("listaProdutosSugestoes");
-        const opcaoSelecionada = Array.from(datalist.options).find(
-            opt => opt.value.trim().toLowerCase() === produtoNome.trim().toLowerCase()
-        );
+        
+        // VALIDAÇÃO RIGOROSA: Tem que existir no banco EXATAMENTE essa combinação de Nome, Sabor e Tamanho!
+        const opcaoSelecionada = Array.from(datalist.options).find(opt => {
+            const digitadoNome = valorDigitado.trim().toLowerCase();
+            const nomeLongo = opt.value.trim().toLowerCase();
+            const nomeCurto = opt.getAttribute("data-nome-real").trim().toLowerCase();
+            
+            const saborOpt = (opt.getAttribute("data-sabor") || "").trim().toLowerCase();
+            const tamanhoOpt = (opt.getAttribute("data-tamanho") || "").trim().toLowerCase();
+            
+            const saborDig = sabor.trim().toLowerCase();
+            const tamanhoDig = tamanho.trim().toLowerCase();
+            
+            const nomeBate = (nomeCurto === digitadoNome || nomeLongo === digitadoNome);
+            const saborBate = (saborOpt === saborDig);
+            const tamanhoBate = (tamanhoOpt === tamanhoDig);
+            
+            return nomeBate && saborBate && tamanhoBate; // Os TRÊS têm que ser verdadeiros
+        });
 
+        // BLOQUEIO: Se tentou inventar moda ou alterar para algo que não existe, o sistema trava!
         if (!opcaoSelecionada) {
-            return alert("Produto não encontrado! Selecione uma opção válida da lista.");
+            return alert("❌ Produto Não Validado!\n\nA combinação exata de Produto, Sabor e Tamanho informada não está cadastrada no seu banco de dados. Verifique a digitação!");
         }
         
+        // Se passou na segurança, pega o preço exato cadastrado no banco e adiciona!
         const precoUnit = parseFloat(opcaoSelecionada.getAttribute("data-preco"));
         const precoTotalItem = precoUnit * qtd;
+        const nomeLimpo = opcaoSelecionada.getAttribute("data-nome-real");
         
-        itensCarrinho.push({ produtoNome: opcaoSelecionada.value, sabor, tamanho, qtd, precoTotalItem });
+        itensCarrinho.push({ 
+            produtoNome: nomeLimpo, 
+            sabor: sabor, 
+            tamanho: tamanho, 
+            qtd: qtd, 
+            precoTotalItem: precoTotalItem 
+        });
+        
         atualizarTabelaCarrinho();
+        
+        // Limpa o formulário pro próximo doce
+        selectProduto.value = "";
+        document.getElementById("selectSabor").value = "";
+        document.getElementById("selectTamanho").value = "";
+        inputQuantidade.value = "1";
+        precoDisplay.textContent = "R$ 0,00";
     });
 
     // EVENTO: Clicar no ❌ da tabela para excluir
