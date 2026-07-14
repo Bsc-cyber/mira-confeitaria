@@ -2,8 +2,7 @@
 // MIRA CONFEITARIA - OPERAÇÕES DO PAINEL DE CLIENTES
 // ==========================================================================
 
-// 1. ANIMAÇÃO DE EXPANSÃO DA BARRA LATERAL (CORREÇÃO DA ABERTURA)
-var sidebar = document.getElementById('sidebar');
+
 
 if (sidebar) {
     // Quando o mouse passa por cima, adiciona a classe que abre a barra

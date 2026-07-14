@@ -1,50 +1,6 @@
-<?php
-// 1. Chama a conexão com o banco
-require_once 'conexao.php';
-
-// 2. LÓGICA DE SALVAR, EDITAR E EXCLUIR
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $acao = $_POST['acao'] ?? 'salvar';
-    $id = $_POST['id'] ?? '';
-    
-    // EXCLUIR
-    if ($acao === 'excluir' && !empty($id)) {
-        $stmt = $pdo->prepare("DELETE FROM clientes WHERE id = ?");
-        $stmt->execute([$id]);
-        header("Location: clientes.php");
-        exit;
-    } 
-    
-    // SALVAR (NOVO) OU EDITAR
-    if ($acao === 'salvar') {
-        $dados = [
-            $_POST['nome'], $_POST['telefone'], $_POST['cpf'], $_POST['data_nascimento'],
-            $_POST['cep'], $_POST['rua'], $_POST['numero'], $_POST['bairro'],
-            $_POST['complemento'], $_POST['cidade'], $_POST['email'], $_POST['observacoes']
-        ];
-
-        if (empty($id)) {
-            // Se não tem ID, é um cliente NOVO (INSERT)
-            $sql = "INSERT INTO clientes (nome, telefone, cpf, data_nascimento, cep, rua, numero, bairro, complemento, cidade, email, observacoes) 
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute($dados);
-        } else {
-            // Se tem ID, está atualizando um cliente existente (UPDATE)
-            $sql = "UPDATE clientes SET nome=?, telefone=?, cpf=?, data_nascimento=?, cep=?, rua=?, numero=?, bairro=?, complemento=?, cidade=?, email=?, observacoes=? WHERE id=?";
-            $dados[] = $id; // Adiciona o ID no final da lista de dados para a cláusula WHERE
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute($dados);
-        }
-        // Recarrega a página para limpar o formulário e atualizar a tabela
-        header("Location: clientes.php");
-        exit;
-    }
-}
-
-// 3. BUSCAR OS CLIENTES PARA A TABELA (Ordem alfabética)
-$stmt = $pdo->query("SELECT * FROM clientes ORDER BY nome ASC");
-$clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+<?php 
+// SEGURANÇA: Valida se o usuário fez login puxando a regra da subpasta
+require_once "logica_php/home.php"; 
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -52,6 +8,7 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Cadastro de Clientes</title>
+    <link rel="stylesheet" href="../css/barra_lateral.css">
     <link rel="stylesheet" href="../css/clientes.css?v=3.0">
 </head>
 <body>
@@ -147,10 +104,10 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
                     <!-- Linha com os 4 Botões Clássicos Padronizados -->
                     <div class="form-actions-4">
-                        <button type="submit" class="btn">Salvar</button>
-                        <button type="button" class="btn">Editar</button>
-                        <button type="button" class="btn">Limpar</button>
-                        <button type="button" class="btn">Excluir</button>
+                        <button type="submit" id="btn-salvar" class="btn">Salvar</button>
+                        <button type="button" id="btn-editar" class="btn">Editar</button>
+                        <button type="button" id="btn-limpar" class="btn">Limpar</button>
+                        <button type="button" id="btn-excluir" class="btn">Excluir</button>
                     </div>
                 </form>
             </div>
@@ -199,15 +156,6 @@ $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </section>
     </main>
 
-    <!-- Script de animação do menu lateral -->
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        if (sidebar) {
-            sidebar.addEventListener('mouseenter', () => sidebar.classList.add('expanded'));
-            sidebar.addEventListener('mouseleave', () => sidebar.classList.remove('expanded'));
-        }
-    </script>
-   
     <!-- CHAMADA PADRÃO DO ARQUIVO DE SCRIPT SEPARADO -->
     <script src="js/clientes.js"></script>
 </body>
