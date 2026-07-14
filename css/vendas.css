@@ -1,36 +1,41 @@
-/* ==========================================================================
-   MIRA CONFEITARIA - ESTILO FRENTE DE CAIXA / VENDAS (FLUXO PREMIUM)
-   ========================================================================== */
-
-/* 1. RESET DE ESTILOS VETORIAIS */
-svg, path, rect, circle, polyline, line, polygon {
-    fill: none !important;
-}
-
-/* 2. CONTÊINER VISUAL DO PAINEL MESTRE */
-.painel-conteudo-vendas {
-    padding: 12px 25px 12px 90px !important;
-    background-color: #dcdddf;
-    height: 100vh;
-    width: 100%; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden;
+/* --- RESET E COMPORTAMENTO DE TELA CHEIA (PADRÃO MIRA) --- */
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-/* 3. TOPO E IDENTIFICAÇÃO DA PÁGINA */
-.topo-vendas {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
-    width: 100%;
+body {
+    background-color: #dcdddf !important; /* Cor cinza corporativa oficial do seu sistema */
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
 }
 
-.titulo-pagina-vendas { display: flex; align-items: center; gap: 12px; }
+/* RECUO DE 90PX: Abre o espaço exato para a barra lateral flutuante trabalhar sem cobrir as letras */
+.painel-conteudo-vendas {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    padding: 15px 25px 15px 90px !important;
+    overflow: hidden;
+}
 
-.icone-titulo-vend {
+/* ✨ TOPO ORGANIZADO: Margem ajustada milimetricamente para alinhar o cabeçalho superior */
+.topo-vendas {
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+/* Alinhamento horizontal idêntico ao padrão oficial da tela de pedidos */
+.titulo-pagina {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Caixinha branca que envolve o ícone vetorial do topo */
+.icone-titulo {
     background-color: #ffffff;
     width: 38px;
     height: 38px;
@@ -41,84 +46,208 @@ svg, path, rect, circle, polyline, line, polygon {
     border: 1px solid #e5e7eb;
 }
 
-.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; }
-.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; }
+.titulo-pagina h1 {
+    font-size: 1.2rem;
+    color: #111827;
+    font-weight: 700;
+}
 
-/* 4. ARQUITETURA DO GRID DIVIDIDO (50% / 50%) */
+.titulo-pagina p {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+/* CONTAINER GRID: Faz as duas colunas preencherem a altura total do monitor de forma responsiva */
 .grid-vendas-container {
-    display: flex !important;
-    flex-direction: row !important;
+    display: flex;
     gap: 15px;
+    align-items: stretch;
     flex: 1;
-    height: calc(100vh - 75px);
+    height: calc(100vh - 85px);
     overflow: hidden;
-    width: 100%;
-    box-sizing: border-box;
+    min-height: 0;
 }
 
-/* Força as duas metades da tela a dividirem o espaço e se ajustarem ao monitor */
-.coluna-esquerda-cadastro, 
-.coluna-direita-listagem {
-    flex: 1 !important;
-    width: 50% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    height: 100% !important;
-    overflow: hidden !important;
-    box-sizing: border-box;
-}
-
-/* Caixa branca flutuante do formulário de faturamento esquerdo */
-.card-formulario-vendas {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 12px 15px;
-    border: 1px solid #e5e7eb;
-    height: 100%;
+/* --- REGRAS DE DIMENSÃO DAS COLUNAS (70% / 30%) --- */
+.coluna-esquerda-vendas {
+    flex: 70;
     display: flex;
     flex-direction: column;
-    box-sizing: border-box;
+    min-width: 0;
+    height: 100%;
 }
 
-.card-formulario-vendas h3 {
+.coluna-direita-vendas {
+    flex: 30;
+    min-width: 290px;
+    height: 100%;
+}
+
+/* CAIXA BRANCA DE FUNDO (CARDS DO PDV) */
+
+.card-vendas-box {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 15px;
+    /* Deixa a borda cinza sutilmente mais marcada */
+    border: 1px solid #d1d5db; 
+    /* ADICIONA A SOMBRA ACENTUADA: Da profundidade e destaca o bloco do fundo cinza */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+/* Localize a classe .wrapper-tabela-scroll no seu arquivo e substitua por esta: */
+.wrapper-tabela-scroll {
+    /* Deixa a borda interna da tabela combinando com o padrão nítido dos inputs */
+    border: 1px solid #d1d5db; 
+    border-radius: 6px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    background: #ffffff;
+    max-height: none !important;
+    /* ADICIONA SOMBRA INTERNA SUAVE: Cria um efeito elegante de profundidade no carrinho */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); 
+}
+
+
+.resumo-flex-box {
+    justify-content: space-between;
+}
+
+/* --- ELEMENTOS E COMPONENTES INTERNOS --- */
+.linha-topo-pdv {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.titulo-secao-compras small {
+    display: block;
+    color: #6b7280;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+
+.titulo-secao-compras h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-size: 0.8rem;
     color: #374151;
     font-weight: 600;
-    margin-bottom: 8px;
+}
+
+.grupo-busca-barra {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* 🚀 CAMPO AMPLIADO: Largura ajustada para 350px para dar espaço total ao Nome/CPF/Telefone */
+.grupo-busca-barra input {
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 350px; 
+    font-size: 0.78rem;
+    height: 32px;
+    background-color: #ffffff;
+    color: #1f2937;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* --- ADAPTAÇÃO CIRÚRGICA DA TABELA ATÉ O RODAPÉ --- */
+.card-tabela-carrinho {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    margin-top: 5px;
+}
+
+/* Força o container da tabela a ocupar todo o espaço vertical restante do monitor */
+.wrapper-tabela-scroll {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    background: #ffffff;
+    max-height: none !important; 
+}
+
+.tabela-itens-venda {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+
+/* Localize a regra .tabela-itens-venda th e substitua por esta: */
+.tabela-itens-venda th {
+    position: sticky;
+    top: 0;
+    background-color: #f9fafb;
+    z-index: 10;
+    padding: 10px;
+    text-align: left;
+    color: #4b5563;
+    font-weight: 600;
+    /* Suaviza a linha horizontal para um cinza bem clarinho e discreto */
+    border-bottom: 1px solid #e5e7eb; 
+}
+
+.tabela-itens-venda td {
+    padding: 10px;
+    font-size: 0.78rem;
+    color: #1f2937;
+    border-bottom: 1px solid #edf2f7;
+}
+
+/* Estado de lista vazia centralizado verticalmente na tela */
+.linha-vazia-texto {
+    text-align: center !important;
+    color: #6b7280;
+    /* Aumenta o padding vertical para 220px para empurrar o fundo da tabela até embaixo */
+    padding: 220px 15px !important; 
+    font-size: 0.78rem;
+}
+
+/* --- BLOCO RESUMO DA COMPRA DIREITO --- */
+.titulo-resumo-caixa {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 0.8rem;
+    color: #374151;
     display: flex;
     align-items: center;
     gap: 8px;
-    text-transform: uppercase;
-    margin-top: 0;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+    font-weight: 600;
 }
 
-/* ROLAGEM MESTRE DE PEDIDOS: Ativa a barra vertical cinza-militar e mata a horizontal feia */
-.wrapper-inputs-scroll-cadastro {
-    flex: 1;
-    overflow-y: auto !important; /* Libera apenas a rolagem para baixo */
-    overflow-x: hidden !important; /* Detona a rolagem de lado do Windows! */
-    padding-right: 6px;
-    margin-bottom: 5px;
-    max-height: calc(100vh - 110px); /* Deixa o formulário alto e livre */
-    box-sizing: border-box;
-}
-
-/* Customização estética do scroll gordinho militar igual a Pedidos */
-.wrapper-inputs-scroll-cadastro::-webkit-scrollbar {
-    width: 6px !important;
-}
-.wrapper-inputs-scroll-cadastro::-webkit-scrollbar-thumb {
-    background: #5c6655 !important; /* Tom cinza escuro militar */
-    border-radius: 4px !important;
-}
-
-/* Estruturação vertical para colocar a legenda acima das caixas */
-.grupo-input-vendas {
+.linha-resumo-valores {
     display: flex;
-    flex-direction: column;
-    margin-bottom: 6px;
-    width: 100%;
-    box-sizing: border-box;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.75rem;
+    color: #4b5563;
+}
+
+.grupo-input-vendas {
+    margin-bottom: 15px;
 }
 
 .grupo-input-vendas label {
@@ -126,15 +255,11 @@ svg, path, rect, circle, polyline, line, polygon {
     color: #4b5563;
     font-weight: 600;
     margin-bottom: 3px;
-    text-align: left;
+    display: block;
 }
 
-.obrigatorio { color: #ef4444; margin-left: 2px; }
-
-/* Customização e respiro de todas as caixas de digitação e seleções */
 .grupo-input-vendas input,
-.grupo-input-vendas select,
-.grupo-input-vendas textarea {
+.grupo-input-vendas select {
     padding: 6px 10px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
@@ -146,166 +271,81 @@ svg, path, rect, circle, polyline, line, polygon {
     box-sizing: border-box;
 }
 
-.grupo-input-vendas textarea { resize: none; height: 150px; }
-
-/* PREFIXO MOEDA: Envelopamento estrutural para injetar o símbolo "R$" dentro do campo */
-.prefixo-moeda-wrapper { 
-    position: relative; 
-    display: flex; 
-    align-items: center; 
-    width: 100%; 
+.grupo-input-vendas input {
+    text-align: right;
 }
 
-.prefixo-rs { 
-    position: absolute; 
-    left: 10px; 
-    font-size: 0.78rem; 
-    font-weight: 600; 
-    color: #6b7280; 
-}
-
-.prefixo-moeda-wrapper input { 
-    padding-left: 32px !important; /* Cria um recuo forçado de 32px na esquerda */
-}
-
-.m-t-8 { margin-top: 5px; }
-
-/* ==========================================================================
-   PARTE 3: BOTÕES HORIZONTAIS, BADGES DE FATURAMENTO E LINHAS ESCURECIDAS
-   ========================================================================== */
-
-/* 1. FILEIRA DE BOTÕES TRIPLOS: Desliza de forma contínua no final do scroll */
-.botoes-acoes-formulario-vend-triplo {
-    display: grid !important;
-    grid-template-columns: repeat(3, 1fr) !important; /* Cria 3 colunas perfeitamente iguais */
-    gap: 8px !important;
-    margin-top: 15px !important; /* Espaço confortável após a caixa de observações */
-    border-top: 1px solid #e5e7eb !important; /* Linha cinza fina elegante de separação */
-    padding-top: 12px !important; /* Espaço interno entre a linha e os botões */
-    width: 100% !important;
-    box-shrink: 0 !important; /* Impede os botões de esmagarem */
-    box-sizing: border-box !important;
-}
-
-/* Customização robusta unificada para os 3 botões possuírem o mesmo tamanho */
-.btn-vend-base {
-    padding: 10px !important;
-    border-radius: 6px !important;
-    font-size: 0.78rem !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 4px !important;
-    font-weight: 600 !important;
-    border: none !important;
-    transition: all 0.2s;
-    color: white !important;
-}
-
-/* Tons escuros corporativos baseados na identidade visual MIRA */
-.salvar-btn { background-color: #172016 !important; } 
-.limpar-btn { background-color: #2a3626 !important; } 
-.editar-btn { background-color: #172016 !important; } /* Mesmo verde escuro do faturar */
-.btn-vend-base:hover { opacity: 0.9; transform: translateY(-1px); }
-
-/* 2. CARD DA LISTAGEM DIREITA (HISTÓRICO DO CAIXA) */
-.card-tabela-vendas {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 12px 15px;
+/* Painel de destaque do valor totalizador */
+.caixa-totalizador-pdv {
+    background-color: #f3f4f6;
     border: 1px solid #e5e7eb;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    overflow: hidden;
-    box-sizing: border-box;
-}
-
-/* FILEIRA INTERNA: Une a busca por faturamentos e o botão de recarregar */
-.linha-pesquisa-interna-vend {
-    display: flex !important;
-    gap: 6px !important;
-    align-items: center !important;
-    width: 100% !important;
-    margin-bottom: 8px !important;
-}
-
-.wrapper-busca-tabela-vend {
-    background-color: #ffffff !important;
-    border: 1px solid #d1d5db !important;
-    border-radius: 6px !important;
-    padding: 6px 12px !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    flex: 1 !important;
-}
-
-.svg-busca-tabela-interna { width: 12px !important; height: 12px !important; stroke: #6b7280 !important; stroke-width: 2 !important; }
-.wrapper-busca-tabela-vend input { border: none !important; outline: none !important; font-size: 0.78rem !important; color: #1f2937 !important; width: 100% !important; background: none !important; }
-
-.btn-mini-tabela-topo {
-    background-color: #ffffff !important;
-    border: 1px solid #d1d5db !important;
-    width: 31px !important;
-    height: 31px !important;
-    border-radius: 6px !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-.svg-mini-topo { width: 12px !important; height: 12px !important; stroke: #4b5563 !important; stroke-width: 2 !important; }
-
-/* 3. ÁREA DE SCROLL COM LINHA EXTERNA ESCURECIDA */
-.wrapper-tabela-vendas-scroll {
-    flex: 1;
-    overflow-y: auto !important;
-    overflow-x: hidden !important; /* Mata o scroll horizontal inferior */
-    border: 1px solid #b8bfc7; /* Borda externa da tabela escurecida para alto contraste */
     border-radius: 6px;
-    margin-bottom: 6px;
-    max-height: calc(100vh - 170px);
-}
-.wrapper-tabela-vendas-scroll::-webkit-scrollbar { width: 4px; }
-.wrapper-tabela-vendas-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
-
-/* 4. BLINDAGEM DA TABELA COM CONTRASTE NÍTIDO NAS LINHAS */
-.tabela-dados-vendas { width: 100% !important; border-collapse: collapse; font-size: 0.75rem; table-layout: fixed !important; }
-
-/* Injetado o cinza escuro (#b8bfc7) na linha inferior para marcar bem cada item faturado */
-.tabela-dados-vendas th, 
-.tabela-dados-vendas td { 
-    padding: 10px 12px !important; 
-    text-align: left; 
-    border-bottom: 1px solid #b8bfc7; /* Linhas horizontais escurecidas nítidas de alto contraste */
-    overflow: hidden; 
-    text-overflow: ellipsis; 
-    white-space: nowrap; 
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-/* Trava a barra de títulos cinza claro congelada no topo da rolagem */
-.tabela-dados-vendas th { background-color: #f9fafb; color: #4b5563; font-weight: 600; position: sticky; top: 0; z-index: 5; }
+.label-total-verde {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #4b5563;
+}
 
-/* Badges Coloridas Pastéis para as Formas de Pagamento */
-.badge-pag { padding: 4px 10px !important; border-radius: 4px; font-size: 0.68rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
-.b-pix { background-color: #e0f2fe; color: #0369a1; } /* Azul pastel */
-.b-dinheiro { background-color: #e6f7ed; color: #1e7e45; } /* Verde pastel */
-.b-cartao { background-color: #f3e8ff; color: #6b21a8; } /* Lilás pastel */
+.valor-total-grande {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #166534; /* Verde institucional oficial do sistema */
+}
 
-/* Etiquetas ovais indicadoras de status de faturamento */
-.badge-venda-status { padding: 2px 8px; border-radius: 12px; font-size: 0.65rem; font-weight: 600; display: inline-block; text-align: center; width: 100%; }
-.badge-venda-status.v-pago { background-color: #e6f7ed; color: #16a34a; }
-.badge-venda-status.v-aguardando { background-color: #fef2f2; color: #ef4444; }
+/* --- BOTÕES DO SISTEMA (PADRÃO REBAIXADO) --- */
+.btn-adicionar-azul {
+    background: #172016;
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
-/* Alinhamento dos mini botões circulares de ação da linha */
-.celula-acoes-tabela { text-align: center !important; display: flex; justify-content: center; gap: 6px; align-items: center; }
-.btn-acao-linha { width: 24px; height: 24px; border-radius: 50%; border: 1px solid #d1d5db; background-color: #ffffff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-.btn-acao-linha svg { width: 12px; height: 12px; stroke: #4b5563 !important; stroke-width: 2; }
-.btn-acao-linha:hover { background-color: #f3f4f6; }
+.btn-pesquisa-lupa {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
 
-/* Rodapé simplificado contendo apenas a contagem total de faturamentos */
-.rodape-paginacao-vendas { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e5e7eb; padding-top: 6px; font-size: 0.72rem; color: #6b7280; }
-.info-contagem-itens { font-weight: 500; }
+/* BOTÃO FINALIZAR: Tom verde musgo escuro oficial da marca */
+.btn-finalizar-venda-grafite {
+    width: 100%;
+    background-color: #172016; 
+    color: #ffffff;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    margin-top: auto;
+}
+
+.btn-finalizar-venda-grafite:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.modal-oculto { display: none; }
