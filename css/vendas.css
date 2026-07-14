@@ -349,3 +349,62 @@ body {
 }
 
 .modal-oculto { display: none; }
+
+/* Efeito visual para pedidos selecionados na fila de faturamento */
+.linha-pedido-fila.pedido-selecionado {
+    background-color: #e6f7ed !important;
+    border-left: 4px solid #16a34a !important;
+}
+
+/* ==========================================================================
+   ESTILOS DO CUPOM FISCAL (MODAL E IMPRESSÃO)
+   ========================================================================== */
+.cupom-container { max-width: 350px !important; width: 100%; padding: 0 !important; }
+
+.cupom-impresso {
+    font-family: 'Courier New', Courier, monospace; /* Fonte clássica de notinha */
+    color: #000;
+    background: #fff;
+    padding: 20px;
+}
+
+.cabecalho-cupom { text-align: center; margin-bottom: 10px; }
+.cabecalho-cupom h2 { margin: 0 0 5px; font-size: 1.1rem; font-weight: bold; }
+.cabecalho-cupom p { margin: 2px 0; font-size: 0.75rem; }
+
+.divisor-cupom { border: 0; border-top: 1px dashed #000; margin: 10px 0; }
+
+.tabela-cupom { width: 100%; border-collapse: collapse; font-size: 0.7rem; margin-bottom: 10px; }
+.tabela-cupom th { text-align: left; border-bottom: 1px dashed #000; padding-bottom: 5px; }
+.tabela-cupom td { padding: 4px 0; vertical-align: top; }
+
+.totais-cupom { text-align: right; font-size: 0.75rem; }
+.totais-cupom p { margin: 3px 0; }
+.totais-cupom h3 { margin: 5px 0 0; font-size: 1.1rem; font-weight: bold; }
+
+.rodape-cupom { text-align: center; margin-top: 20px; font-size: 0.75rem; font-weight: bold; }
+
+/* Botões do Rodapé do Modal */
+.botoes-cupom { display: flex; gap: 8px; justify-content: space-between; padding: 15px; background: #f3f4f6; border-top: 1px solid #e5e7eb; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+.btn-acao-modal { flex: 1; padding: 10px; border: none; border-radius: 6px; color: white; cursor: pointer; font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; }
+.bg-cinza { background-color: #4b5563; }
+.bg-azul { background-color: #2563eb; }
+.bg-verde { background-color: #16a34a; }
+.btn-acao-modal:hover { opacity: 0.85; transform: translateY(-1px); }
+
+/* ==========================================================================
+   MÁGICA DA IMPRESSORA: Esconde o site, mostra só o cupom!
+   ========================================================================== */
+@media print {
+    body * { visibility: hidden !important; } /* Esconde tudo */
+    .cupom-impresso, .cupom-impresso * { visibility: visible !important; } /* Mostra só a nota */
+    .cupom-impresso { 
+        position: absolute; 
+        left: 0; 
+        top: 0; 
+        width: 100%; /* Largura total do papel da impressora térmica */
+        padding: 0;
+        margin: 0;
+    }
+    .no-print { display: none !important; } /* Oculta botões e título na impressão */
+}

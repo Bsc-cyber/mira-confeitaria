@@ -71,15 +71,9 @@ require_once "logica_php/home.php";
                             
                             <!-- Grupo de busca integrado com os botões simétricos de ação -->
                             <div class="grupo-busca-barra">
-                                <input type="text" id="inputBuscaPdv" placeholder="Nome, CPF ou Telefone...">
-                                
-                                <button type="button" class="btn-pesquisa-lupa">
-                                    <!-- Ícone da lupa travado nativamente para proteção visual -->
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#171d14" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                                </button>
-                                
-                                <button type="button" class="btn-adicionar-azul">
-                                    <!-- Símbolo de adição (+) blindado em tamanho fixo corporativo -->
+                                <datalist id="listaPedidosProntos"></datalist>
+                                <input type="text" id="inputBuscaPedido" list="listaPedidosProntos" placeholder="Digite ou selecione o nome do cliente..." style="width: 400px;">
+                                <button type="button" class="btn-adicionar-azul" id="btnCarregarPedido" title="Carregar Pedido">
                                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="#ffffff" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                                 </button>
                             </div>
@@ -100,12 +94,6 @@ require_once "logica_php/home.php";
                                         </tr>
                                     </thead>
                                     <tbody id="corpoTabelaPdv">
-                                        <!-- Estado inicial indicando carrinho vazio aguardando lançamentos de balcão -->
-                                        <tr>
-                                            <td colspan="6" class="linha-vazia-texto">
-                                                Nenhum produto adicionado à compra até o momento.
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -171,32 +159,63 @@ require_once "logica_php/home.php";
         </main> <!-- Fecha a tag .painel-conteudo-vendas iniciada na Parte 1 -->
     </div> <!-- Fecha a tag .container-dashboard iniciada na Parte 1 -->
 
-    <!-- MODAL DE FECHAMENTO DE VENDA COMPLETO (INICIALMENTE OCULTO) -->
+    
+    <!-- MODAL DE FECHAMENTO DE VENDA E CUPOM (RECIBO) -->
     <div id="modalDetalhes" class="modal-oculto"> 
-        <div class="modal-conteudo"> 
-            <div class="modal-cabecalho"> 
-                <h3 id="modalTitulo">Venda Realizada #00</h3> 
+        <div class="modal-conteudo cupom-container"> 
+            
+            <div class="modal-cabecalho no-print"> 
+                <h3 id="modalTitulo">Venda Finalizada!</h3> 
                 <button type="button" id="btnFecharModal">❌</button> 
             </div> 
-            <div class="modal-corpo"> 
-                <p><strong>Cliente:</strong> <span id="modalCliente">Consumidor Final</span></p> 
-                <hr class="divisor-modal"> 
-                <h4 class="subtitulo-itens-modal">Produtos do Cupom:</h4> 
-                <ul id="modalListaItens" class="lista-itens-modal"></ul> 
-                <hr class="divisor-modal"> 
-                <p class="modal-total"><strong>Total Pago:</strong> <strong id="modalTotal" style="color: #166534;">R$ 0,00</strong></p> 
-                <div class="modal-status-box">
-                    <label>Status do Caixa:</label> 
-                    <select id="modalSelectStatus" disabled> 
-                        <option value="Concluida">Venda Concluída</option> 
-                    </select> 
-                </div> 
+            
+            <!-- ÁREA DO CUPOM (É isso que sai na impressora térmica ou no PDF) -->
+            <div class="modal-corpo cupom-impresso" id="cupomArea"> 
+                <div class="cabecalho-cupom">
+                    <h2>MIRA CONFEITARIA</h2>
+                    <p>Recibo de Venda #<span id="cupomNumero">000</span></p>
+                    <p>Data: <span id="cupomData">00/00/0000</span></p>
+                    <hr class="divisor-cupom">
+                    <p><strong>Cliente:</strong> <span id="cupomCliente">Consumidor Final</span></p>
+                </div>
+                
+                <hr class="divisor-cupom">
+                <table class="tabela-cupom">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%;">Qtd</th>
+                            <th style="width: 50%;">Descrição</th>
+                            <th style="width: 20%;">V.Un</th>
+                            <th style="width: 20%;">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cupomListaItens">
+                        <!-- Itens entram aqui -->
+                    </tbody>
+                </table>
+                <hr class="divisor-cupom">
+                
+                <div class="totais-cupom">
+                    <p>Subtotal: <span id="cupomSubtotal">R$ 0,00</span></p>
+                    <p>Desconto: <span id="cupomDesconto">R$ 0,00</span></p>
+                    <h3>TOTAL: <span id="cupomTotalFinal">R$ 0,00</span></h3>
+                    <p style="margin-top: 5px;">Forma Pagto: <strong><span id="cupomPagamento">PIX</span></strong></p>
+                </div>
+                
+                <div class="rodape-cupom">
+                    <p>Obrigado pela preferência!</p>
+                    <p>Volte Sempre 🧁</p>
+                </div>
             </div> 
-            <div class="modal-rodape"> 
-                <button type="button" id="btnImprimirCupom" class="btn-imprimir-cupom-azul">🖨️ Imprimir Cupom</button> 
+
+            <!-- BOTÕES DE AÇÃO DO CUPOM -->
+            <div class="modal-rodape botoes-cupom no-print"> 
+                <button type="button" id="btnImprimirCupom" class="btn-acao-modal bg-cinza">🖨️ Imprimir</button> 
+                <button type="button" id="btnBaixarCupom" class="btn-acao-modal bg-azul">📥 Baixar</button> 
+                <button type="button" id="btnZapCupom" class="btn-acao-modal bg-verde">📱 WhatsApp</button> 
             </div> 
         </div> 
-    </div> 
+    </div>
 
     <!-- Chamada isolada do arquivo JavaScript contendo a lógica dos cálculos do PDV -->
     <script src="../js/vendas.js"></script> 
