@@ -147,7 +147,7 @@ require_once "logica_php/home.php";
 
                         <!-- Botão simétrico na cor oficial verde musgo escuro da MIRA confeitaria -->
                         <div class="rodape-botoes-direita-unico">
-                            <button type="button" id="btnFinalizarVendaCompleto" class="btn-finalizar-venda-grafite" onclick="abrirCupomDireto()">
+                            <button type="button" id="btnFinalizarVendaCompleto" class="btn-finalizar-venda-grafite" onclick="alert('O botão está vivo e recebendo o clique!'); abrirCupomDireto();">
                                 <span>✓ Finalizar Venda</span>
                             </button>
                         </div>
@@ -218,6 +218,7 @@ require_once "logica_php/home.php";
     </div>
 
     <!-- Chamada isolada do arquivo JavaScript contendo a lógica dos cálculos do PDV -->
-    <script src="../js/vendas.js"></script> 
+    <!-- <script src="../js/vendas.js"></script> -->
+    <script src="../js/vendas.js?v=<?php echo time(); ?>"></script>
 </body> 
 </html>

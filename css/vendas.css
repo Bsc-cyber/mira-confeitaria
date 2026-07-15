@@ -408,3 +408,56 @@ body {
     }
     .no-print { display: none !important; } /* Oculta botões e título na impressão */
 }
+
+/* ==========================================================================
+   MÁGICA DO MODAL (FUNDO ESCURO E SOBREPOSIÇÃO)
+   ========================================================================== */
+#modalDetalhes {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo escuro semi-transparente elegante */
+    z-index: 9999; /* Garante que fica por cima de toda a interface do sistema */
+    /* A centralização do cartão branco no ecrã acontece quando o JS muda para display: flex */
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-conteudo {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-height: 95vh;
+}
+
+.modal-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #f3f4f6;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-cabecalho h3 { 
+    margin: 0; 
+    font-size: 1.1rem; 
+    color: #111827; 
+}
+
+#btnFecharModal {
+    background: none; 
+    border: none; 
+    cursor: pointer; 
+    font-size: 1.2rem; 
+    transition: transform 0.2s;
+}
+
+#btnFecharModal:hover { 
+    transform: scale(1.15); 
+}
