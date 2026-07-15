@@ -1,367 +1,445 @@
+/* ==========================================================================
+   MIRA CONFEITARIA - ESTILO PRÓPRIO DE CLIENTES (PADRÃO FLUXO CONTÍNUO)
+   ========================================================================== */
+
+/* Importa a fonte Plus Jakarta Sans diretamente do repositório oficial do Google Fonts */
 @import url('https://googleapis.com');
 
-:root {
-    --bg-dark: #2F3E33;       /* Seu verde escuro oficial */
-    --accent-gold: #D1B48C;   /* Seu dourado refinado */
-    --bg-body: #FDFBF7;       /* Fundo off-white muito leve */
-    --card-bg: #FFFFFF;       
-    --text-main: #2F3E33;     
-    --text-muted: #8A948D;    
-    --radius-lg: 14px;        
-    --radius-md: 8px;
-    --shadow-subtle: 0 4px 20px rgba(47, 62, 51, 0.015);
+/* 1. RESET E TRATAMENTO VETORIAL */
+/* Evita preenchimentos pretos automáticos ou bizarros nos ícones vetoriais da tela de clientes */
+svg, path, rect, circle, polyline, line, polygon {
+    fill: none !important;
 }
 
+/* Redefine as margens, espaçamentos e o cálculo de tamanho padrão para todas as tags */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* Configura o corpo da página para usar a fonte nova e travar qualquer rolagem externa no navegador */
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-main);
+    background-color: #dcdddf; /* Injeta o cinza de fundo padrão do sistema */
     display: flex;
     height: 100vh;
     overflow: hidden;
 }
 
-/* --- BARRA LATERAL DA SUA OUTRA PÁGINA (CORRIGIDA) --- */
-.sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 68px;
-    background-color: var(--bg-dark);
-    padding: 24px 14px;
+/* 2. PAINEL DE CONTEÚDO MESTRE PRÓPRIO DE CLIENTES */
+/* Prende todo o conteúdo interno na tela e elimina rolagem indesejada na janela do navegador */
+.painel-conteudo-clientes {
+    padding: 12px 25px 12px 90px !important; /* Cria o respiro exato para não sumir atrás da barra lateral fixa */
+    background-color: #dcdddf; /* Define a cor cinza claro oficial da MIRA */
+    height: 100vh; /* Força o painel a ocupar exatamente 100% da altura do monitor do usuário */
+    width: 100%; /* Força o painel a se esticar por toda a largura restante da tela */
     display: flex;
-    flex-direction: column;
-    z-index: 1000;
-    box-shadow: 4px 0 20px rgba(47, 62, 51, 0.03);
-    overflow: hidden;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-direction: column; /* Organiza o cabeçalho e a grade em formato vertical empilhado */
+    overflow: hidden; /* Proíbe o navegador de criar barras de rolagem externas */
+    box-sizing: border-box;
 }
 
-.sidebar.expanded { 
-    width: 260px; 
-    box-shadow: 10px 0 40px rgba(47, 62, 51, 0.15);
+/* 3. CABEÇALHO SUPERIOR EXCLUSIVO DE CLIENTES */
+/* Organiza o alinhamento da linha de títulos da parte superior do painel */
+.topo-clientes {
+    display: flex;
+    justify-content: space-between; /* Afasta os elementos para as extremidades */
+    align-items: flex-start;
+    margin-bottom: 8px; /* Pequeno espaçamento inferior para não colar na grade */
+    width: 100%;
 }
 
-.logo {
+/* Alinha o ícone e o texto do título lado a lado em formato flexível */
+.titulo-pagina-clientes {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 25px;
-    padding-left: 2px;
+    gap: 12px; /* Espaço confortável de 12px entre o ícone e a escrita */
 }
 
-.avatar-mc {
-    border: 1px solid var(--accent-gold);
-    color: var(--accent-gold);
-    min-width: 38px;
+/* Estiliza a caixinha branca que serve de moldura para o ícone vetorial do topo de clientes */
+.icone-titulo-clie {
+    background-color: #ffffff;
+    width: 38px;
     height: 38px;
+    border-radius: 8px; /* Bordas levemente arredondadas combinando com o sistema */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centraliza o elemento SVG perfeitamente no meio do quadrado */
+    border: 1px solid #e5e7eb; /* Linha sutil cinza de contorno */
+}
+
+/* Ajusta o tamanho e a espessura da linha do ícone vetorial interno de clientes */
+.svg-topo-clie {
+    width: 18px;
+    height: 18px;
+    stroke: #171d14 !important; /* Aplica o tom verde escuro oficial corporativo da MIRA */
+    stroke-width: 2; /* Deixa o desenho do ícone nítido e corporativo */
+}
+
+/* Define a tipografia e o tamanho do título principal da página de clientes */
+.alinhamento-texto-topo h1 {
+    font-size: 1.2rem;
+    color: #111827; /* Tom cinza escuro quase preto de altíssima legibilidade */
+    font-weight: 700; /* Força o negrito robusto no título */
+    margin: 0;
+}
+
+/* Define a tipografia e o tamanho do subtítulo explicativo cinza de clientes */
+.alinhamento-texto-topo p {
+    font-size: 0.75rem;
+    color: #6b7280; /* Tom cinza médio discreto */
+    margin: 0;
+}
+
+/* 4. GRID REPARTIDO EM DUAS COLUNAS EXCLUSIVO (50% / 50%) */
+/* Alinha o cartão de cadastro e o cartão de listagem perfeitamente lado a lado */
+.grid-clientes-container {
+    display: flex !important;
+    flex-direction: row !important; /* Trava as duas colunas na horizontal */
+    gap: 15px; /* Espaço elegante de respiro entre as duas metades */
+    flex: 1; /* Preenche de forma inteligente todo o espaço vertical útil */
+    height: calc(100vh - 75px); /* Desconta a altura do topo para fixar o layout no monitor */
+    overflow: hidden; /* Proíbe o vazamento de elementos para fora da tela */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Força o comportamento e divisão exata de espaço para ambas as colunas da tela */
+.coluna-esquerda-cadastro, 
+.coluna-direita-listagem {
+    flex: 1 !important;
+    width: 50% !important; /* Divide a tela milimetricamente em duas metades iguais */
+    display: flex !important;
+    flex-direction: column !important; /* Faz o fluxo interno nascer empilhado de cima para baixo */
+    height: 100% !important;
+    overflow: hidden !important; /* Prende os filhos e proíbe barras de rolagem gerais na janela */
+    box-sizing: border-box;
+}
+
+/* 5. FORMULÁRIO ESQUERDO PRÓPRIO DE CLIENTES */
+/* Painel branco flutuante estrutural que acomoda os campos de cadastro do cliente */
+.card-formulario-clientes {
+    background-color: #ffffff;
+    border-radius: 8px; /* Cantos arredondados suavizados padrão MIRA Confeitaria */
+    padding: 12px 15px; /* Afastamento interno confortável para os campos */
+    border: 1px solid #e5e7eb; /* Contorno em linha fina cinza claro */
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Força o empilhamento vertical do título e dos inputs */
+    box-sizing: border-box;
+}
+
+/* Estiliza o título interno do cadastro em letras maiúsculas e tamanho reduzido */
+.card-formulario-clientes h3 {
+    font-size: 0.8rem;
+    color: #374151; /* Tom cinza grafite elegante */
+    font-weight: 600;
+    margin-bottom: 8px; /* Margem de recuo inferior antes do primeiro input */
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Distância entre o mini ícone vetorial e a escrita */
+    text-transform: uppercase; /* Converte automaticamente o texto para caixa alta */
+    margin-top: 0;
+}
+
+/* Modifica o tamanho e espessura do traço do mini ícone vetorial de cadastro de clientes */
+.svg-card-titulo {
+    width: 14px;
+    height: 14px;
+    stroke: #171d14 !important; /* Injeta a cor verde oficial corporativa da confeitaria */
+    stroke-width: 2;
+}
+
+/* ROLAGEM MESTRE DE CLIENTES: Cria a área vertical móvel cinza-militar e embutida */
+.wrapper-inputs-scroll-clientes {
+    flex: 1; /* Toma todo o espaço útil disponível do cartão até a borda inferior */
+    overflow-y: auto !important; /* Libera apenas e exclusivamente a rolagem para baixo */
+    overflow-x: hidden !important; /* Destrói por completo qualquer chance de rolagem lateral */
+    padding-right: 6px; /* Espaço para impedir que a barra oculte o final das caixas de texto */
+    margin-bottom: 5px;
+    max-height: calc(100vh - 190px); /* Garante que haja espaço reservado no fluxo para os botões */
+    box-sizing: border-box;
+}
+
+/* Customização visual e refinada para a barra de rolagem interna do formulário */
+.wrapper-inputs-scroll-clientes::-webkit-scrollbar {
+    width: 6px !important; /* Mantém a trilha de rolagem fina e discreta na lateral */
+}
+
+/* Estiliza a pastilha móvel da barra de rolagem no tom clássico cinza-militar */
+.wrapper-inputs-scroll-clientes::-webkit-scrollbar-thumb {
+    background: #5c6655 !important; /* Tom militar discreto oficial do ecossistema */
+    border-radius: 4px !important;
+}
+
+/* Agrupamento próprio para empilhar verticalmente a legenda acima da caixa de digitação */
+.grupo-input-clientes {
+    display: flex;
+    flex-direction: column; /* Joga a legenda para cima e a caixa de digitação para baixo */
+    margin-bottom: 8px; /* Distância segura de segurança entre as linhas do cadastro */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Define a tipografia, tamanho e alinhamento da legenda do campo */
+.grupo-input-clientes label {
+    font-size: 0.7rem;
+    color: #4b5563; /* Cinza médio clássico */
+    font-weight: 600;
+    margin-bottom: 3px; /* Espaçamento mínimo milimétrico antes do input */
+    text-align: left;
+}
+
+/* Aplica a cor vermelha de alerta para destacar a obrigatoriedade nos asteriscos */
+.obrigatorio {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+/* Customização e respiro interno de todas as caixas de texto e datas de clientes */
+.grupo-input-clientes input, 
+.grupo-input-clientes textarea {
+    padding: 6px 10px; /* Altura de digitação ergonômica idêntica à referência */
+    border: 1px solid #d1d5db; /* Contorno sutil padrão inativo */
+    border-radius: 6px; /* Cantos suavemente lapidados e modernos */
+    font-size: 0.78rem; /* Tamanho unificado para legibilidade confortável */
+    outline: none; /* Desativa a moldura preta nativa do navegador durante o foco */
+    background-color: #ffffff;
+    color: #1f2937; /* Tonalidade dos caracteres digitados */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Estiliza a caixa expandida de anotações e notas gerais do cadastro */
+.grupo-input-clientes textarea {
+    resize: none; /* Proíbe rigidamente o usuário de arrastar e quebrar o layout */
+    height: 70px; /* Altura compactada sob medida para fluir perfeitamente no scroll */
+}
+
+/* 6. FILEIRA DE BOTÕES INFERIORES MULTIPLOS (FLUXO DO SCROLL) */
+/* Configura a grade com 4 colunas proporcionais idênticas para os botões do cadastro */
+.botoes-acoes-formulario-clie-quadruplo {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important; /* Força os 4 botões na mesma linha simétrica */
+    gap: 8px !important; /* Espaçamento cirúrgico de segurança entre cada botão */
+    margin-top: 15px !important; /* Afasta a fileira do final do scroll de inputs */
+    border-top: 1px solid #e5e7eb !important; /* Linha fina cinza superior delimitando o rodapé */
+    padding-top: 12px !important; /* Respiro acima dos botões */
+    width: 100% !important;
+    flex-shrink: 0 !important; /* Impede os botões de esmagarem se a tela for pequena */
+    box-sizing: border-box !important;
+}
+
+/* Garante o preenchimento, arredondamento e altura ideal para os botões corporativos */
+.btn-clie-base {
+    padding: 8px 10px !important; /* Dá altura e largura confortável para o clique do mouse */
+    border-radius: 6px !important;
+    font-size: 0.75rem !important; /* Fonte alinhada ao padrão da MIRA Confeitaria */
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    transition: all 0.2s ease-in-out;
+    color: white !important; /* Força o texto em branco para alto contraste */
+    width: 100% !important;
+    background-color: #172016 !important; /* UNIFICADO: Todos os botões agora usam o verde escuro oficial */
+}
+
+/* Mantém exclusivamente o botão de exclusão em vermelho por segurança visual */
+.botoes-acoes-formulario-clie-quadruplo button[id="btn-excluir"] {
+    background-color: #172016 !important; /* Vermelho vivo para alertar ação destrutiva */
+}
+
+/* Efeito sutil de flutuação ao passar o mouse por cima de qualquer botão ativo */
+.btn-clie-base:hover {
+    opacity: 0.9;
+    transform: translateY(-1px); /* Eleva o botão milimetricamente */
+}
+
+/* 7. CARD DA LISTAGEM DIREITA DE CLIENTES */
+/* Caixa branca flutuante estrutural da listagem direita de clientes */
+.card-tabela-clientes {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Alinha a busca, a tabela e o contador de cima para baixo */
+    justify-content: space-between;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Une a barra de busca de clientes e o botão minificado de atualizar no topo do card */
+.linha-pesquisa-interna-clie {
+    display: flex !important;
+    gap: 6px !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin-bottom: 8px !important;
+}
+
+/* Envoltório cinza com contorno para a caixa de busca de clientes */
+.wrapper-busca-tabela-clie {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 6px !important;
+    padding: 6px 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex: 1 !important; /* Faz a barra de busca ocupar todo o espaço útil restante */
+}
+
+/* Controla o tamanho e a tonalidade cinza do mini ícone vetorial da lupa */
+.svg-busca-tabela-interna {
+    width: 12px !important;
+    height: 12px !important;
+    stroke: #6b7280 !important;
+    stroke-width: 2 !important;
+}
+
+/* Remove completamente o visual nativo do input para herdar o estilo do envoltório */
+.wrapper-busca-tabela-clie input {
+    border: none !important;
+    outline: none !important;
+    font-size: 0.78rem !important;
+    color: #1f2937 !important;
+    width: 100% !important;
+    background: none !important;
+}
+
+/* Botão quadrado minificado cinza de clientes posicionado ao lado direito da busca */
+.btn-mini-tabela-clie-topo {
+    background-color: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    width: 31px !important;
+    height: 31px !important;
+    border-radius: 6px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Modifica as dimensões do ícone vetorial de atualizar próprio da listagem de clientes */
+.svg-mini-topo {
+    width: 12px !important;
+    height: 12px !important;
+    stroke: #4b5563 !important;
+    stroke-width: 2 !important;
+}
+
+/* 8. ÁREA DE SCROLL COM LINHA EXTERNA ESCURECIDA (CLIENTES) */
+/* Caixa isolada de scroll da tabela de clientes para travar o layout da tela */
+.wrapper-tabela-clientes-scroll {
+    flex: 1;
+    overflow-y: auto !important; /* Ativa a rolagem vertical sutil apenas nas linhas */
+    overflow-x: hidden !important; /* Extingue de vez a barra horizontal inferior do Windows */
+    border: 1px solid #b8bfc7; /* Borda cinza escurecida para alto contraste nítido nas tabelas */
+    border-radius: 6px;
+    margin-bottom: 6px;
+    max-height: calc(100vh - 170px); /* Prende a altura respeitando o rodapé de contagem */
+}
+
+/* Customização estética da barra de rolagem ultrafina da tabela de clientes */
+.wrapper-tabela-clientes-scroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+/* Estiliza o pino deslizante transparente cinza-escuro da tabela de clientes */
+.wrapper-tabela-clientes-scroll::-webkit-scrollbar-thumb {
+    background: rgba(23, 32, 22, 0.15);
+    border-radius: 4px;
+}
+
+/* 9. BLINDAGEM DA TABELA DE CLIENTES COM CONTRASTE NITIDO NAS LINHAS */
+.tabela-dados-clientes {
+    width: 100% !important; /* Força a tabela a ocupar toda a largura disponível do card */
+    border-collapse: collapse; /* Une as bordas das células para um visual limpo */
+    font-size: 0.75rem; /* Mantém o tamanho de fonte padronizado da MIRA Confeitaria */
+    /* REMOVIDO: table-layout: fixed para permitir que as colunas se ajustem organicamente */
+}
+
+/* Demarcação nítida em cinza escuro na linha de baixo para isolar bem cada cliente */
+.tabela-dados-clientes th, 
+.tabela-dados-clientes td {
+    padding: 10px 12px !important; /* Espaçamento interno confortável para leitura */
+    text-align: left; /* Alinha todos os textos e cabeçalhos à esquerda */
+    border-bottom: 1px solid #b8bfc7; /* Linha horizontal de alto contraste */
+}
+
+/* Garante o comportamento seguro para o texto de cada célula sem sumir da tela */
+.tabela-dados-clientes td {
+    overflow: hidden; /* Prende o conteúdo na célula */
+    text-overflow: ellipsis; /* Adiciona '...' se o nome do cliente for gigante */
+    white-space: nowrap; /* Impede o texto de quebrar linha e esticar a tabela para baixo */
+}
+
+/* Trava a barra de títulos cinza claro fixa no topo congelada durante a rolagem de clientes */
+.tabela-dados-clientes th {
+    background-color: #f9fafb; /* Fundo cinza bem claro para destacar os títulos */
+    color: #4b5563; /* Cor cinza escuro para os títulos */
+    font-weight: 600; /* Negrito médio comercial */
+    position: sticky; /* Efeito congelado no topo ao rolar a lista */
+    top: 0; /* Fixa no ponto zero do scroll */
+    z-index: 5; /* Garante que os dados passem por baixo do cabeçalho */
+    white-space: nowrap; /* Impede que os títulos da coluna quebrem linha */
+}
+
+/* Alinhamento flexível centralizado para os mini botões circulares da linha de clientes */
+.celula-acoes-clie {
+    display: flex;
+    justify-content: center; /* Centraliza o botão redondo na coluninha de ações */
+    align-items: center;
+    width: 100%;
+}
+
+/* Mini botão circular branco para disparo de ações da linha de clientes */
+.btn-linha-clie {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%; /* Transforma o elemento em uma circunferência perfeita */
+    border: 1px solid #d1d5db; /* Linha sutil de contorno */
+    background-color: #ffffff;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius-md);
-    font-weight: 700;
-    font-size: 13px;
-    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease-in-out;
 }
 
-.logo h2 {
-    color: #FFFFFF;
-    font-size: 15px;
-    font-weight: 600;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-    letter-spacing: 0.5px;
+/* Controla o desenho do mini lápis de edição da listagem de clientes */
+.btn-linha-clie svg {
+    width: 12px;
+    height: 12px;
+    stroke: #4b5563 !important; /* Cor cinza grafite para o ícone vetorial */
+    stroke-width: 2;
 }
 
-.sidebar.expanded .logo h2 { 
-    opacity: 1; 
-    transition-delay: 0.1s;
+/* Efeito cinza sutil ao passar o mouse no botão circular de clientes */
+.btn-linha-clie.edit:hover {
+    background-color: #f3f4f6;
 }
 
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex-grow: 1;
-}
 
-.menu a {
-    display: flex;
-    align-items: center;
-    color: #93A397;
-    text-decoration: none;
-    padding: 10px;
-    border-radius: var(--radius-md);
-    transition: all 0.2s ease;
-    gap: 14px;
-    white-space: nowrap;
-}
-
-.menu a svg { min-width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.8px; }
-
-.menu a span { 
-    font-size: 13px; 
-    font-weight: 500; 
-    opacity: 0; 
-    transition: opacity 0.15s ease; 
-}
-
-.sidebar.expanded .menu a span { 
-    opacity: 1; 
-    transition-delay: 0.1s;
-}
-
-.menu a:hover { background-color: rgba(255, 255, 255, 0.03); color: #FFFFFF; }
-.menu a.active { background-color: rgba(209, 180, 140, 0.12); color: var(--accent-gold); font-weight: 600; }
-
-.sidebar-footer {
-    padding-top: 15px;
-    border-top: 1px solid rgba(255, 255, 255, 0.04);
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.brand-phrase {
-    font-size: 11px;
-    color: #8F9E93;
-    line-height: 1.4;
-    white-space: nowrap;
-    opacity: 0;
-    transition: opacity 0.15s ease;
-}
-
-.sidebar.expanded .brand-phrase { 
-    opacity: 1; 
-    transition-delay: 0.1s;
-}
-
-.user-profile { display: flex; align-items: center; gap: 12px; }
-.avatar-lc { background-color: var(--accent-gold); color: var(--bg-dark); min-width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 700; font-size: 13px; }
-
-.user-info { white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; }
-.sidebar.expanded .user-info { 
-    opacity: 1; 
-    transition-delay: 0.1s;
-}
-
-.user-info h4 { font-size: 13px; font-weight: 600; color: #FFFFFF; }
-.user-info small { font-size: 11px; color: #8F8B86; }
-
-/* --- CONTEÚDO PRINCIPAL --- */
-.main-content {
-    margin-left: 68px; 
-    padding: 16px 24px; 
-    width: calc(100% - 68px);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.topbar {
+/* 10. RODAPÉ DE CONTAGEM DE CLIENTES */
+/* Organiza o alinhamento da linha de numeração total inferior de clientes */
+.rodape-paginacao-clientes {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    border-top: 1px solid #e5e7eb; /* Linha de divisão superior */
+    padding-top: 6px;
+    font-size: 0.72rem;
+    color: #6b7280;
 }
 
-.topbar h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
-.topbar .subtitle { font-size: 12px; color: var(--text-muted); }
-
-/* --- GRADE SIMÉTRICA IGUAL AO SEU PRINT (50/50) --- */
-.clients-grid-container {
-    display: grid;
-    /* Altera de 1fr 1fr para uma proporção equilibrada (60% / 40%) */
-    grid-template-columns: 1.4fr 1fr; 
-    gap: 24px;
-    flex-grow: 1;
-    height: calc(100vh - 90px); 
-    overflow: hidden;
-    /* Evita que o layout estique demais em monitores UltraWide */
-    max-width: 1600px; 
-    width: 100%;
+.info-contagem-clie {
+    font-weight: 500;
 }
-
-
-/* Painéis de Fundo com Acabamento Premium */
-.form-card, .list-card {
-    background: var(--card-bg);
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    /* Linha alterada abaixo: */
-    border: 1px solid rgba(209, 180, 140, 0.50); 
-    box-shadow: var(--shadow-subtle);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-}
-
-
-.card-section-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-main);
-    margin-bottom: 4px;
-}
-
-.custom-form {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    overflow-y: auto;
-    padding-right: 6px;
-    flex-grow: 1;
-}
-
-.custom-form::-webkit-scrollbar { width: 4px; }
-.custom-form::-webkit-scrollbar-thumb { background: rgba(47, 62, 51, 0.1); border-radius: 10px; }
-
-.form-row { display: flex; flex-direction: column; gap: 6px; }
-.form-row.full-width { width: 100%; }
-.form-row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.target-address { grid-template-columns: 3fr 1fr !important; }
-
-.custom-form label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* Envoltório para Inputs com Ícones Internos do Seu Print */
-.input-icon-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.custom-form input, .custom-form textarea {
-    width: 100%;
-    background-color: #FFFFFF;
-    border: 1px solid rgba(47, 62, 51, 0.12);
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-family: inherit;
-    color: var(--text-main);
-    outline: none;
-    transition: all 0.2s ease;
-}
-
-/* Inputs que possuem ícone na direita (como telefone e calendário) */
-.has-icon-right input {
-    padding-right: 36px;
-}
-
-.input-icon-wrapper .field-icon {
-    position: absolute;
-    right: 14px;
-    color: var(--text-muted);
-    font-size: 14px;
-    pointer-events: none;
-}
-
-.custom-form input:focus, .custom-form textarea:focus {
-    border-color: var(--accent-gold);
-    box-shadow: 0 0 0 3px rgba(209, 180, 140, 0.08);
-}
-
-.custom-form textarea { height: 75px; resize: none; }
-
-/* --- BARRA DE BOTÕES INFERIORES DINÂMICOS (FUNDO VERDE / CLIQUE BRANCO) --- */
-.form-actions-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: auto;
-    padding-top: 18px;
-    border-top: 1px solid rgba(209, 180, 140, 0.15);
-    background-color: #FFFFFF;
-}
-
-.btn {
-    padding: 11px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    /* Padrão Inicial: Todo Verde Oficial e Texto Branco */
-    background-color: var(--bg-dark);
-    color: #FFFFFF;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn:hover {
-    background-color: #243227;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(47, 62, 51, 0.1);
-}
-
-/* CLASSE DINÂMICA: Ativada via JavaScript quando o botão for selecionado */
-.btn.active-click {
-    background-color: #FFFFFF !important;
-    color: var(--bg-dark) !important;
-    border-color: var(--accent-gold) !important;
-    box-shadow: 0 4px 15px rgba(209, 180, 140, 0.2) !important;
-    transform: translateY(0);
-}
-
-/* --- COLUNA DIREITA: BUSCA, FILTROS E ESTADO VAZIO --- */
-.list-card { display: flex; flex-direction: column; }
-.list-header { display: grid; grid-template-columns: 1fr auto; gap: 12px; margin-bottom: 20px; }
-
-.search-box-client { position: relative; display: flex; align-items: center; }
-.search-box-client input { width: 100%; background-color: #FFFFFF; border: 1px solid rgba(47, 62, 51, 0.12); padding: 10px 14px; padding-right: 36px; border-radius: var(--radius-md); font-size: 13px; outline: none; color: var(--text-main); }
-.search-box-client svg { position: absolute; right: 14px; color: var(--text-muted); }
-
-.btn-filter-box {
-    background: #FFFFFF;
-    border: 1px solid rgba(47, 62, 51, 0.12);
-    padding: 0 16px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-.btn-filter-box:hover { border-color: var(--accent-gold); background-color: var(--bg-body); }
-
-/* Centralização do Box de "Nenhum Cliente Cadastrado" */
-.empty-state-container {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 40px 20px;
-}
-
-.empty-state-illustration {
-    width: 130px;
-    height: 130px;
-    margin-bottom: 20px;
-    opacity: 0.9;
-}
-
-.empty-state-container h4 { font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 6px; }
-.empty-state-container p { font-size: 13px; color: var(--text-muted); line-height: 1.5; max-width: 280px; }

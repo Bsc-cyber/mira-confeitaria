@@ -1,42 +1,64 @@
 /* ==========================================================================
-   MIRA CONFEITARIA - FOLHA DE ESTILO PREMIUM DE CONFIGURAÇÕES (CORRIGIDO)
+   MIRA CONFEITARIA - ESTILO PRÓPRIO DE CONFIGURAÇÕES (FLUXO CONTÍNUO)
    ========================================================================== */
 
+/* Importa a fonte Plus Jakarta Sans diretamente do repositório oficial do Google Fonts */
+@import url('https://googleapis.com');
+
 /* 1. RESET E TRATAMENTO VETORIAL */
-/* Garante miolo transparente em todos os ícones vetoriais por segurança visual */
+/* Evita preenchimentos automáticos indesejados nos ícones da tela de configurações */
 svg, path, rect, circle, polyline, line, polygon {
     fill: none !important;
 }
 
-/* 2. PAINEL DE CONTEÚDO MESTRE */
-/* Painel mestre travado na viewport do monitor, seguindo o padrão MIRA */
-.painel-conteudo-config {
-    padding: 12px 25px 12px 90px !important; /* Espaço para a barra lateral */
-    background-color: #dcdddf; /* Fundo cinza claro oficial das telas de sucesso */
-    height: 100vh; 
-    width: 100%; 
-    display: flex; 
-    flex-direction: column; 
-    overflow: hidden; /* Elimina barra de rolagem global na janela */
+/* Redefine margens, espaçamentos e força o box-sizing em todos os elementos */
+* {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-/* 3. CABEÇALHO SUPERIOR */
+/* Configura o corpo da página travando qualquer transbordo ou rolagem do navegador */
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: #dcdddf; /* Cinza de fundo oficial do sistema */
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* 2. PAINEL DE CONTEÚDO MESTRE DE CONFIGURAÇÕES */
+/* Segura todos os cartões na tela respeitando o recuo da barra lateral esquerda */
+.painel-conteudo-config {
+    padding: 12px 25px 0 90px !important; /* Deixa margem para a barra e cola na base */
+    background-color: #dcdddf;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* 3. CABEÇALHO SUPERIOR (TOPBAR CONFIG) */
+/* Alinha o título à esquerda e o botão de salvar alterações na extremidade direita */
 .topo-config {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 8px;
+    align-items: center;
+    margin-bottom: 12px;
     width: 100%;
+    flex-shrink: 0;
 }
 
-.titulo-pagina-config { 
-    display: flex; 
-    align-items: center; 
-    gap: 12px; 
+/* Agrupa horizontalmente a moldura branca do ícone e os textos */
+.titulo-pagina-config {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-/* Caixinha branca flutuante do ícone da engrenagem */
+/* Caixa branca de contorno que serve de moldura para a engrenagem */
 .icone-titulo-conf {
     background-color: #ffffff;
     width: 38px;
@@ -48,174 +70,135 @@ svg, path, rect, circle, polyline, line, polygon {
     border: 1px solid #e5e7eb;
 }
 
+/* Desenho linear da engrenagem no tom verde escuro oficial corporativo */
 .svg-topo-conf {
     width: 18px;
     height: 18px;
-    stroke: #171d14 !important; /* Verde escuro militar oficial */
+    stroke: #171d14 !important;
     stroke-width: 2;
 }
 
-.alinhamento-texto-topo h1 { font-size: 1.2rem; color: #111827; font-weight: 700; margin: 0; }
-.alinhamento-texto-topo p { font-size: 0.75rem; color: #6b7280; margin: 0; }
-
-/* 4. GRID PRINCIPAL DE CONFIGURAÇÕES */
-/* Divide a tela entre o menu de abas e os painéis de formulários */
-.grid-config-container {
-    display: flex !important;
-    gap: 20px !important;
-    flex: 1;
-    height: calc(100vh - 85px) !important;
-    overflow: hidden;
-    width: 100%;
-    align-items: flex-start !important; /* CORREÇÃO: Impede o menu da esquerda de esticar até o chão */
-}
-
-/* 5. COLUNA DA ESQUERDA (MENU DE ABAS VERTICAIS) */
-.coluna-esquerda-abas {
-    width: 240px !important; /* Largura lateral elegante e fixa */
-    display: flex !important;
-    flex-direction: column !important;
-    height: auto !important; /* CORREÇÃO: Respeita apenas o tamanho real dos botões */
-}
-
-/* Card contínuo flutuante que abriga as abas verticais */
-.card-menu-abas-internas {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 12px !important;
-    border: 1px solid #e5e7eb;
-    height: auto !important;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-}
-
-/* Estilização dos botões de troca de aba */
-.btn-aba-item {
-    width: 100% !important;
-    padding: 12px 15px !important;
-    border-radius: 6px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #4b5563;
-    background-color: #ffffff;
-    border: 1px solid transparent;
-    text-align: left;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex !important;
-    align-items: center !important; /* Centraliza verticalmente o texto e ícone */
-    gap: 10px !important;
-    box-sizing: border-box !important;
-}
-
-.btn-aba-item:hover {
-    background-color: #f3f4f6;
+/* Estiliza a tipografia em negrito do título principal de configurações */
+.alinhamento-texto-topo h1 {
+    font-size: 1.2rem;
     color: #111827;
+    font-weight: 700;
+    margin: 0;
 }
 
-/* Ajuste dos ícones SVG das abas para garantir que fiquem visíveis e simétricos */
-.btn-aba-item svg {
-    width: 16px !important;
-    height: 16px !important;
-    flex-shrink: 0 !important; /* Impede o texto de amassar o ícone */
-    stroke: #4b5563 !important;
-    stroke-width: 2 !important;
-    transition: stroke 0.2s;
+/* Subtítulo explicativo cinza em tamanho reduzido */
+.alinhamento-texto-topo p {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0;
 }
 
-.btn-aba-item:hover svg {
-    stroke: #111827 !important;
-}
-
-/* Estado Ativo: Quando a aba está selecionada, ganha a cor verde escura militar */
-.btn-aba-item.ativa {
-    background-color: #172016 !important;
+/* BOTÃO DE SALVAR ALTERAÇÕES (CANTO SUPERIOR DIREITO) */
+/* Botão elegante com tom verde escuro e cantos suavizados conforme o mockup */
+.btn-salvar-alteracoes {
+    background-color: #2a3626 !important; /* Tom verde oliva escuro MIRA */
     color: #ffffff !important;
-    border-color: #172016 !important;
+    padding: 8px 14px !important;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
 }
 
-.btn-aba-item.ativa svg {
-    stroke: #ffffff !important; /* Ícone acende em branco na aba ativa */
-    stroke-width: 2.5 !important;
+/* Efeito sutil de iluminação e clique ao passar o mouse */
+.btn-salvar-alteracoes:hover {
+    background-color: #172016 !important; /* Altera para o verde master */
+    transform: translateY(-1px);
 }
 
-/* 6. COLUNA DA DIREITA (PAINÉIS DE CONTEÚDO) */
-.coluna-direita-paineis {
-    flex: 1;
+/* ==========================================================================
+   4. ÁREA DE DISTRIBUIÇÃO DINÂMICA (SEM CÁLCULOS FIXOS DE ALTURA)
+   ========================================================================== */
+.wrapper-scroll-configuracoes {
+    flex: 1; /* Faz esse bloco ocupar todo o espaço vertical disponível na tela */
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden;
-    max-width: 900px !important; /* CORREÇÃO: Evita que o formulário estique demais em telas ultra-wide */
-}
-
-/* Área de rolagem vertical interna que segura as seções de formulários */
-.wrapper-paineis-scroll {
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    padding-right: 4px;
-}
-
-/* Customização fina da barra de rolagem */
-.wrapper-paineis-scroll::-webkit-scrollbar { width: 4px; }
-.wrapper-paineis-scroll::-webkit-scrollbar-thumb { background: rgba(23, 32, 22, 0.15); border-radius: 4px; }
-
-/* Mecanismo de Abas: Painéis começam ocultos por padrão */
-.painel-config-secao {
-    display: none;
+    gap: 12px; /* Espaço elegante entre o card grande e as linhas de baixo */
+    overflow: hidden !important; /* Garante que nenhuma barra de rolagem apareça */
+    box-sizing: border-box;
     width: 100%;
 }
 
-/* Exibe na tela apenas o painel que contiver a classe ativa-painel */
-.painel-config-secao.ativa-painel {
-    display: block !important;
-}
-
-/* Card flutuante branco que abriga os campos de input */
+/* ==========================================================================
+   5. O GRANDE CARD SUPERIOR (INFORMAÇÕES DA CONFEITARIA)
+   ========================================================================== */
 .card-config-bloco {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 20px !important; /* Aumentado o respiro interno para um visual mais premium */
+    padding: 14px 18px; /* Respiro interno confortável e compacto */
     border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    width: 100%;
     box-sizing: border-box;
-}
-
-.card-config-bloco h3 {
-    font-size: 0.8rem;
-    color: #374151;
-    font-weight: 600;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-}
-
-/* Estruturação vertical clássica do MIRA (Label acima do input) */
-.grupo-input-config {
+    flex: 1.2; /* Dá uma leve prioridade de espaço para os campos de digitação */
     display: flex;
     flex-direction: column;
-    margin-bottom: 8px;
+    justify-content: center; /* Centraliza verticalmente o formulário por dentro */
+}
+
+.titulo-secao-config {
+    font-size: 0.88rem;
+    color: #111827;
+    font-weight: 600;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.svg-secao-config {
+    width: 14px;
+    height: 14px;
+    stroke: #171d14 !important;
+    stroke-width: 2;
+}
+
+.subtitulo-secao-config {
+    font-size: 0.7rem;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+.linha-campos-config-tripla {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.grupo-campo-config {
+    display: flex;
+    flex-direction: column;
     flex: 1;
 }
 
-.grupo-input-config label {
+.grupo-campo-config label {
     font-size: 0.7rem;
     color: #4b5563;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
 }
 
-.obrigatorio { color: #ef4444; margin-left: 2px; }
+.opcional-texto {
+    font-size: 0.65rem;
+    color: #9ca3af;
+    font-weight: 400;
+}
 
-.grupo-input-config input {
-    padding: 7px 10px;
+.grupo-campo-config input {
+    padding: 6px 10px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     outline: none;
     background-color: #ffffff;
     color: #1f2937;
@@ -223,71 +206,156 @@ svg, path, rect, circle, polyline, line, polygon {
     box-sizing: border-box;
 }
 
-.linha-inputs-dupla-conf {
+.secao-horario-funcionamento {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2px;
+}
+
+.label-horario-titulo {
+    font-size: 0.7rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.linha-selecao-horario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: #374151;
+    font-weight: 500;
+}
+
+.linha-selecao-horario input[type="time"] {
+    padding: 3px 6px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    outline: none;
+    color: #1f2937;
+    background-color: #ffffff;
+}
+
+.divisor-horas {
+    color: #6b7280;
+    font-size: 0.7rem;
+}
+
+/* ==========================================================================
+   7. FILEIRAS INFERIORES EM DUPLA SIMÉTRICA (COMPORTAMENTO FLUIDO)
+   ========================================================================== */
+.linha-gerenciamento-dupla {
+    display: flex !important;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1; /* Distribui o espaço restante igualmente entre as duas linhas de baixo */
+}
+
+.card-mini-gerenciamento {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 16px; /* Respiro interno confortável e simétrico */
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Empurra o botão de link perfeitamente para a base */
+    flex: 1; /* Divide as fileiras em 50% / 50% de forma exata */
+    min-height: 115px; /* Altura ideal calculada para travar na tela com simetria premium */
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.topo-mini-card {
     display: flex;
     gap: 10px;
+    align-items: flex-start;
+}
+
+.icone-mini-card {
+    background-color: #f3f4f6;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.icone-mini-card svg {
+    width: 13px;
+    height: 13px;
+    stroke: #4b5563 !important;
+    stroke-width: 2;
+}
+
+.texto-mini-card h4 {
+    font-size: 0.78rem;
+    color: #111827;
+    font-weight: 700;
+    margin: 0 0 1px 0;
+}
+
+.texto-mini-card p {
+    font-size: 0.68rem;
+    color: #6b7280;
+    line-height: 1.3;
+    margin: 0;
+}
+
+.btn-link-config {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    margin-top: 4px;
 }
 
-/* Switch deslizante de preferências */
-.alinhamento-switch-config { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-.switch-container-conf { position: relative; display: inline-block; width: 34px; height: 18px; flex-shrink: 0; }
-.switch-container-conf input { opacity: 0; width: 0; height: 0; }
-.slider-switch-bola-conf { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 18px; }
-.slider-switch-bola-conf:before { position: absolute; content: ""; height: 12px; width: 12px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
-.switch-container-conf input:checked + .slider-switch-bola-conf { background-color: #172016; }
-.switch-container-conf input:checked + .slider-switch-bola-conf:before { transform: translateX(16px); }
-.texto-switch-conf { font-size: 0.75rem; color: #4b5563; font-weight: 500; }
+.btn-link-config svg {
+    width: 10px;
+    height: 10px;
+    stroke: #4b5563 !important;
+    stroke-width: 2.2;
+}
 
-/* Fileira de botões rápidos para a aba de segurança e backup */
-.linha-botoes-seguranca-rapida { display: flex; gap: 8px; width: 100%; }
-.btn-acao-seguranca { padding: 8px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 600; color: #172016; background-color: #ffffff; border: 1px solid #172016; cursor: pointer; transition: all 0.2s; }
-.btn-acao-seguranca:hover { background-color: #172016; color: white; }
-.btn-acao-seguranca.limpar-cache { color: #ef4444; border-color: #fca5a5; }
-.btn-acao-seguranca.limpar-cache:hover { background-color: #fef2f2; color: #ef4444; }
+.btn-link-config:hover {
+    border-color: #172016;
+    background-color: #f9fafb;
+    color: #172016;
+}
 
-/* 7. CARD INFERIOR DO BOTÃO DE SALVAR MESTRE */
-.card-formulario-config-acoes {
-    background-color: transparent !important; /* CORREÇÃO: Remove o fundo branco extra */
-    border: none !important;                  /* CORREÇÃO: Remove a borda isolada */
-    box-shadow: none !important;              /* CORREÇÃO: Remove a sombra solta */
-    padding: 0 !important;                    /* Alinha perfeitamente com a margem do card de cima */
-    margin-top: 5px !important;
+/* ==========================================================================
+   9. BARRA DE AVISO CORPORATIVA FIXA DO RODAPÉ
+   ========================================================================== */
+.barra-aviso-config-rodape {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     width: 100%;
+    padding: 8px 0;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.68rem;
+    color: #6b7280;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 4px;
 }
 
-.botoes-acoes-formulario-conf {
-    display: flex !important;
-    justify-content: flex-end !important; /* CORREÇÃO: Alinha o botão à direita (padrão de usabilidade) */
-    width: 100%;
+.barra-aviso-config-rodape svg {
+    width: 11px;
+    height: 11px;
+    stroke: #6b7280 !important;
+    stroke-width: 2;
 }
-
-.btn-conf-base {
-    width: auto !important;            /* CORREÇÃO: Remove a barra preta que cortava a tela inteira */
-    min-width: 220px !important;       /* Tamanho ideal e robusto para o clique */
-    padding: 11px 24px !important;     /* Espaçamento interno confortável */
-    border-radius: 6px !important;
-    font-size: 0.8rem !important;
-    cursor: pointer !important;
-    display: inline-flex !important;   /* Alinha o ícone do disquete perfeitamente com o texto */
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important;
-    font-weight: 600 !important;
-    border: none !important;
-    transition: all 0.2s !important;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08) !important;
-}
-
-.salvar-btn { 
-    background-color: #172016 !important; 
-    color: white !important; 
-}
-
-.btn-conf-base:hover { 
-    opacity: 0.92 !important; 
-    transform: translateY(-1px) !important; 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.12) !important;
-}
-
-.m-t-8 { margin-top: 5px; }
