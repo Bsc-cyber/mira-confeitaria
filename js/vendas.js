@@ -1,10 +1,10 @@
 /* ==========================================================================
-   MIRA CONFEITARIA - MOTOR DO PONTO DE VENDA (PDV)
+   MIRA CONFEITARIA - MOTOR DO PONTO DE VENDA (FINALIZADOR DE PEDIDOS E CUPOM)
    ========================================================================== */
 
 document.addEventListener("DOMContentLoaded", function () {
     
-    // Captura de Elementos da Interface
+    // 1. CAPTURA DE ELEMENTOS
     const inputBuscaPedido = document.getElementById("inputBuscaPedido");
     const btnCarregar = document.getElementById("btnCarregarPedido");
     const corpoTabela = document.getElementById("corpoTabelaPdv");
@@ -21,25 +21,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Variáveis de Memória do Caixa
     let carrinho = [];
-    let pedidosFinalizadosDisponiveis = []; // Armazena os pedidos prontos para faturamento
+    let pedidosFinalizadosDisponiveis = []; 
+    let pedidosSelecionadosIds = []; 
     let pedidoOrigemId = null; 
     let nomeClienteAtual = "CONSUMIDOR FINAL";
+    let valorSubtotalReal = 0;
 
     // ==========================================================================
-    // 1. CARREGAR E LISTAR OS PEDIDOS "FINALIZADOS" DIRETAMENTE NA TABELA
+    // 2. LISTA DE ESPERA (PEDIDOS PRONTOS DA COZINHA)
     // ==========================================================================
     function buscarPedidosAguardandoPagamento() {
         corpoTabela.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 50px;">Buscando pedidos finalizados na produção...</td></tr>';
         
-        // Puxa todos os pedidos cadastrados no sistema
         fetch('buscar_todos_pedidos.php')
         .then(res => res.json())
         .then(retorno => {
             if (retorno.sucesso) {
-                // Filtra para mostrar apenas os pedidos que a cozinha marcou como "Finalizado"
                 pedidosFinalizadosDisponiveis = retorno.pedidos.filter(p => p.status === "Finalizado");
                 
-                // Popula o datalist de pesquisa para o topo (caso queira buscar por nome)
                 const datalist = document.getElementById('listaPedidosProntos');
                 if (datalist) {
                     datalist.innerHTML = '';
@@ -50,7 +49,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         datalist.appendChild(opcao);
                     });
                 }
-
                 renderizarListaDeEspera();
             } else {
                 corpoTabela.innerHTML = '<tr><td colspan="6" class="linha-vazia-texto">Erro ao carregar os dados do banco.</td></tr>';
@@ -62,16 +60,9 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Desenha a "tela inicial" do caixa com os pedidos prontos na tabela
-    // Variáveis de Memória do Caixa (Adicione esta no topo do seu script se não tiver)
-    let pedidosSelecionadosIds = []; // Guarda os IDs dos pedidos selecionados na fila
-
-    // ==========================================================================
-    // DESENHA A LISTA DE ESPERA COM SUPORTE A SELEÇÃO MÚLTIPLA
-    // ==========================================================================
     function renderizarListaDeEspera() {
         corpoTabela.innerHTML = "";
-        pedidosSelecionadosIds = []; // Reseta a seleção
+        pedidosSelecionadosIds = []; 
         
         if (pedidosFinalizadosDisponiveis.length === 0) {
             corpoTabela.innerHTML = '<tr><td colspan="6" class="linha-vazia-texto" style="padding: 150px 15px !important;">🧁 Excelente! Todos os pedidos da cozinha já foram faturados e pagos.</td></tr>';
@@ -103,13 +94,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 </td>
             `;
 
-            // CLIQUE NA LINHA: Controla a Seleção Múltipla Inteligente
             tr.addEventListener("click", function (e) {
-                // Se clicou direto no botão de cobrar, fatura imediatamente os selecionados
                 if (e.target.classList.contains("btn-abrir-pedido")) {
                     e.stopPropagation();
-                    
-                    // Se não tiver nenhum selecionado, adiciona pelo menos este que foi clicado
                     if (pedidosSelecionadosIds.length === 0) {
                         pedidosSelecionadosIds.push(ped.id);
                     }
@@ -118,19 +105,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
                 const clienteLinha = ped.cliente.trim().toLowerCase();
-
-                // Validação de cliente: Se já tiver algum pedido selecionado, impede de selecionar outro cliente
                 if (pedidosSelecionadosIds.length > 0) {
                     const primeiroSelecionado = pedidosFinalizadosDisponiveis.find(p => p.id == pedidosSelecionadosIds[0]);
                     if (primeiroSelecionado && primeiroSelecionado.cliente.trim().toLowerCase() !== clienteLinha) {
-                        alert(`⚠️ Bloqueio de Segurança!\n\nVocê já selecionou um pedido de "${primeiroSelecionado.cliente}". Para faturar múltiplos pedidos juntos, eles precisam pertencer ao mesmo cliente.`);
+                        alert(`⚠️ Bloqueio de Segurança!\n\nVocê já selecionou um pedido de "${primeiroSelecionado.cliente}". Selecione apenas pedidos do mesmo cliente.`);
                         return;
                     }
                 }
 
-                // Liga/Desliga a seleção
                 tr.classList.toggle("pedido-selecionado");
-                
                 if (tr.classList.contains("pedido-selecionado")) {
                     pedidosSelecionadosIds.push(ped.id);
                 } else {
@@ -141,16 +124,16 @@ document.addEventListener("DOMContentLoaded", function () {
             corpoTabela.appendChild(tr);
         });
 
-        atualizarFinanceiro(0, 0); // Mantém o caixa zerado até abrir
+        atualizarFinanceiro(0, 0); 
     }
 
     // ==========================================================================
-    // 2. BUSCAR E UNIR OS ITENS DE MÚLTIPLOS PEDIDOS DO MESMO CLIENTE (LISTAGEM INDIVIDUAL)
+    // 3. UNIFICAR E ABRIR PEDIDOS NO CARRINHO
     // ==========================================================================
     function importarMultiplosPedidosNoCarrinho(listaIds) {
         if (listaIds.length === 0) return;
 
-        corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 50px;">Carregando e unificando ${listaIds.length} pedidos...</td></tr>`;
+        corpoTabela.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 50px;">Carregando e unificando ${listaIds.length} pedido(s)...</td></tr>`;
 
         const urlBusca = `buscar_detalhes_pedido.php`;
         const requisicoesCorretas = listaIds.map(id => 
@@ -173,7 +156,6 @@ document.addEventListener("DOMContentLoaded", function () {
                         const precoTotal = parseFloat(item.preco_total);
                         const precoUnitario = precoTotal / qtd;
 
-                        // AQUI ESTÁ A CORREÇÃO: Ele empurra o doce direto para o carrinho em uma linha nova, sem tentar somar ou agrupar com os outros!
                         carrinho.push({
                             codigo: item.id_item || pedido.id,
                             nome: item.produto,
@@ -185,7 +167,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             });
 
-            // Une os IDs dos pedidos originais para o PHP dar baixa em todos de uma vez (Ex: "13, 14")
             pedidoOrigemId = idsOrigem.join(","); 
             labelCliente.textContent = `CLIENTE: ${nomeClienteAtual} (Faturando Pedidos: #${idsOrigem.join(' e #')})`;
             
@@ -199,11 +180,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ==========================================================================
-    // 3. SEÇÃO DO CARRINHO (CHECKOUT)
+    // 4. RENDERIZAÇÃO DO CARRINHO (CHECKOUT) E FINANCEIRO
     // ==========================================================================
     function renderizarCarrinho() {
         corpoTabela.innerHTML = "";
-        
         let totalItens = 0;
         let subtotalCaixa = 0;
 
@@ -223,7 +203,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 </td>
             `;
 
-            // Se o usuário quiser desistir ou voltar para a lista sem finalizar, clica no botão voltar
             tr.querySelector(".btn-cancelar-checkout").addEventListener("click", (e) => {
                 e.stopPropagation();
                 carrinho = [];
@@ -238,8 +217,6 @@ document.addEventListener("DOMContentLoaded", function () {
         atualizarFinanceiro(totalItens, subtotalCaixa);
     }
 
-    let valorSubtotalReal = 0;
-    
     function atualizarFinanceiro(totalItens = 0, subtotal = 0) {
         valorSubtotalReal = subtotal;
         labelTotalItens.textContent = totalItens;
@@ -255,37 +232,197 @@ document.addEventListener("DOMContentLoaded", function () {
         labelTotalGeral.textContent = `R$ ${totalLiquido.toFixed(2).replace('.', ',')}`;
     }
 
-    inputDesconto.addEventListener("input", recalcularTotalComDesconto);
+    if(inputDesconto) inputDesconto.addEventListener("input", recalcularTotalComDesconto);
 
-    // ==========================================================================
-    // 4. PESQUISA RÁPIDA NO CAMPO SUPERIOR
-    // ==========================================================================
-    if (btnCarregar) {
+    if (btnCarregar && inputBuscaPedido) {
         btnCarregar.addEventListener("click", () => {
             const val = inputBuscaPedido.value.trim();
             if (!val) return;
-            
-            // Tenta achar o pedido no array pelo nome digitado
             const pedidoEncontrado = pedidosFinalizadosDisponiveis.find(p => p.cliente.toLowerCase().includes(val.toLowerCase()));
             if (pedidoEncontrado) {
-                importarPedidoNoCarrinho(pedidoEncontrado.id);
+                importarMultiplosPedidosNoCarrinho([pedidoEncontrado.id]);
             } else {
                 alert("Nenhum pedido pronto encontrado para este cliente.");
             }
         });
+        inputBuscaPedido.addEventListener("keypress", (e) => { if (e.key === "Enter") btnCarregar.click(); });
     }
 
     // ==========================================================================
-    // 5. FINALIZAÇÃO DA VENDA NO BANCO
+    // 5. FINALIZAÇÃO DA VENDA NO BANCO E EMISSÃO DO CUPOM
     // ==========================================================================
-    btnFinalizarVenda.addEventListener("click", function () {
-        if (carrinho.length === 0) return alert("❌ Selecione e abra um pedido na lista abaixo primeiro!");
+    if (btnFinalizarVenda) {
+        btnFinalizarVenda.addEventListener("click", function () {
+            
+            // PROTEÇÃO: Se a imagem R$ 0,00 estiver zerada, ele dá este aviso!
+            if (carrinho.length === 0) return alert("❌ Selecione e abra um pedido na lista ao lado primeiro!");
 
-        const btnOriginal = this.innerHTML;
-        this.innerHTML = "⏳ Processando...";
-        this.disabled = true;
+            const btnOriginal = this.innerHTML;
+            this.innerHTML = "⏳ Processando...";
+            this.disabled = true;
 
-        let descontoNum = parseFloat(inputDesconto.value) || 0;
+            let descontoNum = parseFloat(inputDesconto.value) || 0;
+            let totalFinalNum = valorSubtotalReal - descontoNum;
+
+            const pacoteVenda = {
+                cliente: nomeClienteAtual,
+                subtotal: valorSubtotalReal,
+                desconto: descontoNum,
+                total_liquido: totalFinalNum,
+                forma_pagamento: selectPagamento.options[selectPagamento.selectedIndex].text,
+                pedido_origem_id: pedidoOrigemId,
+                itens: carrinho
+            };
+
+            fetch('../php/salvar_venda.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pacoteVenda)
+            })
+            .then(res => res.json())
+            .then(retorno => {
+                if (retorno.sucesso) {
+                    const dataHoje = new Date();
+                    const dataFormatada = dataHoje.toLocaleString('pt-BR');
+
+                    // 1. PREENCHE O CUPOM FÍSICO
+                    const elmCupomNum = document.getElementById("cupomNumero");
+                    if(elmCupomNum) elmCupomNum.textContent = retorno.id_venda;
+                    
+                    const elmCupomData = document.getElementById("cupomData");
+                    if(elmCupomData) elmCupomData.textContent = dataFormatada;
+                    
+                    const elmCupomCliente = document.getElementById("cupomCliente");
+                    if(elmCupomCliente) elmCupomCliente.textContent = nomeClienteAtual;
+                    
+                    const tbody = document.getElementById("cupomListaItens");
+                    if(tbody) {
+                        tbody.innerHTML = "";
+                        
+                        // 2. PREPARA O TEXTO DO WHATSAPP
+                        let textoZap = `*MIRA CONFEITARIA*\nRecibo #${retorno.id_venda}\nData: ${dataFormatada}\nCliente: ${nomeClienteAtual}\n\n*ITENS:*\n`;
+
+                        carrinho.forEach(item => {
+                            const vlrUn = item.preco.toFixed(2).replace('.', ',');
+                            const vlrTot = item.subtotal.toFixed(2).replace('.', ',');
+                            
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td>${item.qtd}x</td>
+                                    <td>${item.nome}</td>
+                                    <td>R$ ${vlrUn}</td>
+                                    <td>R$ ${vlrTot}</td>
+                                </tr>
+                            `;
+                            textoZap += `${item.qtd}x ${item.nome} (R$ ${vlrTot})\n`;
+                        });
+
+                        const elmSub = document.getElementById("cupomSubtotal");
+                        if(elmSub) elmSub.textContent = `R$ ${valorSubtotalReal.toFixed(2).replace('.', ',')}`;
+                        
+                        const elmDesc = document.getElementById("cupomDesconto");
+                        if(elmDesc) elmDesc.textContent = `R$ ${descontoNum.toFixed(2).replace('.', ',')}`;
+                        
+                        const elmTot = document.getElementById("cupomTotalFinal");
+                        if(elmTot) elmTot.textContent = `R$ ${totalFinalNum.toFixed(2).replace('.', ',')}`;
+                        
+                        const elmPag = document.getElementById("cupomPagamento");
+                        if(elmPag) elmPag.textContent = selectPagamento.options[selectPagamento.selectedIndex].text;
+
+                        textoZap += `\nSubtotal: R$ ${valorSubtotalReal.toFixed(2).replace('.', ',')}`;
+                        textoZap += `\nDesconto: R$ ${descontoNum.toFixed(2).replace('.', ',')}`;
+                        textoZap += `\n*TOTAL: R$ ${totalFinalNum.toFixed(2).replace('.', ',')}*`;
+                        textoZap += `\nPagamento: ${selectPagamento.options[selectPagamento.selectedIndex].text}`;
+                        textoZap += `\n\nObrigado pela preferência! 🧁`;
+
+                        window.textoCupomGerado = textoZap;
+                    }
+
+                    if (modal) modal.style.display = "flex"; 
+                    
+                    carrinho = [];
+                    pedidoOrigemId = null;
+                    nomeClienteAtual = "CONSUMIDOR FINAL";
+                    inputDesconto.value = "0.00";
+                    buscarPedidosAguardandoPagamento();
+                } else {
+                    alert("❌ Erro ao fechar venda: " + retorno.erro);
+                }
+            })
+            .catch((e) => {
+                console.error("Erro no Fetch:", e);
+                alert("❌ Erro de comunicação com o servidor.");
+            })
+            .finally(() => {
+                this.innerHTML = btnOriginal;
+                this.disabled = false;
+            });
+        });
+    }
+
+    // ==========================================================================
+    // 6. BOTÕES DO CUPOM FISCAL E FECHAR
+    // ==========================================================================
+    const btnFecharModal = document.getElementById("btnFecharModal");
+    if (btnFecharModal) btnFecharModal.addEventListener("click", () => modal.style.display = "none");
+
+    const btnImprimirCupom = document.getElementById("btnImprimirCupom");
+    if (btnImprimirCupom) {
+        btnImprimirCupom.addEventListener("click", () => window.print());
+    }
+
+    const btnBaixarCupom = document.getElementById("btnBaixarCupom");
+    if (btnBaixarCupom) {
+        btnBaixarCupom.addEventListener("click", () => {
+            const numero = document.getElementById("cupomNumero").textContent;
+            const blob = new Blob([window.textoCupomGerado], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `Recibo_MiraConfeitaria_${numero}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
+
+    const btnZapCupom = document.getElementById("btnZapCupom");
+    if (btnZapCupom) {
+        btnZapCupom.addEventListener("click", () => {
+            const numeroCliente = prompt("Digite o WhatsApp do cliente (com DDD)\n\nDeixe em branco e clique em 'OK' caso queira escolher o contato na sua lista do WhatsApp Web:");
+            
+            let linkWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(window.textoCupomGerado)}`;
+            
+            if (numeroCliente) {
+                const numeroLimpo = numeroCliente.replace(/\D/g, ''); 
+                linkWhatsApp = `https://api.whatsapp.com/send?phone=55${numeroLimpo}&text=${encodeURIComponent(window.textoCupomGerado)}`;
+            }
+            
+            window.open(linkWhatsApp, '_blank'); 
+        });
+    }
+
+    // ==========================================================================
+    // FORÇA BRUTA: FUNÇÃO DIRETA DE FINALIZAÇÃO E ABERTURA DO CUPOM
+    // ==========================================================================
+    window.abrirCupomDireto = function() {
+        // 1. Verifica se tem itens
+        if (carrinho.length === 0) {
+            alert("⚠️ O CARRINHO ESTÁ VAZIO! Selecione um pedido na fila primeiro.");
+            return;
+        }
+
+        const btn = document.getElementById("btnFinalizarVendaCompleto");
+        const textoOriginal = btn.innerHTML;
+        btn.innerHTML = "⏳ Emitindo Cupom...";
+        btn.disabled = true;
+
+        // 2. Coleta os valores da tela
+        const inputDesconto = document.getElementById("descontoInput");
+        const selectPagamento = document.getElementById("selectPagamento");
+        const modalCupom = document.getElementById("modalDetalhes");
+
+        let descontoNum = inputDesconto ? parseFloat(inputDesconto.value) || 0 : 0;
         let totalFinalNum = valorSubtotalReal - descontoNum;
 
         const pacoteVenda = {
@@ -293,128 +430,98 @@ document.addEventListener("DOMContentLoaded", function () {
             subtotal: valorSubtotalReal,
             desconto: descontoNum,
             total_liquido: totalFinalNum,
-            forma_pagamento: selectPagamento.options[selectPagamento.selectedIndex].text,
+            forma_pagamento: selectPagamento ? selectPagamento.options[selectPagamento.selectedIndex].text : "Dinheiro",
             pedido_origem_id: pedidoOrigemId,
             itens: carrinho
         };
 
+        // 3. Envia para o Banco de Dados
         fetch('../php/salvar_venda.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pacoteVenda)
         })
-        .then(res => res.json())
-        .then(retorno => {
-            if (retorno.sucesso) {
-                // Prepara os dados de Data e Hora
-                const dataHoje = new Date();
-                const dataFormatada = dataHoje.toLocaleString('pt-BR');
+        .then(res => res.text()) // Lê como texto para pescar qualquer erro escondido do PHP
+        .then(textoResposta => {
+            btn.innerHTML = textoOriginal;
+            btn.disabled = false;
 
-                // 1. PREENCHE O CUPOM FÍSICO (HTML)
-                document.getElementById("cupomNumero").textContent = retorno.id_venda;
-                document.getElementById("cupomData").textContent = dataFormatada;
-                document.getElementById("cupomCliente").textContent = nomeClienteAtual;
+            try {
+                const retorno = JSON.parse(textoResposta);
                 
-                const tbody = document.getElementById("cupomListaItens");
-                tbody.innerHTML = "";
-                
-                // 2. PREPARA O TEXTO DO WHATSAPP AO MESMO TEMPO
-                let textoZap = `*MIRA CONFEITARIA*\nRecibo #${retorno.id_venda}\nData: ${dataFormatada}\nCliente: ${nomeClienteAtual}\n\n*ITENS:*\n`;
-
-                carrinho.forEach(item => {
-                    const vlrUn = item.preco.toFixed(2).replace('.', ',');
-                    const vlrTot = item.subtotal.toFixed(2).replace('.', ',');
+                if (retorno.sucesso) {
                     
-                    // Injeta no Cupom HTML
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${item.qtd}x</td>
-                            <td>${item.nome}</td>
-                            <td>R$ ${vlrUn}</td>
-                            <td>R$ ${vlrTot}</td>
-                        </tr>
-                    `;
-                    // Injeta na mensagem de Texto (WhatsApp)
-                    textoZap += `${item.qtd}x ${item.nome} (R$ ${vlrTot})\n`;
-                });
+                    // Verifica se o HTML do Modal existe na página
+                    if (!modalCupom) {
+                        alert("✅ Venda salva no banco! MAS o 'modalDetalhes' (desenho do cupom) não foi encontrado no HTML para ser aberto.");
+                        return;
+                    }
 
-                // Preenche Totais no Cupom HTML
-                document.getElementById("cupomSubtotal").textContent = `R$ ${valorSubtotalReal.toFixed(2).replace('.', ',')}`;
-                document.getElementById("cupomDesconto").textContent = `R$ ${descontoNum.toFixed(2).replace('.', ',')}`;
-                document.getElementById("cupomTotalFinal").textContent = `R$ ${totalFinalNum.toFixed(2).replace('.', ',')}`;
-                document.getElementById("cupomPagamento").textContent = selectPagamento.options[selectPagamento.selectedIndex].text;
+                    const dataHoje = new Date();
+                    const dataFormatada = dataHoje.toLocaleString('pt-BR');
 
-                // Preenche Totais na Mensagem de WhatsApp
-                textoZap += `\nSubtotal: R$ ${valorSubtotalReal.toFixed(2).replace('.', ',')}`;
-                textoZap += `\nDesconto: R$ ${descontoNum.toFixed(2).replace('.', ',')}`;
-                textoZap += `\n*TOTAL: R$ ${totalFinalNum.toFixed(2).replace('.', ',')}*`;
-                textoZap += `\nPagamento: ${selectPagamento.options[selectPagamento.selectedIndex].text}`;
-                textoZap += `\n\nObrigado pela preferência! 🧁`;
+                    // Preenche os dados físicos do Cupom
+                    document.getElementById("cupomNumero").textContent = retorno.id_venda;
+                    document.getElementById("cupomData").textContent = dataFormatada;
+                    document.getElementById("cupomCliente").textContent = nomeClienteAtual;
+                    
+                    const tbody = document.getElementById("cupomListaItens");
+                    tbody.innerHTML = "";
+                    
+                    let textoZap = `*MIRA CONFEITARIA*\nRecibo #${retorno.id_venda}\nData: ${dataFormatada}\nCliente: ${nomeClienteAtual}\n\n*ITENS:*\n`;
 
-                // Guarda o texto do Zap na memória para o botão usar depois
-                window.textoCupomGerado = textoZap;
+                    carrinho.forEach(item => {
+                        const vlrUn = item.preco.toFixed(2).replace('.', ',');
+                        const vlrTot = item.subtotal.toFixed(2).replace('.', ',');
+                        
+                        tbody.innerHTML += `
+                            <tr>
+                                <td>${item.qtd}x</td>
+                                <td>${item.nome}</td>
+                                <td>R$ ${vlrUn}</td>
+                                <td>R$ ${vlrTot}</td>
+                            </tr>
+                        `;
+                        textoZap += `${item.qtd}x ${item.nome} (R$ ${vlrTot})\n`;
+                    });
 
-                // Abre o Modal com o Recibo!
-                modal.style.display = "flex"; 
-                
-                // Limpa o PDV por trás
-                carrinho = [];
-                pedidoOrigemId = null;
-                nomeClienteAtual = "CONSUMIDOR FINAL";
-                inputDesconto.value = "0.00";
-                buscarPedidosAguardandoPagamento();
-            } else {
-                alert("❌ Erro ao fechar venda: " + retorno.erro);
+                    document.getElementById("cupomSubtotal").textContent = `R$ ${valorSubtotalReal.toFixed(2).replace('.', ',')}`;
+                    document.getElementById("cupomDesconto").textContent = `R$ ${descontoNum.toFixed(2).replace('.', ',')}`;
+                    document.getElementById("cupomTotalFinal").textContent = `R$ ${totalFinalNum.toFixed(2).replace('.', ',')}`;
+                    document.getElementById("cupomPagamento").textContent = pacoteVenda.forma_pagamento;
+
+                    textoZap += `\nSubtotal: R$ ${valorSubtotalReal.toFixed(2).replace('.', ',')}`;
+                    textoZap += `\nDesconto: R$ ${descontoNum.toFixed(2).replace('.', ',')}`;
+                    textoZap += `\n*TOTAL: R$ ${totalFinalNum.toFixed(2).replace('.', ',')}*`;
+                    textoZap += `\nPagamento: ${pacoteVenda.forma_pagamento}`;
+                    textoZap += `\n\nObrigado pela preferência! 🧁`;
+
+                    window.textoCupomGerado = textoZap;
+
+                    // A MÁGICA: Abre o Modal!
+                    modalCupom.style.display = "flex"; 
+                    
+                    // Limpa a tela de vendas
+                    carrinho = [];
+                    pedidoOrigemId = null;
+                    nomeClienteAtual = "CONSUMIDOR FINAL";
+                    if(inputDesconto) inputDesconto.value = "0.00";
+                    buscarPedidosAguardandoPagamento();
+
+                } else {
+                    alert("❌ Erro ao salvar no banco de dados:\n" + retorno.erro);
+                }
+            } catch (e) {
+                alert("❌ ERRO CRÍTICO NO ARQUIVO PHP:\n\nO arquivo salvar_venda.php está com algum erro e não conseguiu processar a venda. Resposta do servidor:\n\n" + textoResposta.substring(0, 250));
             }
         })
-        .catch(() => alert("❌ Erro de comunicação com o servidor."))
-        .finally(() => {
-            this.innerHTML = btnOriginal;
-            this.disabled = false;
+        .catch(erro => {
+            btn.innerHTML = textoOriginal;
+            btn.disabled = false;
+            alert("❌ Falha de comunicação com a internet ou com o servidor PHP.");
         });
-    });
+    };
 
-    // ==========================================================================
-    // MÁGICA DOS 3 BOTÕES DO CUPOM FISCAL (IMPRIMIR, BAIXAR, WHATSAPP)
-    // ==========================================================================
-    
-    // 1. Fechar o Modal
-    document.getElementById("btnFecharModal").addEventListener("click", () => modal.style.display = "none");
-
-    // 2. Botão Imprimir
-    document.getElementById("btnImprimirCupom").addEventListener("click", () => {
-        window.print(); // O CSS @media print que fizemos esconde o sistema e imprime só o cupom!
-    });
-
-    // 3. Botão Baixar (Gera um arquivo de texto com a nota)
-    document.getElementById("btnBaixarCupom").addEventListener("click", () => {
-        const numero = document.getElementById("cupomNumero").textContent;
-        // Cria um "arquivo fantasma" contendo o texto gerado
-        const blob = new Blob([window.textoCupomGerado], { type: "text/plain;charset=utf-8" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `Recibo_MiraConfeitaria_${numero}.txt`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    });
-
-    // 4. Botão WhatsApp
-    document.getElementById("btnZapCupom").addEventListener("click", () => {
-        const numeroCliente = prompt("Digite o WhatsApp do cliente (com DDD)\n\nDeixe em branco e clique em 'OK' caso queira escolher o contato na sua lista do WhatsApp Web:");
-        
-        let linkWhatsApp = `https://api.whatsapp.com/send?text=${encodeURIComponent(window.textoCupomGerado)}`;
-        
-        if (numeroCliente) {
-            // Remove parênteses e traços caso você tenha digitado
-            const numeroLimpo = numeroCliente.replace(/\D/g, ''); 
-            linkWhatsApp = `https://api.whatsapp.com/send?phone=55${numeroLimpo}&text=${encodeURIComponent(window.textoCupomGerado)}`;
-        }
-        
-        window.open(linkWhatsApp, '_blank'); // Abre nova guia já com a mensagem pronta
-    });
-
-    // Inicializa a lista de pedidos pendentes
+    // Inicializa a lista assim que o PDV abre
     buscarPedidosAguardandoPagamento();
 });
