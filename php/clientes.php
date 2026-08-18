@@ -1,8 +1,72 @@
 <?php 
-// Valida se o usuário fez login puxando a regra de segurança da subpasta
+// 1. Valida se o usuário fez login puxando a regra de segurança da subpasta
 require_once "logica_php/home.php"; 
+// IMPORTANTE: Inclua aqui o seu arquivo de conexão com o banco de dados! 
+// Ajuste o caminho abaixo se o seu arquivo de conexão estiver em outra pasta (ex: "../php/conexao.php")
+require_once "conexao.php"; 
+
+// ==========================================================================
+// LÓGICA DE SALVAR, ATUALIZAR E EXCLUIR (POST)
+// ==========================================================================
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $acao = $_POST['acao'] ?? 'salvar';
+    $id = $_POST['id'] ?? null;
+    
+    // Captura os dados do formulário
+    $nome = $_POST['nome'] ?? '';
+    $telefone = $_POST['telefone'] ?? null;
+    $cpf = $_POST['cpf'] ?? null;
+    $data_nascimento = !empty($_POST['data_nascimento']) ? $_POST['data_nascimento'] : null;
+    $cep = $_POST['cep'] ?? null;
+    $rua = $_POST['rua'] ?? null;
+    $numero = $_POST['numero'] ?? null;
+    $bairro = $_POST['bairro'] ?? null;
+    $complemento = $_POST['complemento'] ?? null;
+    $cidade = $_POST['cidade'] ?? null;
+    $email = $_POST['email'] ?? null;
+    $observacoes = $_POST['observacoes'] ?? null;
+
+    try {
+        if ($acao === 'salvar') {
+            if (empty($id)) {
+                // SE NÃO TEM ID, É UM CADASTRO NOVO (INSERT)
+                $sql = "INSERT INTO clientes (nome, telefone, cpf, data_nascimento, cep, rua, numero, bairro, complemento, cidade, email, observacoes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $stmt = $conexao->prepare($sql);
+                $stmt->execute([$nome, $telefone, $cpf, $data_nascimento, $cep, $rua, $numero, $bairro, $complemento, $cidade, $email, $observacoes]);
+            } else {
+                // SE TEM ID, É UMA ATUALIZAÇÃO (UPDATE)
+                $sql = "UPDATE clientes SET nome=?, telefone=?, cpf=?, data_nascimento=?, cep=?, rua=?, numero=?, bairro=?, complemento=?, cidade=?, email=?, observacoes=? WHERE id=?";
+                $stmt = $conexao->prepare($sql);
+                $stmt->execute([$nome, $telefone, $cpf, $data_nascimento, $cep, $rua, $numero, $bairro, $complemento, $cidade, $email, $observacoes, $id]);
+            }
+        } elseif ($acao === 'excluir' && !empty($id)) {
+            // SE A AÇÃO FOR EXCLUIR, DELETA O REGISTRO DO BANCO
+            $sql = "DELETE FROM clientes WHERE id=?";
+            $stmt = $conexao->prepare($sql);
+            $stmt->execute([$id]);
+        }
+        
+        // Atualiza a página para limpar o formulário e recarregar a tabela
+        header("Location: clientes.php");
+        exit;
+    } catch (PDOException $e) {
+        echo "<script>alert('Erro ao processar cliente: " . $e->getMessage() . "');</script>";
+    }
+}
+
+// ==========================================================================
+// LÓGICA DE LISTAGEM PARA A TABELA (GET)
+// ==========================================================================
+$clientes = [];
+try {
+    // Busca todos os clientes do banco para preencher a variável $clientes que o seu HTML já usa
+    $stmt = $conexao->query("SELECT * FROM clientes ORDER BY id DESC");
+    $clientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    echo "<script>alert('Erro ao buscar clientes: " . $e->getMessage() . "');</script>";
+}
 ?>
-<!-- Define o tipo de documento como HTML5 para o navegador -->
+ 
 <!DOCTYPE html>
 <!-- Define o idioma padrão da página como Português do Brasil -->
 <html lang="pt-BR">

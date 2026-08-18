@@ -1,40 +1,66 @@
-// ==========================================================================
-// MIRA CONFEITARIA - OPERAÇÕES DO PAINEL DE CLIENTES
-// ==========================================================================
+/* ==========================================================================
+   MIRA CONFEITARIA - OPERAÇÕES DO PAINEL DE CLIENTES
+   ========================================================================== */
 
-
-
-if (sidebar) {
-    // Quando o mouse passa por cima, adiciona a classe que abre a barra
-    sidebar.addEventListener('mouseenter', () => {
-        sidebar.classList.add('expanded');
-    });
+document.addEventListener("DOMContentLoaded", function () {
     
-    // Quando o mouse sai de cima, remove a classe e encolhe a barra
-    sidebar.addEventListener('mouseleave', () => {
-        sidebar.classList.remove('expanded');
-    });
-}
+    // 1. CAPTURA DOS ELEMENTOS DA TELA
+    const form = document.getElementById("formularioCliente");
+    const btnLimpar = document.getElementById("btn-limpar");
+    const btnExcluir = document.getElementById("btn-excluir");
+    const inputAcao = document.getElementById("form_acao");
+    const inputId = document.getElementById("cliente_id");
 
-// 2. INTELIGÊNCIA DE CLIQUES DOS BOTÕES DO FORMULÁRIO (FUNDO VERDE / CLIQUE BRANCO)
-var botoesAcao = document.querySelectorAll('.form-actions-4 .btn');
+    // 2. AÇÃO DO BOTÃO "LIMPAR"
+    if (btnLimpar) {
+        btnLimpar.addEventListener("click", function () {
+            form.reset(); // Limpa todos os campos digitados
+            inputId.value = ""; // Zera o ID oculto (volta ao modo "Novo Cadastro")
+            inputAcao.value = "salvar"; // Reseta a ação para salvar
+        });
+    }
 
-botoesAcao.forEach(botao => {
-    botao.addEventListener('click', function() {
-        // Remove a cor branca ativa de todos os botões para resetar o estado
-        botoesAcao.forEach(b => b.classList.remove('active-click'));
-        
-        // Adiciona a classe que deixa o fundo branco e borda dourada no botão que você clicou
-        this.classList.add('active-click');
-    });
+    // 3. AÇÃO DO BOTÃO "EXCLUIR"
+    if (btnExcluir) {
+        btnExcluir.addEventListener("click", function () {
+            if (inputId.value === "") {
+                alert("⚠️ Selecione um cliente clicando no ícone do lápis na tabela antes de excluir!");
+                return;
+            }
+            
+            // Pede confirmação antes de apagar do banco
+            if (confirm("Tem certeza que deseja EXCLUIR permanentemente este cliente?")) {
+                inputAcao.value = "excluir"; // Muda a intenção do formulário para exclusão
+                form.submit(); // Dispara o formulário para o PHP processar
+            }
+        });
+    }
+
+    // 4. PESQUISA RÁPIDA NA TABELA
+    const inputPesquisa = document.querySelector(".wrapper-busca-tabela-clie input");
+    if (inputPesquisa) {
+        inputPesquisa.addEventListener("keyup", function () {
+            const busca = this.value.toLowerCase().trim();
+            const linhas = document.querySelectorAll(".tabela-dados-clientes tbody tr");
+            
+            linhas.forEach(linha => {
+                // Ignora a linha de "Nenhum cliente cadastrado"
+                if (linha.cells.length > 1) {
+                    const textoLinha = linha.textContent.toLowerCase();
+                    linha.style.display = textoLinha.includes(busca) ? "table-row" : "none";
+                }
+            });
+        });
+    }
 });
 
-// Preenche o formulário ao clicar em uma linha da tabela
-function carregarCliente(dados) {
+// ==========================================================================
+// FUNÇÃO PARA CARREGAR OS DADOS DO CLIENTE NO FORMULÁRIO
+// ==========================================================================
+// Esta função é chamada diretamente pelo atributo onclick no HTML (no botão do lápis)
+window.carregarCliente = function(dados) {
     document.getElementById('cliente_id').value = dados.id;
     document.getElementById('nome').value = dados.nome;
-    
-    // O '|| ""' evita que apareça "null" caso o cliente não tenha telefone cadastrado, por exemplo
     document.getElementById('telefone').value = dados.telefone || "";
     document.getElementById('cpf').value = dados.cpf || "";
     document.getElementById('data_nascimento').value = dados.data_nascimento || "";
@@ -47,10 +73,9 @@ function carregarCliente(dados) {
     document.getElementById('email').value = dados.email || "";
     document.getElementById('observacoes').value = dados.observacoes || "";
 
-    // Garante que a ação principal é salvar (ou atualizar, já que o ID está preenchido)
+    // Garante que ao salvar, ele fará um UPDATE e não um INSERT novo
     document.getElementById('form_acao').value = 'salvar';
-
-    // Se você tiver botões de editar/excluir desabilitados, habilite-os aqui:
-    // document.getElementById('btn-editar').disabled = false;
-    // document.getElementById('btn-excluir').disabled = false;
-}
+    
+    // Rola a tela para cima suavemente para o usuário ver o formulário preenchido
+    document.querySelector('.wrapper-inputs-scroll-clientes').scrollTo({ top: 0, behavior: 'smooth' });
+};
