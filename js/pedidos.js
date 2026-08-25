@@ -378,13 +378,6 @@ document.addEventListener("DOMContentLoaded", function () {
         };
 
         // ENVIO SILENCIOSO PARA O PHP (FETCH)
-        fetch('../php/salvar_pedido.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },    
-            body: JSON.stringify(pacoteDados)
-        })
-
-        // ENVIO SILENCIOSO PARA O PHP (FETCH)
         fetch('salvar_pedido.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },    
@@ -400,9 +393,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 itensCarrinho = []; 
                 atualizarTabelaCarrinho(); 
                 document.getElementById("selectCliente").value = "";
-                // Como não tenho certeza do ID exato do seu Produto/Preço, mantenha os seus:
-                // selectProduto.value = "";
-                // precoDisplay.textContent = "R$ 0,00";
                 
                 // 3. Avisa que deu certo!
                 alert("Sucesso! Pedido #" + retorno.id_pedido + " salvo no banco.");
