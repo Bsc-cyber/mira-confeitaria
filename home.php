@@ -1,6 +1,67 @@
 <?php 
-// 1. SEGURANÇA MÁXIMA: Valida se o usuário fez login puxando a regra da subpasta
-require_once "php/logica_php/home.php"; 
+// 1. SEGURANÇA MÁXIMA: Valida se o usuário fez login
+require_once "home.php"; 
+
+// 2. CONEXÃO COM O BANCO DE DADOS
+// Ajuste este caminho de acordo com a localização do seu arquivo de conexão
+require_once "php/conexao.php"; 
+
+// ==========================================================================
+// MOTOR DE ESTATÍSTICAS (BUSCANDO DADOS REAIS DO BANCO)
+// ==========================================================================
+try {
+    // 1. FATURAMENTO TOTAL, PEDIDOS E TICKET MÉDIO (Apenas Finalizados)
+    $stmt = $conexao->query("SELECT SUM(total) as faturamento, COUNT(id) as qtd_pedidos FROM pedidos WHERE status = 'Finalizado'");
+    $dadosVendas = $stmt->fetch(PDO::FETCH_ASSOC);
+    $faturamentoTotal = $dadosVendas['faturamento'] ?? 0;
+    $qtdPedidos = $dadosVendas['qtd_pedidos'] ?? 0;
+    $ticketMedio = $qtdPedidos > 0 ? ($faturamentoTotal / $qtdPedidos) : 0;
+
+    // 2. TOTAL DE ITENS VENDIDOS (Soma das quantidades dos pedidos finalizados)
+    $stmtItens = $conexao->query("SELECT SUM(i.quantidade) as total_itens FROM itens_pedido i JOIN pedidos p ON i.pedido_id = p.id WHERE p.status = 'Finalizado'");
+    $totalItens = $stmtItens->fetch(PDO::FETCH_ASSOC)['total_itens'] ?? 0;
+
+    // 3. CONTAGENS PARA O RODAPÉ (Clientes, Produtos, Pendentes, Atrasados)
+    $qtdClientes = $conexao->query("SELECT COUNT(*) FROM clientes")->fetchColumn();
+    $qtdProdutos = $conexao->query("SELECT COUNT(*) FROM produtos")->fetchColumn();
+    $qtdPendentes = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status = 'Pendente'")->fetchColumn();
+    
+    // Considera atrasado qualquer pedido não finalizado cuja data de entrega seja menor que hoje
+    $qtdAtrasados = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status != 'Finalizado' AND data_entrega < CURDATE()")->fetchColumn();
+
+    // 4. RANKING DOS 5 PRODUTOS MAIS VENDIDOS
+    $stmtTop = $conexao->query("
+        SELECT produto, SUM(preco_total) as receita 
+        FROM itens_pedido i 
+        JOIN pedidos p ON i.pedido_id = p.id 
+        WHERE p.status = 'Finalizado' 
+        GROUP BY produto 
+        ORDER BY receita DESC 
+        LIMIT 5
+    ");
+    $topProdutos = $stmtTop->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Descobre qual é o produto mais vendido para calcular a largura da barra (100%)
+    $maxReceitaProduto = !empty($topProdutos) ? $topProdutos[0]['receita'] : 1;
+
+    // 5. GRÁFICO DE BARRAS: Vendas dos Últimos 7 Dias
+    $stmt7Dias = $conexao->query("
+        SELECT DATE(data_pedido) as data, SUM(total) as diario 
+        FROM pedidos 
+        WHERE status = 'Finalizado' AND data_pedido >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
+        GROUP BY DATE(data_pedido) 
+        ORDER BY data ASC
+    ");
+    $vendas7Dias = $stmt7Dias->fetchAll(PDO::FETCH_ASSOC);
+    
+    $maxVendaDiaria = 1;
+    foreach($vendas7Dias as $v) {
+        if($v['diario'] > $maxVendaDiaria) $maxVendaDiaria = $v['diario'];
+    }
+
+} catch (PDOException $e) {
+    echo "<script>alert('Erro ao carregar os dados do Dashboard: " . $e->getMessage() . "');</script>";
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -10,21 +71,18 @@ require_once "php/logica_php/home.php";
     <title>MIRA Confeitaria - Home</title>
     <!-- CSS na ordem exata e separada exigida pela banca -->
     <link rel="stylesheet" href="css/barra_lateral.css">
-    <link rel="stylesheet" href="css/home.css">  <!-- ESSA LINHA DEVE ESTAR AQUI -->
+    <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
 
-    <!-- CONTAINER DO DASHBOARD -->
     <div class="container-dashboard">
         
         <!-- INJEÇÃO DA BARRA LATERAL ISOLADA VIA PHP -->
         <?php require_once "php/barra_lateral.php"; ?>
 
-        <!-- ÁREA DE TRABALHO PRINCIPAL (CONTEÚDO COMPACTO) -->
         <main class="painel-conteudo">
             
-            <!-- Bloco 1: Cabeçalho Superior de Boas-Vindas -->
             <header class="topo-dashboard">
                 <div class="saudacao">
                     <span class="usuario-log">Olá, Lucas! </span>
@@ -32,12 +90,12 @@ require_once "php/logica_php/home.php";
                     <p class="sub-painel">Aqui está o resumo do que acontece no seu negócio hoje.</p>
                 </div>
                 <div class="controles-topo">
-                    <div class="seletor-data">01/05/2024 - 07/05/2024</div>
-                    <button class="btn-atualizar">Atualizar</button>
+                    <div class="seletor-data"><?= date('d/m/Y') ?></div>
+                    <button class="btn-atualizar" onclick="window.location.reload();">Atualizar</button>
                 </div>
             </header>
 
-            <!-- Bloco 2: Linha Superior de Mini Cartões de Desempenho -->
+            <!-- LINHA SUPERIOR DE DESEMPENHO (DADOS REAIS) -->
             <section class="linha-mini-cards">
                 <div class="mini-card">
                     <div class="icone-card verde">
@@ -45,8 +103,8 @@ require_once "php/logica_php/home.php";
                     </div>
                     <div class="dados-card">
                         <span>Faturamento Total</span>
-                        <h3>R$ 12.540,00</h3>
-                        <small class="texto-positivo">↑ 18,6% vs. período anterior</small>
+                        <h3>R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></h3>
+                        <small class="texto-positivo">Baseado em pedidos finalizados</small>
                     </div>
                 </div>
                 <div class="mini-card">
@@ -54,9 +112,9 @@ require_once "php/logica_php/home.php";
                         <svg class="svg-painel" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     </div>
                     <div class="dados-card">
-                        <span>Pedidos</span>
-                        <h3>128</h3>
-                        <small class="texto-positivo">↑ 12,3% vs. período anterior</small>
+                        <span>Pedidos Concluídos</span>
+                        <h3><?= $qtdPedidos ?></h3>
+                        <small class="texto-positivo">Apenas pedidos entregues</small>
                     </div>
                 </div>
                 <div class="mini-card">
@@ -65,8 +123,8 @@ require_once "php/logica_php/home.php";
                     </div>
                     <div class="dados-card">
                         <span>Ticket Médio</span>
-                        <h3>R$ 98,75</h3>
-                        <small class="texto-positivo">↑ 8,7% vs. período anterior</small>
+                        <h3>R$ <?= number_format($ticketMedio, 2, ',', '.') ?></h3>
+                        <small class="texto-positivo">Valor médio gasto por cliente</small>
                     </div>
                 </div>
                 <div class="mini-card">
@@ -75,33 +133,31 @@ require_once "php/logica_php/home.php";
                     </div>
                     <div class="dados-card">
                         <span>Itens Vendidos</span>
-                        <h3>256</h3>
-                        <small class="texto-positivo">↑ 15,2% vs. período anterior</small>
+                        <h3><?= $totalItens ?></h3>
+                        <small class="texto-positivo">Total de doces fabricados</small>
                     </div>
                 </div>
             </section>
-            <!-- Bloco 3: Linha Central de Gráficos Principais -->
+
+            <!-- LINHA CENTRAL: RESUMO FINANCEIRO -->
             <section class="linha-blocos-graficos">
-                
-                <!-- Resumo Financeiro -->
                 <div class="caixa-grafico flex-7">
                     <div class="topo-caixa">
                         <h3>Resumo Financeiro</h3>
-                        <span class="filtro-drop">Este Mês ▾</span>
+                        <span class="filtro-drop">Geral ▾</span>
                     </div>
                     <div class="grid-valores-resumo">
-                        <div class="bloco-valor"><small>Receitas</small> <strong class="cor-verde">R$ 12.540,00</strong></div>
-                        <div class="bloco-valor"><small>Despesas</small> <strong class="cor-vermelha">R$ 4.230,00</strong></div>
-                        <div class="bloco-valor"><small>Lucro Líquido</small> <strong class="cor-azul">R$ 8.310,00</strong></div>
+                        <div class="bloco-valor"><small>Receitas (Faturamento)</small> <strong class="cor-verde">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></strong></div>
+                        <div class="bloco-valor"><small>Despesas Estimadas (30%)</small> <strong class="cor-vermelha">R$ <?= number_format($faturamentoTotal * 0.3, 2, ',', '.') ?></strong></div>
+                        <div class="bloco-valor"><small>Lucro Líquido</small> <strong class="cor-azul">R$ <?= number_format($faturamentoTotal * 0.7, 2, ',', '.') ?></strong></div>
                     </div>
                     <div class="grafico-linhas-ficticio">
                         <div class="grid-linhas-fundo"></div>
                         <div class="vetor-linha-receitas"></div>
-                        <div class="vetor-linha-despesas"></div>
+                        <div class="vetor-linha-despesas" style="top: 55px;"></div>
                     </div>
                 </div>
 
-                <!-- Vendas por Categoria -->
                 <div class="caixa-grafico flex-5">
                     <div class="topo-caixa">
                         <h3>Vendas por Categoria</h3>
@@ -111,62 +167,72 @@ require_once "php/logica_php/home.php";
                             <div class="miolo-branco"></div>
                         </div>
                         <div class="legenda-categorias">
-                            <div class="item-legenda"><span class="marcador-cor b-bolos"></span> Bolos <span class="valor-cat">R$ 5.240,00</span> <span class="porcentagem">41,8%</span></div>
-                            <div class="item-legenda"><span class="marcador-cor b-doces"></span> Doces <span class="valor-cat">R$ 3.120,00</span> <span class="porcentagem">24,9%</span></div>
-                            <div class="item-legenda"><span class="marcador-cor b-tortas"></span> Tortas <span class="valor-cat">R$ 2.330,00</span> <span class="porcentagem">18,6%</span></div>
-                            <div class="item-legenda"><span class="marcador-cor b-salgados"></span> Salgados <span class="valor-cat">R$ 1.230,00</span> <span class="porcentagem">9,8%</span></div>
+                            <div class="item-legenda"><span class="marcador-cor" style="background:#10b981;"></span> Bolos <span class="valor-cat">41,8%</span></div>
+                            <div class="item-legenda"><span class="marcador-cor" style="background:#f97316;"></span> Doces <span class="valor-cat">24,9%</span></div>
+                            <div class="item-legenda"><span class="marcador-cor" style="background:#8b5cf6;"></span> Tortas <span class="valor-cat">18,6%</span></div>
+                            <div class="item-legenda"><span class="marcador-cor" style="background:#ef4444;"></span> Salgados <span class="valor-cat">9,8%</span></div>
                         </div>
                     </div>
                 </div>
-
             </section>
 
-            <!-- Bloco 4: Linha Inferior de Estatísticas Adicionais -->
+            <!-- LINHA INFERIOR: GRÁFICOS E RANKING -->
             <section class="linha-blocos-graficos">
                 
-                <!-- Histórico de 7 dias -->
+                <!-- Histórico de 7 dias Dinâmico -->
                 <div class="caixa-grafico flex-6">
                     <div class="topo-caixa">
                         <h3>Vendas dos Últimos 7 Dias</h3>
                         <span class="filtro-drop">Últimos 7 dias ▾</span>
                     </div>
                     <div class="grafico-barras-css">
-                        <div class="coluna-barra" style="height: 35%;"></div>
-                        <div class="coluna-barra" style="height: 55%;"></div>
-                        <div class="coluna-barra" style="height: 80%;"></div>
-                        <div class="coluna-barra" style="height: 45%;"></div>
-                        <div class="coluna-barra" style="height: 70%;"></div>
-                        <div class="coluna-barra" style="height: 60%;"></div>
-                        <div class="coluna-barra" style="height: 40%;"></div>
+                        <?php if (empty($vendas7Dias)): ?>
+                            <p style="font-size: 0.7rem; color: #6b7280;">Nenhuma venda registrada nos últimos 7 dias.</p>
+                        <?php else: ?>
+                            <?php foreach($vendas7Dias as $dia): 
+                                $alturaBarra = ($dia['diario'] / $maxVendaDiaria) * 100;
+                            ?>
+                                <div class="coluna-barra" style="height: <?= $alturaBarra ?>%;" title="R$ <?= number_format($dia['diario'], 2, ',', '.') ?>"></div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
 
-                <!-- Produtos Mais Vendidos -->
+                <!-- Produtos Mais Vendidos Dinâmico -->
                 <div class="caixa-grafico flex-6">
                     <div class="topo-caixa">
                         <h3>Produtos Mais Vendidos</h3>
-                        <a href="#" class="link-acao-topo">Ver todos</a>
                     </div>
                     <ul class="ranking-produtos">
-                        <li><span class="nome-prod">1. Bolo de Chocolate Premium</span> <span class="barra-progresso-ficticia p-100"></span> <strong>R$ 2.450,00</strong></li>
-                        <li><span class="nome-prod">2. Cheesecake de Frutas Vermelhas</span> <span class="barra-progresso-ficticia p-80"></span> <strong>R$ 1.980,00</strong></li>
-                        <li><span class="nome-prod">3. Torta de Limão Siciliano</span> <span class="barra-progresso-ficticia p-60"></span> <strong>R$ 1.350,00</strong></li>
-                        <li><span class="nome-prod">4. Brigadeiro Gourmet</span> <span class="barra-progresso-ficticia p-50"></span> <strong>R$ 1.120,00</strong></li>
-                        <li><span class="nome-prod">5. Macarons Sortidos</span> <span class="barra-progresso-ficticia p-40"></span> <strong>R$ 980,00</strong></li>
+                        <?php if (empty($topProdutos)): ?>
+                            <li style="color: #6b7280; font-size: 0.7rem;">Nenhum produto vendido ainda.</li>
+                        <?php else: ?>
+                            <?php foreach ($topProdutos as $index => $prod): 
+                                $percentual = ($prod['receita'] / $maxReceitaProduto) * 100;
+                            ?>
+                                <li>
+                                    <span class="nome-prod"><?= ($index + 1) ?>. <?= htmlspecialchars($prod['produto']) ?></span> 
+                                    <span class="barra-progresso-ficticia">
+                                        <div style="height: 100%; background-color: #172016; width: <?= $percentual ?>%;"></div>
+                                    </span> 
+                                    <strong>R$ <?= number_format($prod['receita'], 2, ',', '.') ?></strong>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
             </section>
 
-            <!-- Bloco 5: Rodapé de Métricas Simples -->
+            <!-- RODAPÉ DE MÉTRICAS SIMPLES (DADOS REAIS) -->
             <section class="linha-mini-cards metricas-rodape">
                 <div class="card-rodape-simples">
                     <div class="icone-rodape verde-txt">
                         <svg class="svg-mini" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                     </div>
                     <div class="dados-rodape">
-                        <span>Clientes Ativos</span>
-                        <h4>532</h4>
-                        <small class="texto-positivo">↑ 9,5% vs. período anterior</small>
+                        <span>Clientes Cadastrados</span>
+                        <h4><?= $qtdClientes ?></h4>
+                        <small class="texto-positivo">Base de contatos</small>
                     </div>
                 </div>
                 <div class="card-rodape-simples">
@@ -174,9 +240,9 @@ require_once "php/logica_php/home.php";
                         <svg class="svg-mini" viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
                     </div>
                     <div class="dados-rodape">
-                        <span>Produtos Cadastrados</span>
-                        <h4>87</h4>
-                        <small class="texto-neutro">— sem alterações</small>
+                        <span>Produtos no Cardápio</span>
+                        <h4><?= $qtdProdutos ?></h4>
+                        <small class="texto-neutro">Ativos para venda</small>
                     </div>
                 </div>
                 <div class="card-rodape-simples">
@@ -185,8 +251,8 @@ require_once "php/logica_php/home.php";
                     </div>
                     <div class="dados-rodape">
                         <span>Pedidos Pendentes</span>
-                        <h4>23</h4>
-                        <small class="texto-link">Ver pedidos →</small>
+                        <h4><?= $qtdPendentes ?></h4>
+                        <small class="texto-link" onclick="window.location.href='php/pedidos.php';" style="cursor: pointer;">Ir para produção →</small>
                     </div>
                 </div>
                 <div class="card-rodape-simples">
@@ -195,8 +261,8 @@ require_once "php/logica_php/home.php";
                     </div>
                     <div class="dados-rodape">
                         <span>Pedidos Atrasados</span>
-                        <h4>3</h4>
-                        <small class="texto-link">Ver pedidos →</small>
+                        <h4><?= $qtdAtrasados ?></h4>
+                        <small class="texto-link" onclick="window.location.href='php/pedidos.php';" style="cursor: pointer;">Atenção imediata →</small>
                     </div>
                 </div>
             </section>
