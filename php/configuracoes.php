@@ -77,7 +77,7 @@ require_once "logica_php/home.php";
                         </div>
                         <div class="grupo-campo-config">
                             <label>CNPJ <span class="opcional-texto">(opcional)</span></label>
-                            <input type="text" name="cnpj" id="cnpj" value="12.345.678/0001-90" placeholder="00.000.000/0000-00">
+                            <input type="text" name="cnpj" id="cnpj" value="000.000.000/0001-00" placeholder="00.000.000/0000-00">
                         </div>
                         <div class="grupo-campo-config">
                             <label>Telefone</label>
@@ -93,7 +93,7 @@ require_once "logica_php/home.php";
                         </div>
                         <div class="grupo-campo-config">
                             <label>Endereço</label>
-                            <input type="text" name="endereco_confeitaria" id="endereco_confeitaria" value="Rua das Flores, 123 - Centro" placeholder="Rua, número, bairro">
+                            <input type="text" name="endereco_confeitaria" id="endereco_confeitaria" value="Rua das Flores - Centro" placeholder="Rua, número, bairro">
                         </div>
                         <div class="grupo-campo-config">
                             <label>Cidade / Estado</label>
