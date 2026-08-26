@@ -116,10 +116,9 @@ require_once "logica_php/home.php";
                     </div>
                 </div>
 
-                <!-- 2. GRID INFERIOR SELECIONÁVEL (FILHOS MENORES QUE NÃO FORAM RISCADOS) -->
-
-                <div class="linha-gerenciamento-dupla">
-                    
+                <!-- 2. GRID INFERIOR REORGANIZADO: FILEIRA DE 3 COLUNAS SIMÉTRICAS -->
+                <div class="linha-gerenciamento-tripla">
+    
                     <!-- Card de Gerenciamento de Usuários -->
                     <div class="card-mini-gerenciamento">
                         <div class="topo-mini-card">
@@ -154,29 +153,7 @@ require_once "logica_php/home.php";
                         </button>
                     </div>
 
-                </div>
-
-                <!-- 3. GRID INFERIOR REORGANIZADO: FILEIRA DE BAIXO (2 COLUNAS) -->
-                <div class="linha-gerenciamento-dupla">
-                    
-                    <!-- Card de Segurança (Movido para cá) -->
-                    <div class="card-mini-gerenciamento">
-                        <div class="topo-mini-card">
-                            <div class="icone-mini-card">
-                                <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                            </div>
-                            <div class="texto-mini-card">
-                                <h4>Segurança</h4>
-                                <p>Altere sua senha, autenticação 2FA e gerencie sessões ativas.</p>
-                            </div>
-                        </div>
-                        <button type="button" class="btn-link-config" onclick="location.href='seguranca.php'">
-                            <span>Configurar segurança</span>
-                            <svg xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </button>
-                    </div>
-
-                    <!-- Card de Sobre o Sistema -->
+                    <!-- Card de Sobre o Sistema (Movido para a mesma linha) -->
                     <div class="card-mini-gerenciamento">
                         <div class="topo-mini-card">
                             <div class="icone-mini-card">
@@ -193,7 +170,8 @@ require_once "logica_php/home.php";
                         </button>
                     </div>
 
-                </div>
+                </div> <!-- Fecha a linha-gerenciamento-tripla -->
+
                 <!-- 3. FILEIRA INFERIOR: CARD SOBRE O SISTEMA -->
                             <!-- Fecha a div do wrapper-scroll-configuracoes móvel de forma limpa -->
             </div>

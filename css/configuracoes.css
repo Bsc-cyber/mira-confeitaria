@@ -251,8 +251,18 @@ body {
     gap: 12px;
     width: 100%;
     box-sizing: border-box;
-    flex: 1; /* Distribui o espaço restante igualmente entre as duas linhas de baixo */
+    flex: 1;
 }
+
+/* NOVA CLASSE ADICIONADA AQUI: */
+.linha-gerenciamento-tripla {
+    display: flex !important;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 1; /* Faz a fileira dividir igualmente a altura restante da tela */
+}
+
 
 .card-mini-gerenciamento {
     background-color: #ffffff;
