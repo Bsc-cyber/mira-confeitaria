@@ -1,4 +1,6 @@
 <?php 
+// 1. CONFIGURAÇÃO DE FUSO HORÁRIO PARA O BRASIL (Corrige a data do topo)
+date_default_timezone_set('America/Sao_Paulo');
 // 1. SEGURANÇA MÁXIMA: Valida se o usuário fez login
 require_once "home.php"; 
 
