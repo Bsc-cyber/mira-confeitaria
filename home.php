@@ -6,62 +6,82 @@ require_once "home.php";
 // Ajuste este caminho de acordo com a localização do seu arquivo de conexão
 require_once "php/conexao.php"; 
 
+// Inicializa variáveis para evitar erros visuais caso alguma tabela esteja vazia
+$faturamentoTotal = 0;
+$qtdVendas = 0;
+$ticketMedio = 0;
+$totalItens = 0;
+$qtdClientes = 0;
+$qtdProdutos = 0;
+$qtdPendentes = 0;
+$qtdAtrasados = 0;
+$topProdutos = [];
+$vendas7Dias = [];
+$maxReceitaProduto = 1;
+$maxVendaDiaria = 1;
+
 // ==========================================================================
 // MOTOR DE ESTATÍSTICAS (BUSCANDO DADOS REAIS DO BANCO)
 // ==========================================================================
-try {
-    // 1. FATURAMENTO TOTAL, PEDIDOS E TICKET MÉDIO (Apenas Finalizados)
-    $stmt = $conexao->query("SELECT SUM(total) as faturamento, COUNT(id) as qtd_pedidos FROM pedidos WHERE status = 'Finalizado'");
-    $dadosVendas = $stmt->fetch(PDO::FETCH_ASSOC);
-    $faturamentoTotal = $dadosVendas['faturamento'] ?? 0;
-    $qtdPedidos = $dadosVendas['qtd_pedidos'] ?? 0;
-    $ticketMedio = $qtdPedidos > 0 ? ($faturamentoTotal / $qtdPedidos) : 0;
 
-    // 2. TOTAL DE ITENS VENDIDOS (Soma das quantidades dos pedidos finalizados)
-    $stmtItens = $conexao->query("SELECT SUM(i.quantidade) as total_itens FROM itens_pedido i JOIN pedidos p ON i.pedido_id = p.id WHERE p.status = 'Finalizado'");
+// BLOCO 1: FINANCEIRO E VENDAS (Vem EXCLUSIVAMENTE da tabela 'vendas' do PDV)
+try {
+    // Busca apenas as vendas concretizadas no PDV
+    $stmtVendas = $conexao->query("SELECT SUM(total_liquido) as faturamento, COUNT(id) as qtd_vendas FROM vendas");
+    $dadosVendas = $stmtVendas->fetch(PDO::FETCH_ASSOC);
+    
+    $faturamentoTotal = $dadosVendas['faturamento'] ?? 0;
+    $qtdVendas = $dadosVendas['qtd_vendas'] ?? 0;
+    $ticketMedio = $qtdVendas > 0 ? ($faturamentoTotal / $qtdVendas) : 0;
+} catch (Exception $e) {
+    // Se a tabela 'vendas' não existir ou a coluna tiver outro nome, não quebra a tela
+}
+
+// BLOCO 2: ITENS VENDIDOS E RANKING (Vem da tabela 'itens_venda' do PDV)
+try {
+    // Conta quantos itens passaram pelo caixa
+    $stmtItens = $conexao->query("SELECT SUM(quantidade) as total_itens FROM itens_venda");
     $totalItens = $stmtItens->fetch(PDO::FETCH_ASSOC)['total_itens'] ?? 0;
 
-    // 3. CONTAGENS PARA O RODAPÉ (Clientes, Produtos, Pendentes, Atrasados)
-    $qtdClientes = $conexao->query("SELECT COUNT(*) FROM clientes")->fetchColumn();
-    $qtdProdutos = $conexao->query("SELECT COUNT(*) FROM produtos")->fetchColumn();
-    $qtdPendentes = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status = 'Pendente'")->fetchColumn();
-    
-    // Considera atrasado qualquer pedido não finalizado cuja data de entrega seja menor que hoje
-    $qtdAtrasados = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status != 'Finalizado' AND data_entrega < CURDATE()")->fetchColumn();
-
-    // 4. RANKING DOS 5 PRODUTOS MAIS VENDIDOS
+    // Ranking dos 5 mais vendidos que deram entrada financeira
     $stmtTop = $conexao->query("
-        SELECT produto, SUM(preco_total) as receita 
-        FROM itens_pedido i 
-        JOIN pedidos p ON i.pedido_id = p.id 
-        WHERE p.status = 'Finalizado' 
-        GROUP BY produto 
+        SELECT nome as produto, SUM(subtotal) as receita 
+        FROM itens_venda 
+        GROUP BY nome 
         ORDER BY receita DESC 
         LIMIT 5
     ");
     $topProdutos = $stmtTop->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Descobre qual é o produto mais vendido para calcular a largura da barra (100%)
     $maxReceitaProduto = !empty($topProdutos) ? $topProdutos[0]['receita'] : 1;
+} catch (Exception $e) { }
 
-    // 5. GRÁFICO DE BARRAS: Vendas dos Últimos 7 Dias
+// BLOCO 3: MÉTRICAS OPERACIONAIS (Vem das tabelas 'clientes', 'produtos' e 'pedidos')
+try {
+    $qtdClientes = $conexao->query("SELECT COUNT(*) FROM clientes")->fetchColumn();
+    $qtdProdutos = $conexao->query("SELECT COUNT(*) FROM produtos")->fetchColumn();
+    
+    // Pedidos na cozinha (Pendente ou Em Produção)
+    $qtdPendentes = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status IN ('Pendente', 'Em Produção')")->fetchColumn();
+    
+    // Pedidos Atrasados (A data de entrega já passou e ainda não foram finalizados)
+    $qtdAtrasados = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status != 'Finalizado' AND data_entrega < CURDATE()")->fetchColumn();
+} catch (Exception $e) { }
+
+// BLOCO 4: GRÁFICO DE 7 DIAS (Vem da tabela 'vendas' do PDV)
+try {
     $stmt7Dias = $conexao->query("
-        SELECT DATE(data_pedido) as data, SUM(total) as diario 
-        FROM pedidos 
-        WHERE status = 'Finalizado' AND data_pedido >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
-        GROUP BY DATE(data_pedido) 
+        SELECT DATE(data_venda) as data, SUM(total_liquido) as diario 
+        FROM vendas 
+        WHERE data_venda >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
+        GROUP BY DATE(data_venda) 
         ORDER BY data ASC
     ");
     $vendas7Dias = $stmt7Dias->fetchAll(PDO::FETCH_ASSOC);
     
-    $maxVendaDiaria = 1;
     foreach($vendas7Dias as $v) {
         if($v['diario'] > $maxVendaDiaria) $maxVendaDiaria = $v['diario'];
     }
-
-} catch (PDOException $e) {
-    echo "<script>alert('Erro ao carregar os dados do Dashboard: " . $e->getMessage() . "');</script>";
-}
+} catch (Exception $e) { }
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -69,13 +89,11 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Home</title>
-    <!-- CSS na ordem exata e separada exigida pela banca -->
     <link rel="stylesheet" href="css/barra_lateral.css">
     <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
-
     <div class="container-dashboard">
         
         <!-- INJEÇÃO DA BARRA LATERAL ISOLADA VIA PHP -->
@@ -104,7 +122,7 @@ try {
                     <div class="dados-card">
                         <span>Faturamento Total</span>
                         <h3>R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></h3>
-                        <small class="texto-positivo">Baseado em pedidos finalizados</small>
+                        <small class="texto-positivo">Dinheiro em Caixa (PDV)</small>
                     </div>
                 </div>
                 <div class="mini-card">
@@ -112,9 +130,9 @@ try {
                         <svg class="svg-painel" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                     </div>
                     <div class="dados-card">
-                        <span>Pedidos Concluídos</span>
-                        <h3><?= $qtdPedidos ?></h3>
-                        <small class="texto-positivo">Apenas pedidos entregues</small>
+                        <span>Vendas Concluídas</span>
+                        <h3><?= $qtdVendas ?></h3>
+                        <small class="texto-positivo">Faturadas no PDV</small>
                     </div>
                 </div>
                 <div class="mini-card">
@@ -134,7 +152,7 @@ try {
                     <div class="dados-card">
                         <span>Itens Vendidos</span>
                         <h3><?= $totalItens ?></h3>
-                        <small class="texto-positivo">Total de doces fabricados</small>
+                        <small class="texto-positivo">Total de doces cobrados</small>
                     </div>
                 </div>
             </section>
@@ -147,7 +165,7 @@ try {
                         <span class="filtro-drop">Geral ▾</span>
                     </div>
                     <div class="grid-valores-resumo">
-                        <div class="bloco-valor"><small>Receitas (Faturamento)</small> <strong class="cor-verde">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></strong></div>
+                        <div class="bloco-valor"><small>Receitas (PDV)</small> <strong class="cor-verde">R$ <?= number_format($faturamentoTotal, 2, ',', '.') ?></strong></div>
                         <div class="bloco-valor"><small>Despesas Estimadas (30%)</small> <strong class="cor-vermelha">R$ <?= number_format($faturamentoTotal * 0.3, 2, ',', '.') ?></strong></div>
                         <div class="bloco-valor"><small>Lucro Líquido</small> <strong class="cor-azul">R$ <?= number_format($faturamentoTotal * 0.7, 2, ',', '.') ?></strong></div>
                     </div>
@@ -187,7 +205,7 @@ try {
                     </div>
                     <div class="grafico-barras-css">
                         <?php if (empty($vendas7Dias)): ?>
-                            <p style="font-size: 0.7rem; color: #6b7280;">Nenhuma venda registrada nos últimos 7 dias.</p>
+                            <p style="font-size: 0.7rem; color: #6b7280; padding-bottom: 25px;">Nenhuma venda faturada nos últimos 7 dias.</p>
                         <?php else: ?>
                             <?php foreach($vendas7Dias as $dia): 
                                 $alturaBarra = ($dia['diario'] / $maxVendaDiaria) * 100;
@@ -205,7 +223,7 @@ try {
                     </div>
                     <ul class="ranking-produtos">
                         <?php if (empty($topProdutos)): ?>
-                            <li style="color: #6b7280; font-size: 0.7rem;">Nenhum produto vendido ainda.</li>
+                            <li style="color: #6b7280; font-size: 0.7rem;">Nenhum produto faturado no PDV ainda.</li>
                         <?php else: ?>
                             <?php foreach ($topProdutos as $index => $prod): 
                                 $percentual = ($prod['receita'] / $maxReceitaProduto) * 100;
@@ -250,7 +268,7 @@ try {
                         <svg class="svg-mini" viewBox="0 0 24 24"><polyline points="12 5 19 12 12 19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     </div>
                     <div class="dados-rodape">
-                        <span>Pedidos Pendentes</span>
+                        <span>Pedidos na Cozinha</span>
                         <h4><?= $qtdPendentes ?></h4>
                         <small class="texto-link" onclick="window.location.href='php/pedidos.php';" style="cursor: pointer;">Ir para produção →</small>
                     </div>
