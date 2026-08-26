@@ -135,15 +135,16 @@ body {
 .card-config-bloco {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 14px 18px; /* Respiro interno confortável e compacto */
+    padding: 14px 18px; 
     border: 1px solid #e5e7eb;
     width: 100%;
     box-sizing: border-box;
-    flex: 1.2; /* Dá uma leve prioridade de espaço para os campos de digitação */
+    flex: 0 1 auto; /* Modificado: impede o bloco de esticar verticalmente sozinho */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centraliza verticalmente o formulário por dentro */
+    justify-content: flex-start; /* Modificado: alinha os campos no topo do card */
 }
+
 
 .titulo-secao-config {
     font-size: 0.88rem;
@@ -260,23 +261,24 @@ body {
     gap: 12px;
     width: 100%;
     box-sizing: border-box;
-    flex: 1; /* Faz a fileira dividir igualmente a altura restante da tela */
+    flex: 0 1 auto; /* Altere de 1 para 0 1 auto para travar a altura */
+    margin-top: 16px; /* Define um espaçamento fixo e limpo entre os blocos */
 }
-
 
 .card-mini-gerenciamento {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 12px 16px; /* Respiro interno confortável e simétrico */
+    padding: 12px 16px; 
     border: 1px solid #e5e7eb;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Empurra o botão de link perfeitamente para a base */
-    flex: 1; /* Divide as fileiras em 50% / 50% de forma exata */
-    min-height: 115px; /* Altura ideal calculada para travar na tela com simetria premium */
+    justify-content: space-between; 
+    width: 33.33%; /* Garante que os três dividam a largura da tela igualmente */
+    min-height: 115px; 
     box-sizing: border-box;
     overflow: hidden;
 }
+
 
 .topo-mini-card {
     display: flex;
