@@ -1,14 +1,23 @@
 <?php 
-// 1. CONFIGURAÇÃO DE FUSO HORÁRIO PARA O BRASIL (Corrige a data do topo)
+// 1. CONFIGURAÇÃO DE FUSO HORÁRIO PARA O BRASIL
 date_default_timezone_set('America/Sao_Paulo');
-// 1. SEGURANÇA MÁXIMA: Valida se o usuário fez login
-require_once "home.php"; 
 
-// 2. CONEXÃO COM O BANCO DE DADOS
-// Ajuste este caminho de acordo com a localização do seu arquivo de conexão
+// 2. SEGURANÇA MÁXIMA: Valida se o usuário fez login
+require_once "php/logica_php/home.php"; 
+
+// 3. CONEXÃO COM O BANCO DE DADOS
 require_once "php/conexao.php"; 
 
-// Inicializa variáveis para evitar erros visuais caso alguma tabela esteja vazia
+// ==========================================================================
+// CAPTURA DO FILTRO DE DIAS (Se não escolher nada, o padrão é 7 dias)
+// ==========================================================================
+$periodoFiltro = isset($_GET['periodo']) ? (int)$_GET['periodo'] : 7;
+// Trava de segurança para aceitar apenas os valores permitidos
+if (!in_array($periodoFiltro, [7, 15, 30])) {
+    $periodoFiltro = 7;
+}
+
+// Inicializa variáveis base
 $faturamentoTotal = 0;
 $qtdVendas = 0;
 $ticketMedio = 0;
@@ -18,70 +27,114 @@ $qtdProdutos = 0;
 $qtdPendentes = 0;
 $qtdAtrasados = 0;
 $topProdutos = [];
-$vendas7Dias = [];
+$vendasGrafico = [];
 $maxReceitaProduto = 1;
 $maxVendaDiaria = 1;
 
 // ==========================================================================
-// MOTOR DE ESTATÍSTICAS (BUSCANDO DADOS REAIS DO BANCO)
+// BLOCO 1: FINANCEIRO E VENDAS
 // ==========================================================================
-
-// BLOCO 1: FINANCEIRO E VENDAS (Vem EXCLUSIVAMENTE da tabela 'vendas' do PDV)
 try {
-    // Busca apenas as vendas concretizadas no PDV
     $stmtVendas = $conexao->query("SELECT SUM(total_liquido) as faturamento, COUNT(id) as qtd_vendas FROM vendas");
     $dadosVendas = $stmtVendas->fetch(PDO::FETCH_ASSOC);
     
     $faturamentoTotal = $dadosVendas['faturamento'] ?? 0;
     $qtdVendas = $dadosVendas['qtd_vendas'] ?? 0;
     $ticketMedio = $qtdVendas > 0 ? ($faturamentoTotal / $qtdVendas) : 0;
-} catch (Exception $e) {
-    // Se a tabela 'vendas' não existir ou a coluna tiver outro nome, não quebra a tela
-}
+} catch (Exception $e) { }
 
-// BLOCO 2: ITENS VENDIDOS E RANKING (Vem da tabela 'itens_venda' do PDV)
+// ==========================================================================
+// BLOCO 2: ITENS VENDIDOS E RANKING
+// ==========================================================================
 try {
-    // Conta quantos itens passaram pelo caixa
-    $stmtItens = $conexao->query("SELECT SUM(quantidade) as total_itens FROM itens_venda");
+    $stmtItens = $conexao->query("SELECT SUM(quantidade) as total_itens FROM vendas_itens");
     $totalItens = $stmtItens->fetch(PDO::FETCH_ASSOC)['total_itens'] ?? 0;
 
-    // Ranking dos 5 mais vendidos que deram entrada financeira
     $stmtTop = $conexao->query("
-        SELECT nome as produto, SUM(subtotal) as receita 
-        FROM itens_venda 
-        GROUP BY nome 
+        SELECT produto_nome as nome, SUM(subtotal) as receita 
+        FROM vendas_itens 
+        GROUP BY produto_nome 
         ORDER BY receita DESC 
         LIMIT 5
     ");
     $topProdutos = $stmtTop->fetchAll(PDO::FETCH_ASSOC);
-    $maxReceitaProduto = !empty($topProdutos) ? $topProdutos[0]['receita'] : 1;
+    
+    if(!empty($topProdutos)) {
+        $maxReceitaProduto = $topProdutos[0]['receita'] > 0 ? $topProdutos[0]['receita'] : 1;
+    }
 } catch (Exception $e) { }
 
-// BLOCO 3: MÉTRICAS OPERACIONAIS (Vem das tabelas 'clientes', 'produtos' e 'pedidos')
+// ==========================================================================
+// BLOCO 3: VENDAS POR CATEGORIA (Gráfico Donut)
+// ==========================================================================
+$categorias = [
+    'Bolos' => ['valor' => 0, 'cor' => '#10b981'],
+    'Doces' => ['valor' => 0, 'cor' => '#f97316'],
+    'Tortas' => ['valor' => 0, 'cor' => '#8b5cf6'],
+    'Salgados' => ['valor' => 0, 'cor' => '#ef4444'],
+    'Outros' => ['valor' => 0, 'cor' => '#6b7280']
+];
+$totalCategorias = 0;
+
+try {
+    $itensCat = $conexao->query("SELECT produto_nome as nome, subtotal as valor FROM vendas_itens")->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach($itensCat as $item) {
+        $nomeProd = strtolower($item['nome']);
+        $valor = floatval($item['valor']);
+        $totalCategorias += $valor;
+        
+        if (strpos($nomeProd, 'bolo') !== false) {
+            $categorias['Bolos']['valor'] += $valor;
+        } elseif (strpos($nomeProd, 'doce') !== false || strpos($nomeProd, 'brigadeiro') !== false || strpos($nomeProd, 'macaron') !== false) {
+            $categorias['Doces']['valor'] += $valor;
+        } elseif (strpos($nomeProd, 'torta') !== false || strpos($nomeProd, 'cheesecake') !== false) {
+            $categorias['Tortas']['valor'] += $valor;
+        } elseif (strpos($nomeProd, 'salgado') !== false || strpos($nomeProd, 'coxinha') !== false || strpos($nomeProd, 'empada') !== false) {
+            $categorias['Salgados']['valor'] += $valor;
+        } else {
+            $categorias['Outros']['valor'] += $valor;
+        }
+    }
+} catch (Exception $e) { }
+
+$deg = 0;
+$gradient = [];
+foreach($categorias as $cat => $dados) {
+    if ($dados['valor'] > 0 && $totalCategorias > 0) {
+        $percent = ($dados['valor'] / $totalCategorias) * 100;
+        $start = $deg;
+        $end = $deg + $percent;
+        $gradient[] = "{$dados['cor']} {$start}% {$end}%";
+        $deg = $end;
+    }
+}
+$stringDonutCss = !empty($gradient) ? implode(', ', $gradient) : '#e5e7eb 0% 100%';
+
+// ==========================================================================
+// BLOCO 4: MÉTRICAS OPERACIONAIS E GRÁFICO DINÂMICO DE DIAS
+// ==========================================================================
 try {
     $qtdClientes = $conexao->query("SELECT COUNT(*) FROM clientes")->fetchColumn();
     $qtdProdutos = $conexao->query("SELECT COUNT(*) FROM produtos")->fetchColumn();
-    
-    // Pedidos na cozinha (Pendente ou Em Produção)
     $qtdPendentes = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status IN ('Pendente', 'Em Produção')")->fetchColumn();
-    
-    // Pedidos Atrasados (A data de entrega já passou e ainda não foram finalizados)
     $qtdAtrasados = $conexao->query("SELECT COUNT(*) FROM pedidos WHERE status != 'Finalizado' AND data_entrega < CURDATE()")->fetchColumn();
 } catch (Exception $e) { }
 
-// BLOCO 4: GRÁFICO DE 7 DIAS (Vem da tabela 'vendas' do PDV)
 try {
-    $stmt7Dias = $conexao->query("
+    // Utiliza a variável $periodoFiltro para ditar quantos dias puxar do banco
+    $stmtGrafico = $conexao->prepare("
         SELECT DATE(data_venda) as data, SUM(total_liquido) as diario 
         FROM vendas 
-        WHERE data_venda >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) 
+        WHERE data_venda >= DATE_SUB(CURDATE(), INTERVAL ? DAY) 
         GROUP BY DATE(data_venda) 
         ORDER BY data ASC
     ");
-    $vendas7Dias = $stmt7Dias->fetchAll(PDO::FETCH_ASSOC);
+    $stmtGrafico->execute([$periodoFiltro]);
+    $vendasGrafico = $stmtGrafico->fetchAll(PDO::FETCH_ASSOC);
     
-    foreach($vendas7Dias as $v) {
-        if($v['diario'] > $maxVendaDiaria) $maxVendaDiaria = $v['diario'];
+    foreach($vendasGrafico as $v) { 
+        if($v['diario'] > $maxVendaDiaria) $maxVendaDiaria = $v['diario']; 
     }
 } catch (Exception $e) { }
 ?>
@@ -98,7 +151,6 @@ try {
 <body>
     <div class="container-dashboard">
         
-        <!-- INJEÇÃO DA BARRA LATERAL ISOLADA VIA PHP -->
         <?php require_once "php/barra_lateral.php"; ?>
 
         <main class="painel-conteudo">
@@ -115,7 +167,6 @@ try {
                 </div>
             </header>
 
-            <!-- LINHA SUPERIOR DE DESEMPENHO (DADOS REAIS) -->
             <section class="linha-mini-cards">
                 <div class="mini-card">
                     <div class="icone-card verde">
@@ -159,7 +210,6 @@ try {
                 </div>
             </section>
 
-            <!-- LINHA CENTRAL: RESUMO FINANCEIRO -->
             <section class="linha-blocos-graficos">
                 <div class="caixa-grafico flex-7">
                     <div class="topo-caixa">
@@ -183,42 +233,58 @@ try {
                         <h3>Vendas por Categoria</h3>
                     </div>
                     <div class="conteudo-donut">
-                        <div class="grafico-donut-css">
+                        <div class="grafico-donut-css" style="background: conic-gradient(<?= $stringDonutCss ?>);">
                             <div class="miolo-branco"></div>
                         </div>
                         <div class="legenda-categorias">
-                            <div class="item-legenda"><span class="marcador-cor" style="background:#10b981;"></span> Bolos <span class="valor-cat">41,8%</span></div>
-                            <div class="item-legenda"><span class="marcador-cor" style="background:#f97316;"></span> Doces <span class="valor-cat">24,9%</span></div>
-                            <div class="item-legenda"><span class="marcador-cor" style="background:#8b5cf6;"></span> Tortas <span class="valor-cat">18,6%</span></div>
-                            <div class="item-legenda"><span class="marcador-cor" style="background:#ef4444;"></span> Salgados <span class="valor-cat">9,8%</span></div>
+                            <?php foreach($categorias as $nomeCat => $dados): ?>
+                                <?php 
+                                    $pct = $totalCategorias > 0 ? ($dados['valor'] / $totalCategorias) * 100 : 0; 
+                                    if ($dados['valor'] > 0 || $totalCategorias == 0):
+                                ?>
+                                <div class="item-legenda">
+                                    <span class="marcador-cor" style="background:<?= $dados['cor'] ?>;"></span> <?= $nomeCat ?> 
+                                    <span class="valor-cat">R$ <?= number_format($dados['valor'], 2, ',', '.') ?></span>
+                                    <span class="porcentagem"><?= number_format($pct, 1, ',', '') ?>%</span>
+                                </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- LINHA INFERIOR: GRÁFICOS E RANKING -->
             <section class="linha-blocos-graficos">
                 
-                <!-- Histórico de 7 dias Dinâmico -->
                 <div class="caixa-grafico flex-6">
                     <div class="topo-caixa">
-                        <h3>Vendas dos Últimos 7 Dias</h3>
-                        <span class="filtro-drop">Últimos 7 dias ▾</span>
+                        <!-- Título atualiza dinamicamente conforme os dias escolhidos -->
+                        <h3>Vendas dos Últimos <?= $periodoFiltro ?> Dias</h3>
+                        
+                        <!-- Formulário que atualiza a página automaticamente ao mudar a opção -->
+                        <form method="GET" action="home.php" style="margin: 0;">
+                            <select name="periodo" class="filtro-drop" onchange="this.form.submit()" style="cursor: pointer; background-color: #ffffff; outline: none;">
+                                <option value="7" <?= $periodoFiltro == 7 ? 'selected' : '' ?>>Últimos 7 dias</option>
+                                <option value="15" <?= $periodoFiltro == 15 ? 'selected' : '' ?>>Últimos 15 dias</option>
+                                <option value="30" <?= $periodoFiltro == 30 ? 'selected' : '' ?>>Últimos 30 dias</option>
+                            </select>
+                        </form>
                     </div>
                     <div class="grafico-barras-css">
-                        <?php if (empty($vendas7Dias)): ?>
-                            <p style="font-size: 0.7rem; color: #6b7280; padding-bottom: 25px;">Nenhuma venda faturada nos últimos 7 dias.</p>
+                        <?php if (empty($vendasGrafico)): ?>
+                            <p style="font-size: 0.7rem; color: #6b7280; padding-bottom: 25px;">Nenhuma venda faturada nos últimos <?= $periodoFiltro ?> dias.</p>
                         <?php else: ?>
-                            <?php foreach($vendas7Dias as $dia): 
+                            <?php foreach($vendasGrafico as $dia): 
                                 $alturaBarra = ($dia['diario'] / $maxVendaDiaria) * 100;
+                                // Formata a data para dia/mês/ano para aparecer no aviso flutuante
+                                $dataVisual = date('d/m/Y', strtotime($dia['data']));
                             ?>
-                                <div class="coluna-barra" style="height: <?= $alturaBarra ?>%;" title="R$ <?= number_format($dia['diario'], 2, ',', '.') ?>"></div>
+                                <div class="coluna-barra" style="height: <?= $alturaBarra ?>%;" title="<?= $dataVisual ?> - R$ <?= number_format($dia['diario'], 2, ',', '.') ?>"></div>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                 </div>
 
-                <!-- Produtos Mais Vendidos Dinâmico -->
                 <div class="caixa-grafico flex-6">
                     <div class="topo-caixa">
                         <h3>Produtos Mais Vendidos</h3>
@@ -231,7 +297,7 @@ try {
                                 $percentual = ($prod['receita'] / $maxReceitaProduto) * 100;
                             ?>
                                 <li>
-                                    <span class="nome-prod"><?= ($index + 1) ?>. <?= htmlspecialchars($prod['produto']) ?></span> 
+                                    <span class="nome-prod" title="<?= htmlspecialchars($prod['nome']) ?>"><?= ($index + 1) ?>. <?= htmlspecialchars($prod['nome']) ?></span> 
                                     <span class="barra-progresso-ficticia">
                                         <div style="height: 100%; background-color: #172016; width: <?= $percentual ?>%;"></div>
                                     </span> 
@@ -243,7 +309,6 @@ try {
                 </div>
             </section>
 
-            <!-- RODAPÉ DE MÉTRICAS SIMPLES (DADOS REAIS) -->
             <section class="linha-mini-cards metricas-rodape">
                 <div class="card-rodape-simples">
                     <div class="icone-rodape verde-txt">
