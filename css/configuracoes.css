@@ -371,3 +371,71 @@ body {
     stroke: #6b7280 !important;
     stroke-width: 2;
 }
+
+/* ==========================================================================
+   MODAIS DE CONFIGURAÇÃO (100% CSS PUR0 COM :TARGET)
+   ========================================================================== */
+.modal-config-container {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); 
+    align-items: center;
+    justify-content: center;
+}
+
+/* QUANDO A ID DO MODAL FOR ACIONADA NA URL PELO BOTÃO, O CSS ABRE ELE NATIVAMENTE */
+.modal-config-container:target {
+    display: flex;
+}
+
+.modal-config-conteudo {
+    background-color: #ffffff;
+    border-radius: 8px;
+    width: 450px;
+    max-width: 90%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    animation: abrirModalAnimacao 0.2s ease-out;
+}
+
+.modal-config-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.modal-config-topo h2 {
+    font-size: 1.1rem;
+    color: #111827;
+    font-weight: 700;
+}
+
+.btn-fechar-modal {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: #9ca3af;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.btn-fechar-modal:hover {
+    color: #1f2937;
+}
+
+/* Garante que as tags <a> dos mini cards mantenham o estilo visual original de botões */
+a.btn-link-config {
+    text-decoration: none !important;
+}
+
+@keyframes abrirModalAnimacao {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
