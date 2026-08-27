@@ -3,7 +3,7 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 // 2. SEGURANÇA MÁXIMA: Valida se o usuário fez login
-require_once "php/logica_php/home.php"; 
+require_once "home.php"; 
 
 // 3. CONEXÃO COM O BANCO DE DADOS
 require_once "php/conexao.php"; 
@@ -122,7 +122,6 @@ try {
 } catch (Exception $e) { }
 
 try {
-    // Utiliza a variável $periodoFiltro para ditar quantos dias puxar do banco
     $stmtGrafico = $conexao->prepare("
         SELECT DATE(data_venda) as data, SUM(total_liquido) as diario 
         FROM vendas 
@@ -145,7 +144,8 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MIRA Confeitaria - Home</title>
     <link rel="stylesheet" href="css/barra_lateral.css">
-    <link rel="stylesheet" href="css/home.css">
+    <!-- O ?v=11.0 força o navegador a baixar as novas regras de CSS! -->
+    <link rel="stylesheet" href="css/home.css?v=11.0">
 </head>
 
 <body>
@@ -258,10 +258,8 @@ try {
                 
                 <div class="caixa-grafico flex-6">
                     <div class="topo-caixa">
-                        <!-- Título atualiza dinamicamente conforme os dias escolhidos -->
                         <h3>Vendas dos Últimos <?= $periodoFiltro ?> Dias</h3>
                         
-                        <!-- Formulário que atualiza a página automaticamente ao mudar a opção -->
                         <form method="GET" action="home.php" style="margin: 0;">
                             <select name="periodo" class="filtro-drop" onchange="this.form.submit()" style="cursor: pointer; background-color: #ffffff; outline: none;">
                                 <option value="7" <?= $periodoFiltro == 7 ? 'selected' : '' ?>>Últimos 7 dias</option>
@@ -276,10 +274,13 @@ try {
                         <?php else: ?>
                             <?php foreach($vendasGrafico as $dia): 
                                 $alturaBarra = ($dia['diario'] / $maxVendaDiaria) * 100;
-                                // Formata a data para dia/mês/ano para aparecer no aviso flutuante
-                                $dataVisual = date('d/m/Y', strtotime($dia['data']));
+                                $dataVisual = date('d/m', strtotime($dia['data']));
+                                $valorVisual = number_format($dia['diario'], 2, ',', '.');
                             ?>
-                                <div class="coluna-barra" style="height: <?= $alturaBarra ?>%;" title="<?= $dataVisual ?> - R$ <?= number_format($dia['diario'], 2, ',', '.') ?>"></div>
+                                <div class="coluna-barra" style="height: <?= $alturaBarra ?>%;">
+                                    <!-- A Caixa Flutuante Tooltip inserida aqui -->
+                                    <span class="tooltip-barra"><?= $dataVisual ?> - R$ <?= $valorVisual ?></span>
+                                </div>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
