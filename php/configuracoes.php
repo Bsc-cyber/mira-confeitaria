@@ -201,16 +201,25 @@ require_once "logica_php/home.php";
                     <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Salvar / Atualizar Usuário</h3>
                     <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Insira os dados do colaborador para salvar as permissões.</p>
                     
+                    <!-- Campo Nome -->
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Nome Completo</label>
                         <input type="text" placeholder="Digite o nome" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
                     </div>
 
+                    <!-- Campo E-mail -->
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">E-mail de Acesso</label>
                         <input type="email" placeholder="exemplo@empresa.com" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
                     </div>
 
+                    <!-- NOVO CAMPO: Senha de Acesso -->
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Senha de Acesso</label>
+                        <input type="password" placeholder="Digite uma senha segura" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
+                    </div>
+
+                    <!-- Campo Nível/Regra (Select) -->
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Nível de Permissão</label>
                         <select style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none; background-color: white; color: #1f2937;">
@@ -219,17 +228,16 @@ require_once "logica_php/home.php";
                         </select>
                     </div>
 
+                    <!-- Botão de Confirmação do Formulário -->
                     <button type="button" style="background-color: #2a3626; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px;">
                         <svg xmlns="http://w3.org" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
                         Salvar Usuário
                     </button>
                 </div>
 
+
                 <!-- COLUNA DA DIREITA: MINI TABELA DE LISTAGEM COM EXCLUSÃO -->
-                <div style="flex: 1.2; display: flex; flex-direction: column; gap: 12px;">
-                    <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Usuários Ativos</h3>
-                    <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Clique em um registro para editar ou use a ação para remover.</p>
-                    
+                                    <!-- TABELA ATUALIZADA COM EXCLUIR EM TODOS OS USUÁRIOS -->
                     <div style="border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; background: #ffffff;">
                         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.72rem;">
                             <thead>
@@ -240,14 +248,18 @@ require_once "logica_php/home.php";
                                 </tr>
                             </thead>
                             <tbody style="color: #1f2937;">
+                                <!-- Linha 1: Administrador -->
                                 <tr style="border-bottom: 1px solid #f3f4f6; cursor: pointer;" title="Clique para editar dados">
                                     <td style="padding: 8px 10px;">
                                         <div style="font-weight: 600;">Administrador</div>
                                         <div style="font-size: 0.65rem; color: #6b7280;">admin@miraconfeitaria.com.br</div>
                                     </td>
                                     <td style="padding: 8px 10px;"><span style="background-color: #fef3c7; color: #d97706; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;">Master</span></td>
-                                    <td style="padding: 8px 10px; text-align: right; color: #9ca3af; font-style: italic; font-size: 0.62rem;">Fixo</td>
+                                    <td style="padding: 8px 10px; text-align: right;">
+                                        <button type="button" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;" onclick="event.stopPropagation(); alert('Remoção do Administrador acionada via backend.')">Excluir</button>
+                                    </td>
                                 </tr>
+                                <!-- Linha 2: Atendente 01 -->
                                 <tr style="cursor: pointer;" title="Clique para editar dados">
                                     <td style="padding: 8px 10px;">
                                         <div style="font-weight: 600;">Atendente 01</div>
@@ -255,12 +267,13 @@ require_once "logica_php/home.php";
                                     </td>
                                     <td style="padding: 8px 10px;"><span style="background-color: #e0f2fe; color: #0369a1; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;">Balcão</span></td>
                                     <td style="padding: 8px 10px; text-align: right;">
-                                        <button type="button" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;" onclick="event.stopPropagation(); alert('Remoção acionada via backend.')">Excluir</button>
+                                        <button type="button" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;" onclick="event.stopPropagation(); alert('Remoção do Atendente acionada via backend.')">Excluir</button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
+
                 </div>
 
             </div> <!-- Fim da modal-config-corpo -->
