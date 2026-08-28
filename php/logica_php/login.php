@@ -1,51 +1,66 @@
 <?php
-// 1. CONFIGURAÇÕES DE SEGURANÇA: Configura propriedades de sessão a nível de servidor antes de iniciar
-ini_set('session.cookie_httponly', 1); // Bloqueia o acesso aos cookies por scripts JS (evita roubo de sessão)
-ini_set('session.cookie_secure', 1);   // Força o uso de conexões seguras HTTPS em produção
-
-// 2. INICIALIZAÇÃO DA SESSÃO: Ativa o rastreamento seguro no servidor
+// Inicia a sessão global para gerenciar o login
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// REMOVIDO O REQUIRE DA CONEXAO DAQUI PARA NÃO DAR MAIS ERRO DE BANCO DE DADOS!
-
-// 3. PROTEÇÃO CSRF: Cria um token criptográfico único para o formulário se ele não existir
+// 1. GERAÇÃO DO TOKEN CSRF PARA SEGURANÇA DO SEU FORMULÁRIO
 if (empty($_SESSION['token_csrf'])) {
-    $_SESSION['token_csrf'] = bin2hex(random_bytes(32)); 
+    $_SESSION['token_csrf'] = bin2hex(random_bytes(32));
 }
 
-// 4. PROCESSAMENTO DO FORMULÁRIO DE LOGIN
-$mensagem_erro = ""; 
+$mensagem_erro = "";
 
+// 2. INTERCEPTA O ENVIO DO FORMULÁRIO POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validação estrita do Token CSRF para garantir que a requisição veio do seu próprio site
-    if (!isset($_POST['token_csrf']) || $_POST['token_csrf'] !== $_SESSION['token_csrf']) {
-        die("Erro de validação de segurança: Requisição inválida (CSRF).");
-    }
-
-    // Tratamento básico de entradas do usuário para mitigar injeções de scripts XSS
-    $usuario_enviado = filter_input(INPUT_POST, 'usuario', FILTER_SANITIZE_SPECIAL_CHARS);
-    $senha_enviada = $_POST['senha'];
-
-    // Credenciais provisórias solicitadas
-    $usuario_unico = "admin";
-    $senha_unica = "123";
-
-    // Validação lógica do acesso
-    if ($usuario_enviado === $usuario_unico && $senha_enviada === $senha_unica) {
-        session_regenerate_id(true); // Regenera o ID para evitar fixação de sessão
-        
-        // Define as variáveis de sessão essenciais
-        $_SESSION['usuario_logado'] = "Chef Confeiteiro Mira";
-        $_SESSION['autenticado'] = true;
-        
-        // Redireciona o confeiteiro para a tela interna protegida
-        header("Location: home.php");
-        exit;
+    
+    // Valida o token de segurança para evitar ataques CSRF
+    $token_post = $_POST['token_csrf'] ?? '';
+    if ($token_post !== $_SESSION['token_csrf']) {
+        $mensagem_erro = "Falha de segurança: Token inválido.";
     } else {
-        // Mensagem de erro genérica por boas práticas de segurança
-        $mensagem_erro = "Usuário ou senha incorretos!";
+        
+        // Captura e limpa os inputs digitados pelo usuário
+        $usuario_input = isset($_POST['usuario']) ? trim($_POST['usuario']) : '';
+        $senha_input = isset($_POST['senha']) ? trim($_POST['senha']) : '';
+
+        if (empty($usuario_input) || empty($senha_input)) {
+            $mensagem_erro = "Por favor, preencha todos os campos.";
+        } else {
+            
+            // Configurações de acesso ao MySQL local
+            $host = "localhost";
+            $usuario_db = "root";
+            $senha_db = "";
+            $banco = "mira_confeitaria";
+
+            try {
+                $pdo = new PDO("mysql:host=$host;dbname=$banco;charset=utf8", $usuario_db, $senha_db);
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+                // Busca o usuário na tabela correta do seu XAMPP ('usuarios')
+                $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE usuario = ? LIMIT 1");
+                $stmt->execute([$usuario_input]);
+                $dados_usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                // Compara a senha digitada diretamente com o texto puro salvo no banco
+                if ($dados_usuario && $senha_input === $dados_usuario['senha']) {
+                    
+                    // CONFIGURA A SESSÃO EXATA EXIGIDA PELO SEU HOME.PHP PARA AUTORIZAR O ACESSO
+                    $_SESSION['autenticado'] = true;
+                    $_SESSION['id_usuario'] = $dados_usuario['id'];
+                    $_SESSION['nome_usuario'] = $dados_usuario['nome_completo'];
+
+                    // Redireciona para o painel de configurações na subpasta php/
+                    header("Location: php/configuracoes.php");
+                    exit;
+                } else {
+                    $mensagem_erro = "Usuário ou senha incorretos.";
+                }
+
+            } catch (Exception $e) {
+                $mensagem_erro = "Erro de conexão local: " . $e->getMessage();
+            }
+        }
     }
 }
-?>

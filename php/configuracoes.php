@@ -31,8 +31,9 @@ require_once "logica_php/home.php";
     <!-- Abre o painel de conteúdo mestre exclusivo da tela de configurações -->
     <main class="painel-conteudo-config">
         
-        <!-- Abertura do formulário mestre que engloba toda a página para salvar tudo de uma vez -->
-        <form id="formularioConfiguracoes" method="POST" action="configuracoes.php" novalidate style="display: flex; flex-direction: column; height: 100%; width: 100%;">
+        <!-- Abertura do formulário mestre que engloba toda a página para salvar tudo de uma vez -->            
+        <form id="formularioConfiguracoes" method="POST" action="logica_php/salvar_configuracoes.php" novalidate style="display: flex; flex-direction: column; height: 100%; width: 100%;">
+
 
             <!-- Abre o cabeçalho superior completo de configurações -->
             <header class="topo-config">
@@ -181,15 +182,13 @@ require_once "logica_php/home.php";
             </div> <!-- Fecha o wrapper-scroll-configuracoes -->
         </form> <!-- Fecha o formulário mestre -->
     </main> <!-- Fecha o main do painel-conteudo-config -->
-    <!-- MODAIS OPERACIONAIS (ISOLADOS DE TODOS OS CONTAINERS PRINCIPAIS) -->
-
-    <!-- 1. MODAL DE USUÁRIOS REORGANIZADO: FORMULÁRIO (ESQUERDA) + TABELA (DIREITA) -->
+    
+    <!-- 1. MODAL DE USUÁRIOS REORGANIZADO DESDE O INÍCIO (CORREÇÃO DE BOTÃO) -->
     <div id="modalUsuarios" class="modal-config-container">
-        <div class="modal-config-conteudo" style="width: 800px; max-width: 95%;">
+        <div class="modal-config-conteudo" style="width: 850px; max-width: 95%;">
             <div class="modal-config-topo">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <h2>Gerenciar Usuários</h2>
-                    <span style="background-color: #e5e7eb; color: #374151; font-size: 0.65rem; padding: 2px 6px; border-radius: 20px; font-weight: 700;">2 Cadastrados</span>
                 </div>
                 <a href="#" class="btn-fechar-modal">&times;</a>
             </div>
@@ -201,82 +200,96 @@ require_once "logica_php/home.php";
                     <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Salvar / Atualizar Usuário</h3>
                     <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Insira os dados do colaborador para salvar as permissões.</p>
                     
-                    <!-- Campo Nome -->
+                    <!-- ID invisível essencial para o JS saber se vai cadastrar ou atualizar -->
+                    <input type="hidden" id="id_usuario" value="">
+
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Nome Completo</label>
-                        <input type="text" placeholder="Digite o nome" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
+                        <input type="text" id="nome_completo_input" placeholder="Digite o nome" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
                     </div>
 
-                    <!-- Campo E-mail -->
                     <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">E-mail de Acesso</label>
-                        <input type="email" placeholder="exemplo@empresa.com" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
+                        <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Usuário de Acesso (Login)</label>
+                        <input type="text" id="usuario_input" placeholder="Ex: admin ou atendente01" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
                     </div>
 
-                    <!-- NOVO CAMPO: Senha de Acesso -->
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Senha de Acesso</label>
-                        <input type="password" placeholder="Digite uma senha segura" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
+                        <input type="password" id="senha_input" placeholder="Digite uma senha segura" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none;">
                     </div>
 
-                    <!-- Campo Nível/Regra (Select) -->
                     <div style="display: flex; flex-direction: column; gap: 4px;">
                         <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Nível de Permissão</label>
-                        <select style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none; background-color: white; color: #1f2937;">
+                        <select id="permissao_input" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none; background-color: white; color: #1f2937;">
                             <option value="balcao">Balcão (Atendimento)</option>
                             <option value="master">Master (Administrador)</option>
                         </select>
                     </div>
 
-                    <!-- Botão de Confirmação do Formulário -->
-                    <button type="button" style="background-color: #2a3626; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px;">
+                    <button type="button" id="btnSalvarUsuarioForm" style="background-color: #2a3626; color: white; border: none; padding: 8px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 6px;">
                         <svg xmlns="http://w3.org" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
-                        Salvar Usuário
+                        <span>Salvar Usuário</span>
                     </button>
                 </div>
 
-
-                <!-- COLUNA DA DIREITA: MINI TABELA DE LISTAGEM COM EXCLUSÃO -->
-                                    <!-- TABELA ATUALIZADA COM EXCLUIR EM TODOS OS USUÁRIOS -->
+                <!-- COLUNA DA DIREITA: LISTAGEM DINÂMICA COMPLETA CORRIGIDA -->
+                <div style="flex: 1.3; display: flex; flex-direction: column; gap: 12px;">
+                    <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Usuários Ativos</h3>
+                    <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Clique em um registro para editar ou use a ação para remover.</p>
+                    
                     <div style="border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; background: #ffffff;">
                         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.72rem;">
                             <thead>
                                 <tr style="background-color: #f9fafb; border-bottom: 1px solid #e5e7eb; color: #4b5563; font-weight: 600;">
-                                    <th style="padding: 8px 10px;">Nome / E-mail</th>
+                                    <th style="padding: 8px 10px;">Nome / Usuário</th>
                                     <th style="padding: 8px 10px;">Nível</th>
                                     <th style="padding: 8px 10px; text-align: right;">Ações</th>
                                 </tr>
                             </thead>
-                            <tbody style="color: #1f2937;">
-                                <!-- Linha 1: Administrador -->
-                                <tr style="border-bottom: 1px solid #f3f4f6; cursor: pointer;" title="Clique para editar dados">
-                                    <td style="padding: 8px 10px;">
-                                        <div style="font-weight: 600;">Administrador</div>
-                                        <div style="font-size: 0.65rem; color: #6b7280;">admin@miraconfeitaria.com.br</div>
-                                    </td>
-                                    <td style="padding: 8px 10px;"><span style="background-color: #fef3c7; color: #d97706; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;">Master</span></td>
-                                    <td style="padding: 8px 10px; text-align: right;">
-                                        <button type="button" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;" onclick="event.stopPropagation(); alert('Remoção do Administrador acionada via backend.')">Excluir</button>
-                                    </td>
-                                </tr>
-                                <!-- Linha 2: Atendente 01 -->
-                                <tr style="cursor: pointer;" title="Clique para editar dados">
-                                    <td style="padding: 8px 10px;">
-                                        <div style="font-weight: 600;">Atendente 01</div>
-                                        <div style="font-size: 0.65rem; color: #6b7280;">atendimento@miraconfeitaria.com.br</div>
-                                    </td>
-                                    <td style="padding: 8px 10px;"><span style="background-color: #e0f2fe; color: #0369a1; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;">Balcão</span></td>
-                                    <td style="padding: 8px 10px; text-align: right;">
-                                        <button type="button" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;" onclick="event.stopPropagation(); alert('Remoção do Atendente acionada via backend.')">Excluir</button>
-                                    </td>
-                                </tr>
+                            <tbody id="listaUsuariosTabela" style="color: #1f2937;">
+                                <?php
+                                try {
+                                    $conexao_lista = new PDO("mysql:host=localhost;dbname=mira_confeitaria;charset=utf8", "root", "");
+                                    $conexao_lista->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                                    
+                                    $stmt_lista = $conexao_lista->query("SELECT id, usuario, nome_completo FROM usuarios ORDER BY nome_completo ASC");
+                                    
+                                    while ($user = $stmt_lista->fetch(PDO::FETCH_ASSOC)) {
+                                        $ehAdmin = (strtolower($user['usuario']) === 'admin' || strtolower($user['usuario']) === 'master');
+                                        $labelNivel = $ehAdmin ? 'Master' : 'Balcão';
+                                        $corBg = $ehAdmin ? '#fef3c7' : '#e0f2fe';
+                                        $corTexto = $ehAdmin ? '#d97706' : '#0369a1';
+                                        ?>
+                                        <tr style="border-bottom: 1px solid #f3f4f6; cursor: pointer;" 
+                                            data-id="<?php echo $user['id']; ?>" 
+                                            data-nome="<?php echo htmlspecialchars($user['nome_completo']); ?>" 
+                                            data-usuario="<?php echo htmlspecialchars($user['usuario']); ?>"
+                                            data-permissao="<?php echo $ehAdmin ? 'master' : 'balcao'; ?>">
+                                            <td style="padding: 8px 10px;">
+                                                <div style="font-weight: 600;"><?php echo htmlspecialchars($user['nome_completo']); ?></div>
+                                                <div style="font-size: 0.65rem; color: #6b7280;"><?php echo htmlspecialchars($user['usuario']); ?></div>
+                                            </td>
+                                            <td style="padding: 8px 10px;">
+                                                <span style="background-color: <?php echo $corBg; ?>; color: <?php echo $corTexto; ?>; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;"><?php echo $labelNivel; ?></span>
+                                            </td>
+                                            <td style="padding: 8px 10px; text-align: right;">
+                                                <button type="button" class="btn-excluir-linha" data-id="<?php echo $user['id']; ?>" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;">
+                                                    Excluir
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                    }
+                                } catch (Exception $e) {
+                                    echo "<tr><td colspan='3' style='padding: 10px; color: red;'>Erro ao listar banco: " . $e->getMessage() . "</td></tr>";
+                                }
+                                ?>
                             </tbody>
                         </table>
                     </div>
-
                 </div>
 
-            </div> <!-- Fim da modal-config-corpo -->
+            </div>
         </div>
     </div>
 
@@ -298,6 +311,6 @@ require_once "logica_php/home.php";
     </div>
 
     <!-- Chamada padrão do JS isolado do sistema -->
-    <script src="js/configuracoes.js"></script>
+    <script src="../js/configuracoes.js?v=1.2"></script>
 </body>
 </html>
