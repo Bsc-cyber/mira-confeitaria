@@ -1,118 +1,133 @@
 <?php 
-// Valida se o usuário fez login puxando a regra de segurança da subpasta
+// 1. REGRA DE SEGURANÇA: Valida se o usuário fez login antes de desenhar a página
 require_once "logica_php/home.php"; 
+
+// 2. CRIAÇÃO DAS GAVETAS COM VALORES PADRÃO (Essenciais para o HTML ler sem dar erro)
+$nome_conf = "MIRA Confeitaria"; 
+$cnpj_conf = "000.000.000/0001-00";
+$telefone_conf = "(31) 99876-5432";
+$email_conf = "contato@miraconfeitaria.com.br";
+$endereco_conf = "Rua das Flores - Centro";
+$cidade_estado_conf = "Belo Horizonte - MG";
+$hora_abertura_conf = "08:00";
+$hora_fechamento_conf = "18:00";
+
+// 3. CONSULTA AO BANCO DE DADOS: Atualiza as gavetas se encontrar dados na tabela
+try {
+    $pdo_info = new PDO("mysql:host=localhost;dbname=mira_confeitaria;charset=utf8", "root", "");
+    $pdo_info->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Busca o registro de configurações
+    $stmt_info = $pdo_info->query("SELECT * FROM info_confeitaria LIMIT 1");
+    $dados_conf = $stmt_info->fetch(PDO::FETCH_ASSOC);
+
+    // Se achou dados reais salvos por você, joga nas gavetas
+    if ($dados_conf) {
+        $nome_conf = $dados_conf['nome_confeitaria'];
+        $cnpj_conf = $dados_conf['cnpj'];
+        $telefone_conf = $dados_conf['telefone'];
+        $email_conf = $dados_conf['email'];
+        $endereco_conf = $dados_conf['endereco'];
+        $cidade_estado_conf = $dados_conf['cidade_estado'];
+        
+        if (!empty($dados_conf['hora_abertura'])) {
+            $hora_abertura_conf = date("H:i", strtotime($dados_conf['hora_abertura']));
+        }
+        if (!empty($dados_conf['hora_fechamento'])) {
+            $hora_fechamento_conf = date("H:i", strtotime($dados_conf['hora_fechamento']));
+        }
+    }
+} catch (Exception $e) {
+    // Se a tabela 'info_confeitaria' ainda não existir, o PHP ignora e mantém os padrões acima
+}
 ?>
-<!-- Define o tipo de documento como HTML5 para o navegador -->
 <!DOCTYPE html>
-<!-- Define o idioma padrão da página como Português do Brasil -->
 <html lang="pt-BR">
-<!-- Abertura do cabeçalho de metadados da página -->
 <head>
-    <!-- Define a codificação de caracteres UTF-8 para evitar erros de acentos -->
     <meta charset="UTF-8">
-    <!-- Ajusta a janela de visualização para garantir a responsividade -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Define o título que aparece na aba do navegador -->
     <title>MIRA Confeitaria - Configurações</title>
-    <!-- Importa a folha de estilo fixa da barra lateral esquerda do sistema -->
     <link rel="stylesheet" href="../css/barra_lateral.css">
-    <!-- Importa o CSS próprio e customizado de configurações com controle de cache -->
-    <link rel="stylesheet" href="../css/configuracoes.css?v=1.0">
-<!-- Fechamento do bloco de metadados do cabeçalho -->
+    <link rel="stylesheet" href="../css/configuracoes.css?v=1.4">
 </head>
-<!-- Abertura do corpo visível da página -->
 <body>
 
     <?php 
-    // Injeta dinamicamente a barra lateral de navegação do sistema MIRA
+    // Injeta dinamicamente a barra lateral de navegação
     require_once "barra_lateral.php"; 
     ?>
 
-    <!-- Abre o painel de conteúdo mestre exclusivo da tela de configurações -->
     <main class="painel-conteudo-config">
         
-        <!-- Abertura do formulário mestre que engloba toda a página para salvar tudo de uma vez -->            
+        <!-- Formulário mestre apontando para a rota correta de salvamento -->
         <form id="formularioConfiguracoes" method="POST" action="logica_php/salvar_configuracoes.php" novalidate style="display: flex; flex-direction: column; height: 100%; width: 100%;">
 
-
-            <!-- Abre o cabeçalho superior completo de configurações -->
+            <!-- Cabeçalho Superior -->
             <header class="topo-config">
-                <!-- Agrupamento interno do título e do ícone do topo esquerdo -->
                 <div class="titulo-pagina-config">
-                    <!-- Moldura branca para o ícone vetorial da engrenagem -->
                     <div class="icone-titulo-conf">
-                        <!-- Ícone vetorial de engrenagem seguindo o padrão MIRA -->
                         <svg class="svg-topo-conf" xmlns="http://w3.org" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     </div>
-                    <!-- Bloco de texto para alinhar os títulos do topo -->
                     <div class="alinhamento-texto-topo">
                         <h1>Configurações</h1>
                         <p>Gerencie as configurações do sistema da sua confeitaria.</p>
                     </div>
                 </div>
 
-                <!-- Botão de Ação Destacado no Canto Direito Superior -->
                 <button type="submit" class="btn-salvar-alteracoes">
-                    <!-- Ícone vetorial de disquete/salvar interno do botão -->
                     <svg xmlns="http://w3.org" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
                     Salvar alterações
                 </button>
             </header>
 
-            <!-- Área móvel interna de scroll que vai guardar os blocos e travar o layout -->
             <div class="wrapper-scroll-configuracoes">
+                
                 <!-- 1. GRANDE CARD: INFORMAÇÕES DA CONFEITARIA -->
                 <div class="card-config-bloco">
-                    <!-- Título interno da seção com mini ícone vetorial de loja -->
                     <h3 class="titulo-secao-config">
                         <svg class="svg-secao-config" xmlns="http://w3.org" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                         Informações da Confeitaria
                     </h3>
                     <p class="subtitulo-secao-config">Atualize os dados principais da sua confeitaria.</p>
 
-                    <!-- Fileira com 3 campos: Nome, CNPJ e Telefone -->
                     <div class="linha-campos-config-tripla">
                         <div class="grupo-campo-config">
                             <label>Nome da Confeitaria</label>
-                            <input type="text" name="nome_confeitaria" id="nome_confeitaria" value="MIRA Confeitaria" placeholder="Digite o nome comercial">
+                            <input type="text" name="nome_confeitaria" id="nome_confeitaria" value="<?php echo htmlspecialchars($nome_conf); ?>" placeholder="Digite o nome comercial">
                         </div>
                         <div class="grupo-campo-config">
                             <label>CNPJ <span class="opcional-texto">(opcional)</span></label>
-                            <input type="text" name="cnpj" id="cnpj" value="000.000.000/0001-00" placeholder="00.000.000/0000-00">
+                            <input type="text" name="cnpj" id="cnpj" value="<?php echo htmlspecialchars($cnpj_conf); ?>" placeholder="00.000.000/0000-00">
                         </div>
                         <div class="grupo-campo-config">
                             <label>Telefone</label>
-                            <input type="text" name="telefone_confeitaria" id="telefone_confeitaria" value="(31) 99876-5432" placeholder="(00) 00000-0000">
+                            <input type="text" name="telefone_confeitaria" id="telefone_confeitaria" value="<?php echo htmlspecialchars($telefone_conf); ?>" placeholder="(00) 00000-0000">
                         </div>
                     </div>
 
-                    <!-- Fileira com 3 campos: E-mail, Endereço e Cidade/Estado -->
                     <div class="linha-campos-config-tripla">
                         <div class="grupo-campo-config">
                             <label>E-mail</label>
-                            <input type="email" name="email_confeitaria" id="email_confeitaria" value="contato@miraconfeitaria.com.br" placeholder="exemplo@empresa.com">
+                            <input type="email" name="email_confeitaria" id="email_confeitaria" value="<?php echo htmlspecialchars($email_conf); ?>" placeholder="exemplo@empresa.com">
                         </div>
                         <div class="grupo-campo-config">
                             <label>Endereço</label>
-                            <input type="text" name="endereco_confeitaria" id="endereco_confeitaria" value="Rua das Flores - Centro" placeholder="Rua, número, bairro">
+                            <input type="text" name="endereco_confeitaria" id="endereco_confeitaria" value="<?php echo htmlspecialchars($endereco_conf); ?>" placeholder="Rua, número, bairro">
                         </div>
                         <div class="grupo-campo-config">
                             <label>Cidade / Estado</label>
-                            <input type="text" name="cidade_estado" id="cidade_estado" value="Belo Horizonte - MG" placeholder="Cidade - UF">
+                            <input type="text" name="cidade_estado" id="cidade_estado" value="<?php echo htmlspecialchars($cidade_estado_conf); ?>" placeholder="Cidade - UF">
                         </div>
                     </div>
 
-                    <!-- Bloco interno de Horário de Funcionamento -->
                     <div class="secao-horario-funcionamento">
                         <label class="label-horario-titulo">Horário de Funcionamento</label>
                         <div class="linha-selecao-horario">
-                            <!-- Ícone sutil de relógio -->
                             <svg xmlns="http://w3.org" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                             <span>Segunda a Sábado</span>
-                            <!-- Inputs de hora minificados lado a lado -->
-                            <input type="time" name="hora_abertura" id="hora_abertura" value="08:00">
+                            <input type="time" name="hora_abertura" id="hora_abertura" value="<?php echo $hora_abertura_conf; ?>">
                             <span class="divisor-horas">às</span>
-                            <input type="time" name="hora_fechamento" id="hora_fechamento" value="18:00">
+                            <input type="time" name="hora_fechamento" id="hora_fechamento" value="<?php echo $hora_fechamento_conf; ?>">
                         </div>
                     </div>
                 </div>
