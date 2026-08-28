@@ -157,7 +157,7 @@ try {
             
             <header class="topo-dashboard">
                 <div class="saudacao">
-                    <span class="usuario-log">Olá, Lucas! </span>
+                    <span class="usuario-log">Olá! </span>
                     <h1>Bem-vindo ao Mira Confeitaria</h1>
                     <p class="sub-painel">Aqui está o resumo do que acontece no seu negócio hoje.</p>
                 </div>

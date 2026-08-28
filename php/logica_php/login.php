@@ -4,14 +4,14 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// 1. GERAÇÃO DO TOKEN CSRF PARA SEGURANÇA DO SEU FORMULÁRIO
+// GERAÇÃO DO TOKEN CSRF PARA SEGURANÇA DO SEU FORMULÁRIO
 if (empty($_SESSION['token_csrf'])) {
     $_SESSION['token_csrf'] = bin2hex(random_bytes(32));
 }
 
 $mensagem_erro = "";
 
-// 2. INTERCEPTA O ENVIO DO FORMULÁRIO POST
+// INTERCEPTA O ENVIO DO FORMULÁRIO POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Valida o token de segurança para evitar ataques CSRF
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo = new PDO("mysql:host=$host;dbname=$banco;charset=utf8", $usuario_db, $senha_db);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-                // Busca o usuário na tabela correta do seu XAMPP ('usuarios')
+                // Busca o usuário na tabela do seu XAMPP ('usuarios')
                 $stmt = $pdo->prepare("SELECT * FROM usuarios WHERE usuario = ? LIMIT 1");
                 $stmt->execute([$usuario_input]);
                 $dados_usuario = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -46,10 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Compara a senha digitada diretamente com o texto puro salvo no banco
                 if ($dados_usuario && $senha_input === $dados_usuario['senha']) {
                     
-                    // CONFIGURA A SESSÃO EXATA EXIGIDA PELO SEU HOME.PHP PARA AUTORIZAR O ACESSO
+                    // CONFIGURA A SESSÃO COMPLETA ATUALIZADA COM O NÍVEL DO BANCO
                     $_SESSION['autenticado'] = true;
                     $_SESSION['id_usuario'] = $dados_usuario['id'];
                     $_SESSION['nome_usuario'] = $dados_usuario['nome_completo'];
+                    
+                    // MODIFICADO: Salva o nível real cadastrado (Administrador, Proprietário, Colaborador)
+                    $_SESSION['nivel_usuario'] = !empty($dados_usuario['nivel']) ? $dados_usuario['nivel'] : 'colaborador';
 
                     // Redireciona para o painel de configurações na subpasta php/
                     header("Location: php/configuracoes.php");

@@ -198,7 +198,7 @@ try {
         </form> <!-- Fecha o formulário mestre -->
     </main> <!-- Fecha o main do painel-conteudo-config -->
     
-    <!-- 1. MODAL DE USUÁRIOS REORGANIZADO DESDE O INÍCIO (CORREÇÃO DE BOTÃO) -->
+        <!-- 1. MODAL DE USUÁRIOS COMPLETO: TRÊS NÍVEIS DE ACESSO -->
     <div id="modalUsuarios" class="modal-config-container">
         <div class="modal-config-conteudo" style="width: 850px; max-width: 95%;">
             <div class="modal-config-topo">
@@ -210,12 +210,11 @@ try {
             
             <div class="modal-config-corpo" style="display: flex; gap: 24px; align-items: stretch;">
                 
-                <!-- COLUNA DA ESQUERDA: FORMULÁRIO DE CADASTRO / ATUALIZAÇÃO -->
+                <!-- COLUNA DA ESQUERDA: FORMULÁRIO -->
                 <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; border-right: 1px solid #e5e7eb; padding-right: 24px;">
-                    <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Salvar / Atualizar Usuário</h3>
-                    <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Insira os dados do colaborador para salvar as permissões.</p>
+                    <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Salvar / Atualizar Dados</h3>
+                    <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Insira as credenciais do usuário para cadastrar ou modificar o acesso.</p>
                     
-                    <!-- ID invisível essencial para o JS saber se vai cadastrar ou atualizar -->
                     <input type="hidden" id="id_usuario" value="">
 
                     <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -234,10 +233,11 @@ try {
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Nível de Permissão</label>
+                        <label style="font-size: 0.68rem; color: #4b5563; font-weight: 600;">Nível de Acesso</label>
                         <select id="permissao_input" style="padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 0.75rem; outline: none; background-color: white; color: #1f2937;">
-                            <option value="balcao">Balcão (Atendimento)</option>
-                            <option value="master">Master (Administrador)</option>
+                            <option value="colaborador">Colaborador</option>
+                            <option value="proprietario">Proprietário</option>
+                            <option value="administrador">Administrador</option>
                         </select>
                     </div>
 
@@ -247,10 +247,10 @@ try {
                     </button>
                 </div>
 
-                <!-- COLUNA DA DIREITA: LISTAGEM DINÂMICA COMPLETA CORRIGIDA -->
+                <!-- COLUNA DA DIREITA: TABELA COM CORES DOS TRÊS NÍVEIS -->
                 <div style="flex: 1.3; display: flex; flex-direction: column; gap: 12px;">
-                    <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Usuários Ativos</h3>
-                    <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Clique em um registro para editar ou use a ação para remover.</p>
+                    <h3 style="font-size: 0.82rem; color: #111827; font-weight: 700; margin: 0;">Usuários Cadastrados</h3>
+                    <p style="font-size: 0.7rem; color: #6b7280; margin: 0 0 4px 0;">Clique sobre um registro para editar ou use a ação para remover.</p>
                     
                     <div style="border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; background: #ffffff;">
                         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.72rem;">
@@ -267,25 +267,32 @@ try {
                                     $conexao_lista = new PDO("mysql:host=localhost;dbname=mira_confeitaria;charset=utf8", "root", "");
                                     $conexao_lista->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                                     
-                                    $stmt_lista = $conexao_lista->query("SELECT id, usuario, nome_completo FROM usuarios ORDER BY nome_completo ASC");
+                                    // Puxa a nova coluna 'nivel' do banco
+                                    $stmt_lista = $conexao_lista->query("SELECT id, usuario, nome_completo, nivel FROM usuarios ORDER BY nome_completo ASC");
                                     
                                     while ($user = $stmt_lista->fetch(PDO::FETCH_ASSOC)) {
-                                        $ehAdmin = (strtolower($user['usuario']) === 'admin' || strtolower($user['usuario']) === 'master');
-                                        $labelNivel = $ehAdmin ? 'Master' : 'Balcão';
-                                        $corBg = $ehAdmin ? '#fef3c7' : '#e0f2fe';
-                                        $corTexto = $ehAdmin ? '#d97706' : '#0369a1';
+                                        $nivel = !empty($user['nivel']) ? strtolower($user['nivel']) : 'colaborador';
+                                        
+                                        // Configuração visual das tags coloridas baseadas no nível real do banco
+                                        if ($nivel === 'administrador') {
+                                            $label = 'Administrador'; $bg = '#fef3c7'; $txt = '#d97706'; // Amarelo
+                                        } else if ($nivel === 'proprietario') {
+                                            $label = 'Proprietário'; $bg = '#d1fae5'; $txt = '#065f46'; // Verde sutil
+                                        } else {
+                                            $label = 'Colaborador'; $bg = '#e0f2fe'; $txt = '#0369a1'; // Azul
+                                        }
                                         ?>
                                         <tr style="border-bottom: 1px solid #f3f4f6; cursor: pointer;" 
                                             data-id="<?php echo $user['id']; ?>" 
                                             data-nome="<?php echo htmlspecialchars($user['nome_completo']); ?>" 
                                             data-usuario="<?php echo htmlspecialchars($user['usuario']); ?>"
-                                            data-permissao="<?php echo $ehAdmin ? 'master' : 'balcao'; ?>">
+                                            data-permissao="<?php echo $nivel; ?>">
                                             <td style="padding: 8px 10px;">
                                                 <div style="font-weight: 600;"><?php echo htmlspecialchars($user['nome_completo']); ?></div>
                                                 <div style="font-size: 0.65rem; color: #6b7280;"><?php echo htmlspecialchars($user['usuario']); ?></div>
                                             </td>
                                             <td style="padding: 8px 10px;">
-                                                <span style="background-color: <?php echo $corBg; ?>; color: <?php echo $corTexto; ?>; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;"><?php echo $labelNivel; ?></span>
+                                                <span style="background-color: <?php echo $bg; ?>; color: <?php echo $txt; ?>; padding: 2px 5px; border-radius: 4px; font-size: 0.62rem; font-weight: 600;"><?php echo $label; ?></span>
                                             </td>
                                             <td style="padding: 8px 10px; text-align: right;">
                                                 <button type="button" class="btn-excluir-linha" data-id="<?php echo $user['id']; ?>" style="background: none; border: none; color: #ef4444; font-size: 0.68rem; font-weight: 700; cursor: pointer; padding: 2px 4px;">

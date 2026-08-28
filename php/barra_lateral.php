@@ -1,34 +1,31 @@
 <?php
-// Garante o início da sessão para capturar os dados do usuário logado
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Resgata o nome salvo no login. Se não achar, usa "Usuário"
 $nome_completo_user = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : "Usuário";
 
-// Descobre se o login é do administrador para mudar o cargo visual abaixo do nome
-$login_sistema = isset($_SESSION['id_usuario']) ? $_SESSION['nome_usuario'] : '';
+// BUSCA O NÍVEL REAL SALVO NA SESSÃO DO BANCO DE DADOS
+$nivel_real = isset($_SESSION['nivel_usuario']) ? strtolower($_SESSION['nivel_usuario']) : 'colaborador';
 $cargo_visual = "Colaborador";
 
-// Inteligência para gerar as duas iniciais de forma automática (Ex: Lucas Silva -> LS)
-$iniciais_avatar = "US"; // Padrão de segurança
-$partes_nome = explode(" ", trim($nome_completo_user));
+if ($nivel_real === 'administrador') {
+    $cargo_visual = "Administrador";
+} else if ($nivel_real === 'proprietario') {
+    $cargo_visual = "Proprietário";
+}
 
+// Lógica das iniciais automáticas (Mantenha igual)
+$iniciais_avatar = "US";
+$partes_nome = explode(" ", trim($nome_completo_user));
 if (count($partes_nome) >= 2) {
     $iniciais_avatar = strtoupper(substr($partes_nome[0], 0, 1) . substr($partes_nome[count($partes_nome) - 1], 0, 1));
 } else if (count($partes_nome) == 1 && !empty($partes_nome[0])) {
     $iniciais_avatar = strtoupper(substr($partes_nome[0], 0, 2));
 }
-
-// Define de forma inteligente o primeiro nome limpo para exibir
 $primeiro_nome_user = !empty($partes_nome[0]) ? $partes_nome[0] : "Usuário";
-
-// Define o cargo de forma inteligente baseado no login de administrador fixo
-if (strtolower($primeiro_nome_user) === 'lucas' || strtolower($primeiro_nome_user) === 'admin') {
-    $cargo_visual = "Administrador";
-}
 ?>
+
 <!-- COMPONENTE DA BARRA LATERAL COMPLETO E TOTALMENTE DINÂMICO -->
 <aside class="menu-lateral">
     
