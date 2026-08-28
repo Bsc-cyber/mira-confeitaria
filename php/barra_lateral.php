@@ -1,4 +1,35 @@
-<!-- COMPONENTE DA BARRA LATERAL REUTILIZÁVEL COM ROTAS ABSOLUTAS PARA A PASTA /TESTE/ -->
+<?php
+// Garante o início da sessão para capturar os dados do usuário logado
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Resgata o nome salvo no login. Se não achar, usa "Usuário"
+$nome_completo_user = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : "Usuário";
+
+// Descobre se o login é do administrador para mudar o cargo visual abaixo do nome
+$login_sistema = isset($_SESSION['id_usuario']) ? $_SESSION['nome_usuario'] : '';
+$cargo_visual = "Colaborador";
+
+// Inteligência para gerar as duas iniciais de forma automática (Ex: Lucas Silva -> LS)
+$iniciais_avatar = "US"; // Padrão de segurança
+$partes_nome = explode(" ", trim($nome_completo_user));
+
+if (count($partes_nome) >= 2) {
+    $iniciais_avatar = strtoupper(substr($partes_nome[0], 0, 1) . substr($partes_nome[count($partes_nome) - 1], 0, 1));
+} else if (count($partes_nome) == 1 && !empty($partes_nome[0])) {
+    $iniciais_avatar = strtoupper(substr($partes_nome[0], 0, 2));
+}
+
+// Define de forma inteligente o primeiro nome limpo para exibir
+$primeiro_nome_user = !empty($partes_nome[0]) ? $partes_nome[0] : "Usuário";
+
+// Define o cargo de forma inteligente baseado no login de administrador fixo
+if (strtolower($primeiro_nome_user) === 'lucas' || strtolower($primeiro_nome_user) === 'admin') {
+    $cargo_visual = "Administrador";
+}
+?>
+<!-- COMPONENTE DA BARRA LATERAL COMPLETO E TOTALMENTE DINÂMICO -->
 <aside class="menu-lateral">
     
     <!-- Seção Superior: Logotipo e Nome MIRA Confeitaria -->
@@ -40,7 +71,7 @@
             <svg class="icone-svg" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             <span class="texto-menu">Produtos</span>
         </a>
-        
+
         <!-- 4. Pedidos -->
         <a href="/mira-confeitaria/php/pedidos.php" class="item-menu">
             <span class="marcador-selecionado"></span>
@@ -62,7 +93,7 @@
             <span class="texto-menu">Receitas</span>
         </a>
         
-        <!-- 7. Fornecedores (AGORA INTEGRADO E LINKADO CORRETAMENTE!) -->
+        <!-- 7. Fornecedores -->
         <a href="/mira-confeitaria/php/fornecedores.php" class="item-menu">
             <span class="marcador-selecionado"></span>
             <svg class="icone-svg" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polyline points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
@@ -76,21 +107,23 @@
             <span class="texto-menu">Configurações</span>
         </a>
 
-        <!-- Botão de Desconexão apontando para a raiz segura de /teste/ -->
+        <!-- Botão de Desconexão ajustado para a rota correta sem sair da pasta php -->
         <div class="saida-sistema">
-            <a href="/mira-confeitaria/login.php" class="link-sair">
+            <a href="logica_php/logout.php" class="link-sair">
                 <svg class="icone-svg-sair" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                 <span class="texto-menu">Sair do Painel</span>
             </a>
         </div>
-    </nav>
 
-    <!-- Seção Inferior: Perfil do Administrador -->
+
+    <!-- Seção Inferior: Perfil Dinâmico Conectado com o Banco -->
     <div class="bloco-perfil">
-        <div class="foto-perfil">LC</div>
+        <!-- Exibe dinamicamente as iniciais calculadas pelo PHP -->
+        <div class="foto-perfil"><?php echo $iniciais_avatar; ?></div>
         <div class="identidade-usuario">
-            <strong>Lucas</strong>
-            <span>Administrador ▾</span>
+            <!-- Exibe dinamicamente o primeiro nome limpo do colaborador -->
+            <strong><?php echo htmlspecialchars($primeiro_nome_user); ?></strong>
+            <span><?php echo $cargo_visual; ?> ▾</span>
         </div>
     </div>
 

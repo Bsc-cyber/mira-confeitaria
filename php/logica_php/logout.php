@@ -1,8 +1,8 @@
 <?php
 session_start();
 session_unset();
-session_destroy(); // Limpa todas as variáveis de sessão
+session_destroy(); // Limpa todas as variáveis de sessão com segurança
 
-// Volta um nível para encontrar o login.php na pasta raiz (mira-confeitaria/)
-header("Location: ../login.php"); 
+// Volta dois níveis (../_../) para encontrar o login.php na raiz mestre do projeto
+header("Location: ../../login.php"); 
 exit;
