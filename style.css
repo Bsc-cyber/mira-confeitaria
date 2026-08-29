@@ -42,24 +42,24 @@ body {
 /* ==========================================
    BARRA FIXA SUPERIOR (HEADER)
    ========================================== */
-/* ==========================================
-   BARRA SUPERIOR COM CORTE EM ONDA (MIRA)
-   ========================================== */
+
 .main-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Padding inferior aumentado para compensar a curva da onda */
-    padding: 20px 6% 45px 6%; 
     
-    background-color: #2F3E33; /* Verde oliva escuro idêntico à referência */
+    /* MODIFICADO: Padding inferior reduzido para alinhar de forma reta e simétrica */
+    padding: 16px 6% 16px 6%; 
+    
+    background-color: #2F3E33; /* Mantém o lindo verde oliva escuro */
     position: fixed;
     top: 0; left: 0; width: 100%;
     z-index: 1000;
-    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 
-    /* EFEITO DE DESENHO EM ONDA NA BASE DO MENU */
-    clip-path: ellipse(100% 80% at 50% 20%);
+    /* MODIFICADO: Remove o efeito de elipse/onda e força a base a ficar reta */
+    clip-path: none !important;
+    border-bottom: 2px solid #BC8A5F; /* Linha sutil caramelo/dourada para dar acabamento */
 }
 
 /* Ajusta a cor do símbolo da logo para branco */
