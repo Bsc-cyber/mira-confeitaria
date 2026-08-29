@@ -40,29 +40,58 @@
         </nav>
         
         <div class="header-actions">
+            <!-- Botão de ação direta via WhatsApp -->
             <a href="#" class="btn-whatsapp" onclick="enviarPedidoWhatsApp()">
                 <i class="ph ph-whatsapp-logo"></i> ENVIAR PEDIDO
             </a>
             
+            <!-- Recipiente do Carrinho de Compras Modificado -->
             <div class="cart-icon" onclick="toggleCarrinho()">
-                <i class="ph ph-shopping-bag"></i>
+                <!-- Alterado de ph-shopping-bag para ph-shopping-cart (Carrinho de compras) -->
+                <i class="ph ph-shopping-cart"></i>
                 <span class="cart-count" id="cart-count-badge">0</span>
             </div>
         </div>
+
     </header>
 
     <!-- ==========================================
-       PÁGINA DO SOBRE NÓS (FICA OCULTA POR PADRÃO)
-       ========================================== -->
+    PÁGINA SOBRE NÓS BOUTIQUE (PREMIUM COM FOTO)
+    ========================================== -->
     <section id="section-sobre-nos" class="sobre-nos-section section-fade" style="display: none;">
-        <div class="sobre-container">
-            <h2>Nossa História</h2>
-            <div class="sobre-linha"></div>
-            <p>A <strong>Mira Confeitaria</strong> nasceu do sonho de transformar receitas tradicionais de família em experiências únicas e inesquecíveis. Cada ingrediente que entra em nossa cozinha é selecionado rigorosamente, priorizando produtores locais e a máxima qualidade.</p>
-            <p>Para nós, confeitar não é apenas misturar farinha e açúcar; é esculpir afeto, celebrar momentos especiais e criar memórias doces que permanecem no coração de quem amamos. Seja muito bem-vindo ao nosso cardápio artesanal!</p>
-            <button class="btn-voltar-cardapio" onclick="mostrarCardapio()">🎯 VER O CARDÁPIO AGORA</button>
+        <div class="sobre-container-boutique">
+            
+            <!-- TOPO EXCLUSIVO: ÁREA DA FOTO DO PROPRIETÁRIO COM MOLDURA -->
+            <div class="sobre-topo-perfil">
+                <div class="sobre-moldura-foto">
+                    <!-- SUBSTITUA 'img/proprietario.jpg' PELO CAMINHO REAL DA SUA FOTO LOCAL -->
+                    <img src="imagens/proprietario.jpg" alt="Proprietário MIRA Confeitaria" class="sobre-foto-dono">
+                </div>
+                <div class="sobre-assinatura-topo">
+                    <span class="sobre-tag-premium">A ALMA DA CONFEITARIA</span>
+                    <p class="sobre-citacao">"Cada doce conta uma história de afeto, moldada à mão com os melhores sabores."</p>
+                </div>
+            </div>
+
+            <!-- CORPO INFERIOR: A HISTÓRIA DETALHADA -->
+            <div class="sobre-corpo-narrativa">
+                <h2>Nossa História</h2>
+                <div class="sobre-divisor-dourado"></div>
+                
+                <div class="sobre-paragrafos">
+                    <p>A <strong>Mira Confeitaria</strong> nasceu do sonho de transformar receitas tradicionais de família em experiências únicas e inesquecíveis. Cada ingrediente que entra em nossa cozinha é selecionado rigorosamente, priorizando produtores locais e a máxima qualidade.</p>
+                    <p>Para nós, confeitar não é apenas misturar farinha e açúcar; é esculpir afeto, celebrar momentos especiais e criar memórias doces que permanecem no coração de quem amamos.</p>
+                    <p class="sobre-fechamento-dourado">Seja muito bem-vindo ao nosso cardápio artesanal!</p>
+                </div>
+
+                <button class="btn-retornar-cardapio" onclick="mostrarCardapio()">
+                    VER O CARDÁPIO AGORA
+                </button>
+            </div>
+
         </div>
     </section>
+
 
     <!-- CONTAINER QUE ENGLOBA TODO O CARDÁPIO COMPLETO -->
     <div id="area-cardapio-completo">
