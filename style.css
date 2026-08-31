@@ -201,6 +201,178 @@ body {
 }
 .btn-voltar-cardapio:hover { background-color: #4A5D4E; }
 
+/* ==========================================================================
+   MIRA CARDÁPIO - CORREÇÃO DE EXIBIÇÃO DA SEÇÃO SOBRE NÓS
+   ========================================================================== */
+
+/* CORRIGIDO: O display flex só entra quando a seção não estiver com display: none no HTML */
+.sobre-nos-section:not([style*="display: none"]) {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    min-height: calc(100vh - 80px) !important;
+    padding: 60px 20px !important;
+    background-color: #dcdddf !important;
+    box-sizing: border-box !important;
+}
+
+
+/* Caixa principal branca com bordas chiques e sombra leve */
+.sobre-container-boutique {
+    background-color: #ffffff !important;
+    width: 750px !important;
+    max-width: 100% !important;
+    border-radius: 16px !important;
+    padding: 50px 40px !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Bloco do topo: Agrupa a imagem e a frase lado a lado */
+.sobre-topo-perfil {
+    display: flex !important;
+    align-items: center !important;
+    gap: 32px !important;
+    width: 100% !important;
+    margin-bottom: 40px !important;
+    border-bottom: 1px solid #f3f4f6;
+    padding-bottom: 30px;
+}
+
+/* Moldura redonda com efeito de borda dupla sofisticada para a foto */
+.sobre-moldura-foto {
+    width: 130px !important;
+    height: 130px !important;
+    min-width: 130px !important;
+    border-radius: 50% !important;
+    padding: 4px !important;
+    border: 2px solid #BC8A5F !important; /* Cor marrom/dourada MIRA */
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Garante que a foto preencha o círculo sem distorcer */
+.sobre-foto-dono {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    border-radius: 50% !important;
+}
+
+/* Estilo do bloco de texto ao lado da foto */
+.sobre-assinatura-topo {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    text-align: left !important;
+}
+
+.sobre-tag-premium {
+    font-size: 0.65rem !important;
+    font-weight: 700 !important;
+    color: #BC8A5F !important;
+    letter-spacing: 1.5px !important;
+}
+
+.sobre-citacao {
+    font-size: 0.95rem !important;
+    color: #4b5563 !important;
+    font-style: italic !important;
+    line-height: 1.5 !important;
+    margin: 0 !important;
+}
+
+/* Corpo do texto da história */
+.sobre-corpo-narrativa {
+    width: 100% !important;
+    text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.sobre-corpo-narrativa h2 {
+    font-size: 1.6rem !important;
+    color: #111827 !important;
+    font-weight: 700 !important;
+    margin: 0 !important;
+}
+
+.sobre-divisor-dourado {
+    width: 50px !important;
+    height: 1.5px !important;
+    background-color: #BC8A5F !important;
+    margin: 12px 0 24px 0 !important;
+}
+
+.sobre-paragrafos {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    max-width: 620px !important;
+}
+
+.sobre-paragrafos p {
+    font-size: 0.88rem !important;
+    color: #4b5563 !important;
+    line-height: 1.6 !important;
+    margin: 0 !important;
+    text-align: justify !important;
+}
+
+.sobre-paragrafos strong {
+    color: #111827 !important;
+}
+
+.sobre-fechamento-dourado {
+    font-weight: 600 !important;
+    color: #BC8A5F !important;
+    text-align: center !important;
+    margin-top: 4px !important;
+}
+
+/* Botão inferior de retorno ao cardápio */
+.btn-retornar-cardapio {
+    margin-top: 36px !important;
+    background-color: #1f291f !important; /* Verde escuro sofisticado */
+    color: #ffffff !important;
+    border: none !important;
+    padding: 12px 28px !important;
+    border-radius: 30px !important; /* Botão em formato de pílula moderno */
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    letter-spacing: 0.5px !important;
+    transition: background-color 0.2s ease !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+}
+
+.btn-retornar-cardapio:hover {
+    background-color: #2a3626 !important; /* Verde oliva ativo */
+}
+
+/* Ajuste rápido para telas de celulares */
+@media (max-width: 600px) {
+    .sobre-topo-perfil {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 16px !important;
+    }
+    .sobre-assinatura-topo {
+        text-align: center !important;
+    }
+    .sobre-container-boutique {
+        padding: 30px 20px !important;
+    }
+}
+
 /* ==========================================
    BANNER PRINCIPAL (HERO DE PONTA A PONTA)
    ========================================== */
@@ -964,179 +1136,4 @@ body {
     z-index: 10 !important;
 }
 
-/* ==========================================================================
-   MIRA CARDÁPIO - SEÇÃO SOBRE NÓS PREMIUM BOUTIQUE
-   ========================================================================== */
 
-/* Ajusta o container de fundo para ocupar a tela de forma harmoniosa */
-/* ==========================================================================
-   MIRA CARDÁPIO - CORREÇÃO DE EXIBIÇÃO DA SEÇÃO SOBRE NÓS
-   ========================================================================== */
-
-/* CORRIGIDO: O display flex só entra quando a seção não estiver com display: none no HTML */
-.sobre-nos-section:not([style*="display: none"]) {
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    min-height: calc(100vh - 80px) !important;
-    padding: 60px 20px !important;
-    background-color: #dcdddf !important;
-    box-sizing: border-box !important;
-}
-
-
-/* Caixa principal branca com bordas chiques e sombra leve */
-.sobre-container-boutique {
-    background-color: #ffffff !important;
-    width: 750px !important;
-    max-width: 100% !important;
-    border-radius: 16px !important;
-    padding: 50px 40px !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    box-sizing: border-box !important;
-}
-
-/* Bloco do topo: Agrupa a imagem e a frase lado a lado */
-.sobre-topo-perfil {
-    display: flex !important;
-    align-items: center !important;
-    gap: 32px !important;
-    width: 100% !important;
-    margin-bottom: 40px !important;
-    border-bottom: 1px solid #f3f4f6;
-    padding-bottom: 30px;
-}
-
-/* Moldura redonda com efeito de borda dupla sofisticada para a foto */
-.sobre-moldura-foto {
-    width: 130px !important;
-    height: 130px !important;
-    min-width: 130px !important;
-    border-radius: 50% !important;
-    padding: 4px !important;
-    border: 2px solid #BC8A5F !important; /* Cor marrom/dourada MIRA */
-    background-color: #ffffff !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
-    overflow: hidden !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-/* Garante que a foto preencha o círculo sem distorcer */
-.sobre-foto-dono {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-    border-radius: 50% !important;
-}
-
-/* Estilo do bloco de texto ao lado da foto */
-.sobre-assinatura-topo {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 6px !important;
-    text-align: left !important;
-}
-
-.sobre-tag-premium {
-    font-size: 0.65rem !important;
-    font-weight: 700 !important;
-    color: #BC8A5F !important;
-    letter-spacing: 1.5px !important;
-}
-
-.sobre-citacao {
-    font-size: 0.95rem !important;
-    color: #4b5563 !important;
-    font-style: italic !important;
-    line-height: 1.5 !important;
-    margin: 0 !important;
-}
-
-/* Corpo do texto da história */
-.sobre-corpo-narrativa {
-    width: 100% !important;
-    text-align: center !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-}
-
-.sobre-corpo-narrativa h2 {
-    font-size: 1.6rem !important;
-    color: #111827 !important;
-    font-weight: 700 !important;
-    margin: 0 !important;
-}
-
-.sobre-divisor-dourado {
-    width: 50px !important;
-    height: 1.5px !important;
-    background-color: #BC8A5F !important;
-    margin: 12px 0 24px 0 !important;
-}
-
-.sobre-paragrafos {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 16px !important;
-    max-width: 620px !important;
-}
-
-.sobre-paragrafos p {
-    font-size: 0.88rem !important;
-    color: #4b5563 !important;
-    line-height: 1.6 !important;
-    margin: 0 !important;
-    text-align: justify !important;
-}
-
-.sobre-paragrafos strong {
-    color: #111827 !important;
-}
-
-.sobre-fechamento-dourado {
-    font-weight: 600 !important;
-    color: #BC8A5F !important;
-    text-align: center !important;
-    margin-top: 4px !important;
-}
-
-/* Botão inferior de retorno ao cardápio */
-.btn-retornar-cardapio {
-    margin-top: 36px !important;
-    background-color: #1f291f !important; /* Verde escuro sofisticado */
-    color: #ffffff !important;
-    border: none !important;
-    padding: 12px 28px !important;
-    border-radius: 30px !important; /* Botão em formato de pílula moderno */
-    font-size: 0.78rem !important;
-    font-weight: 700 !important;
-    cursor: pointer !important;
-    letter-spacing: 0.5px !important;
-    transition: background-color 0.2s ease !important;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
-}
-
-.btn-retornar-cardapio:hover {
-    background-color: #2a3626 !important; /* Verde oliva ativo */
-}
-
-/* Ajuste rápido para telas de celulares */
-@media (max-width: 600px) {
-    .sobre-topo-perfil {
-        flex-direction: column !important;
-        text-align: center !important;
-        gap: 16px !important;
-    }
-    .sobre-assinatura-topo {
-        text-align: center !important;
-    }
-    .sobre-container-boutique {
-        padding: 30px 20px !important;
-    }
-}
